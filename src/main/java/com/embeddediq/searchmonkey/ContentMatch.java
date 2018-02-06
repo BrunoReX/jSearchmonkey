@@ -91,7 +91,6 @@ public class ContentMatch {
             pdfStripper.setEndPage(5);
             pdfStripper.getParagraphEnd();
             String parsedText = pdfStripper.getText(pdDoc);
-            //String line;
             String[] lines = parsedText.split("\n");
             for (String line: lines)
             {
