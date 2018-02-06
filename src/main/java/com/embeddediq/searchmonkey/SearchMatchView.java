@@ -5,7 +5,6 @@
  */
 package com.embeddediq.searchmonkey;
 
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -20,15 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.MatchResult;
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.JViewport;
 import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import javax.swing.Timer;
@@ -252,7 +245,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                     if (isCancelled()) break; // Check for cancel
                     if (result.isTitle)
                     {
-                        doc.insertString(doc.getLength(), result.title, doc.linkStyle);
+                        doc.insertString(doc.getLength(), result.title, doc.pathStyle);
                     } else {
                         doc.insertString(doc.getLength(), String.format("Line %d:\t", result.line_nr), doc.numberStyle);
 

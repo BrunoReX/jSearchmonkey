@@ -68,7 +68,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         // TODO future stuff
         //this.menuBar.setVisible(false);
-        
+        this.contentMenuItem.setVisible(false);
+        this.editMenu.setVisible(false);
+        this.openMenuItem.setVisible(false);
+        this.saveAsMenuItem.setVisible(false);
+        this.saveMenuItem.setVisible(false);
     }
     
     public void addActionListeners()

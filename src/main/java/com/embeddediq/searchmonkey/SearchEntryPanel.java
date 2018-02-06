@@ -86,6 +86,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jButton7.setVisible(false);
         this.jButton8.setVisible(false);
         this.jButton10.setVisible(false);
+
+        this.jButton4.setVisible(false);
+        this.jButton5.setVisible(false);
+        this.jButton9.setVisible(false);
     }
     
     public class PopupCalendar extends JPopupMenu {
@@ -142,7 +146,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private String getSelectedItem(JComboBox jCombo)
     {
         String val = (String)jCombo.getSelectedItem();
-        if (val.length() > 0)
+        if (val != null && val.length() > 0)
         {
             DefaultComboBoxModel model = (DefaultComboBoxModel)jCombo.getModel();
             int idx = model.getIndexOf(val);

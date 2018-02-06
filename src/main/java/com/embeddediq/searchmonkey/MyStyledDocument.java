@@ -35,12 +35,14 @@ public class MyStyledDocument extends DefaultStyledDocument
     {
         nameStyle = addStyle("nameStyle", null);
         pathStyle = addStyle("pathStyle", null);
-        StyleConstants.setForeground(pathStyle, Color.GREEN);
+        // StyleConstants.setForeground(pathStyle, Color.GREEN);
         StyleConstants.setItalic(pathStyle, true);
+        StyleConstants.setBold(pathStyle, true);
         numberStyle = addStyle("numberStyle", null);
-        StyleConstants.setBold(numberStyle, true);
+        StyleConstants.setUnderline(numberStyle, true);
         linkStyle = addStyle("linkStyle", null);
-        StyleConstants.setForeground(linkStyle, Color.BLUE);
-        StyleConstants.setUnderline(linkStyle, true);
+        //StyleConstants.setForeground(linkStyle, Color.BLUE);
+        StyleConstants.setBackground(linkStyle, Color.GREEN);
+        //StyleConstants.setUnderline(linkStyle, true);
     }
 }
