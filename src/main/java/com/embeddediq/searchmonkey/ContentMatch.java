@@ -19,6 +19,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.io.RandomAccessRead;
 
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -81,20 +82,21 @@ public class ContentMatch {
     private int CheckContentPDF(Path path)
     {
         int count = 0;
-        try{
-            PDFParser parser = new PDFParser((RandomAccessRead)new FileInputStream(path.toFile()));
+        try (RandomAccessBufferedFileInputStream fd = new RandomAccessBufferedFileInputStream(path.toFile())){
+            PDFParser parser = new PDFParser(fd);
             parser.parse();
-            COSDocument cosDoc = parser.getDocument();
-            PDFTextStripper pdfStripper = new PDFTextStripper();
-            PDDocument pdDoc = new PDDocument(cosDoc);
-            pdfStripper.setStartPage(1);
-            pdfStripper.setEndPage(5);
-            pdfStripper.getParagraphEnd();
-            String parsedText = pdfStripper.getText(pdDoc);
-            String[] lines = parsedText.split("\n");
-            for (String line: lines)
-            {
-                count += getMatchCount(line);
+            try (COSDocument cosDoc = parser.getDocument()) {
+                PDFTextStripper pdfStripper = new PDFTextStripper();
+                PDDocument pdDoc = new PDDocument(cosDoc);
+                pdfStripper.setStartPage(1);
+                pdfStripper.setEndPage(5);
+                pdfStripper.getParagraphEnd();
+                String parsedText = pdfStripper.getText(pdDoc);
+                String[] lines = parsedText.split("\n");
+                for (String line: lines)
+                {
+                    count += getMatchCount(line);
+                }
             }
         } catch (IOException er) {
             // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
