@@ -195,39 +195,32 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         }
         private void consumePath(Path path, MyStyledDocument previewDoc)
         {
-            try {
-                LineIterator lineIterator = FileUtils.lineIterator(path.toFile());
-                try
+            // ContentMatch cm = new ContentMatch();
+            String lines = ContentMatch.GetContent(path);
+            try /*(LineIterator lineIterator = FileUtils.lineIterator(path.toFile())) */ {
+                publish(new MatchResult2(path.toString() + "\n"));
+                previewDoc.insertString(previewDoc.getLength(), path.toString() + "\n", previewDoc.pathStyle);
+                int i = 0;
+                //while (lineIterator.hasNext())
+                for (String line: lines.split("\n"))
                 {
-                    publish(new MatchResult2(path.toString() + "\n"));
-                    previewDoc.insertString(previewDoc.getLength(), path.toString() + "\n", previewDoc.linkStyle);
-                    int i = 0;
-                    while (lineIterator.hasNext())
+                    if (isCancelled()) break; // Check for cancel
+                    // String line = lineIterator.nextLine();
+                    i ++;
+                    if (match != null)
                     {
-                        if (isCancelled()) break; // Check for cancel
-                        String line = lineIterator.nextLine();
-                        i ++;
-                        if (match != null)
+                        List<MatchResult> results = match.getMatches(line);
+                        if (results.size() > 0)
                         {
-                            List<MatchResult> results = match.getMatches(line);
-                            if (results.size() > 0)
-                            {
-                                publish(new MatchResult2(i, line, results));
-                            }
+                            publish(new MatchResult2(i, line, results));
                         }
-                        previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
                     }
-                    // return resultList;
+                    previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
                 }
-                catch (BadLocationException ex) {
-                    Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    lineIterator.close();
-                }
+                // return resultList;
             }
-            catch (IOException er)
-            {
-                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, er);
+            catch (BadLocationException ex) {
+                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
