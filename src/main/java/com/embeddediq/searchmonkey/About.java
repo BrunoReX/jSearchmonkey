@@ -77,7 +77,7 @@ public class About extends javax.swing.JPanel {
         jTextPane1.setEditable(false);
         jTextPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTextPane1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextPane1.setText("Searchmonkey is a lightweight but powerful tool for finding files and their content. Searchmonkey was written by adam@embededdiq.com.  http://searchmonnkey.embeddediq.com");
+        jTextPane1.setText("Searchmonkey is a lightweight but powerful tool for finding files and their content. Searchmonkey was written by searchmonkey@embededdiq.com.  http://searchmonnkey.embeddediq.com");
         jTextPane1.setToolTipText("");
         jTextPane1.setOpaque(false);
         jScrollPane2.setViewportView(jTextPane1);
