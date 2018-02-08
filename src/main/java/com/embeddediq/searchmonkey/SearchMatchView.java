@@ -197,6 +197,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         {
             // ContentMatch cm = new ContentMatch();
             String lines = ContentMatch.GetContent(path);
+            if (lines == null || lines.equals("")) return;
+            
             try /*(LineIterator lineIterator = FileUtils.lineIterator(path.toFile())) */ {
                 publish(new MatchResult2(path.toString() + "\n"));
                 previewDoc.insertString(previewDoc.getLength(), path.toString() + "\n", previewDoc.pathStyle);

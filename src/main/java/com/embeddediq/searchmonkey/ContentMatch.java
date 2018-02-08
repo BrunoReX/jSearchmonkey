@@ -189,16 +189,17 @@ public class ContentMatch {
                 
     static public String GetContentText(Path path)
     {
-        String line = "";
+        String lines = "";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                line += line + "\n";
+                lines += line + "\n";
             }
         } catch (IOException er) {
             // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
         }
 
-        return line;
+        return lines;
     }
     
     /**

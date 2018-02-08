@@ -5,8 +5,11 @@
  */
 package com.embeddediq.searchmonkey;
 
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -19,11 +22,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
 import javax.swing.Painter;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -48,11 +54,13 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         "/images/searchmonkey-300x300.png",
     };
     
+    private final Preferences prefs;
    
     /**
      * Creates new form NewMDIApplication
      */
     public Searchmonkey() {
+        prefs = Preferences.userNodeForPackage(Searchmonkey.class);
         initComponents();
         
         // Update icon
@@ -73,6 +81,12 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         this.openMenuItem.setVisible(false);
         this.saveAsMenuItem.setVisible(false);
         this.saveMenuItem.setVisible(false);
+        this.pack();
+        this.setVisible(true);
+
+        Restore();
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     public void addActionListeners()
@@ -167,6 +181,14 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Searchmonkey 3.0");
         setMinimumSize(new java.awt.Dimension(500, 500));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentMoved(java.awt.event.ComponentEvent evt) {
+                formComponentMoved(evt);
+            }
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(searchEntryPanel1, java.awt.BorderLayout.WEST);
@@ -174,6 +196,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.5);
         jSplitPane1.setToolTipText("");
+        jSplitPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSplitPane1PropertyChange(evt);
+            }
+        });
         jSplitPane1.setTopComponent(searchResultsTable1);
         jSplitPane1.setBottomComponent(searchMatchView1);
 
@@ -341,6 +368,89 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         testRegexExpression();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        Save(1);
+    }//GEN-LAST:event_formComponentResized
+
+    private void formComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentMoved
+        Save(2);
+    }//GEN-LAST:event_formComponentMoved
+
+    private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSplitPane1PropertyChange
+        if (evt.getPropertyName().equals(JSplitPane.DIVIDER_LOCATION_PROPERTY))
+        {
+            Save(4);
+        }
+    }//GEN-LAST:event_jSplitPane1PropertyChange
+
+    boolean first_time = true;
+    private void Save(int flag) throws SecurityException
+    {
+        if (first_time) return;
+        // In normal mode
+        int eState = this.getExtendedState();
+        if (eState == Frame.NORMAL)
+        {
+            Dimension sz = getSize();
+            Point pt = getLocationOnScreen();
+        
+            if ((flag & 0x1) == 0x1)
+            {
+                prefs.putInt("Height", sz.height);
+                prefs.putInt("Width", sz.width);
+            }
+            if ((flag & 0x2) == 0x2)
+            {
+                prefs.putInt("x", pt.x);
+                prefs.putInt("y", pt.y);        
+            }
+        }
+        
+        // Get results split panel orientation and location
+        if ((flag & 0x4) == 0x4)
+        {
+            boolean isHoriz = (jSplitPane1.getOrientation() == JSplitPane.HORIZONTAL_SPLIT);
+            prefs.putBoolean("div_horiz", isHoriz);
+            if (isHoriz)
+            {
+                prefs.putInt("div_hpos", jSplitPane1.getDividerLocation());
+            } else {
+                prefs.putInt("div_vpos", jSplitPane1.getDividerLocation());
+            }
+        }
+    }
+    
+    private void Restore() throws SecurityException
+    {
+        // Restore last position
+        int h = prefs.getInt("Height", -1);
+        int w = prefs.getInt("Width", -1);
+        int x1 = prefs.getInt("x", -1);
+        int y1 = prefs.getInt("y", -1);
+        if (x1 != -1 && y1 != -1) {
+            setLocation(x1, y1);
+        }
+        if (h != -1 && w != -1) {
+            setSize(w, h);
+        }
+        //SwingUtilities.invokeLater(() -> {
+
+            // Get results split panel orientation and location
+            boolean isHoriz = prefs.getBoolean("div_horiz", false); // default to vertical
+            int pos;
+            if (isHoriz)
+            {
+                pos = prefs.getInt("div_hpos", 250);
+            } else {
+                pos = prefs.getInt("div_vpos", 250);
+            }
+            jSplitPane1.setDividerLocation(pos);
+            
+            first_time = false;
+        //});
+
+    }
 
     private void testRegexExpression()
     {
