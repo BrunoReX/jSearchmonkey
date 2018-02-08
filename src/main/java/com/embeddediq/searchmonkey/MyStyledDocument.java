@@ -39,7 +39,8 @@ public class MyStyledDocument extends DefaultStyledDocument
         StyleConstants.setItalic(pathStyle, true);
         StyleConstants.setBold(pathStyle, true);
         numberStyle = addStyle("numberStyle", null);
-        StyleConstants.setUnderline(numberStyle, true);
+        //StyleConstants.setUnderline(numberStyle, true);
+        StyleConstants.setBold(numberStyle, true);
         linkStyle = addStyle("linkStyle", null);
         //StyleConstants.setForeground(linkStyle, Color.BLUE);
         StyleConstants.setBackground(linkStyle, Color.GREEN);
