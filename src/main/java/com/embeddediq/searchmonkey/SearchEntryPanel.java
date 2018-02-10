@@ -1400,6 +1400,12 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         );
 
         jButton3.setText(bundle.getString("SearchEntryPanel.jButton3.text")); // NOI18N
+        jButton3.setToolTipText(bundle.getString("SearchEntryPanel.jButton3.toolTipText")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jOptionsLayout = new javax.swing.GroupLayout(jOptions);
         jOptions.setLayout(jOptionsLayout);
@@ -1410,12 +1416,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGroup(jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jOptionsLayout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jOptionsLayout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jOptionsLayout.setVerticalGroup(
             jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1425,7 +1430,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
+                .addGap(36, 36, 36)
                 .addComponent(jButton3)
                 .addContainerGap())
         );
@@ -1649,6 +1654,17 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private void jAccessedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jAccessedAfterCheckItemStateChanged
         this.jAfterSpinner2.setEnabled(jAccessedAfterCheck.isSelected());
     }//GEN-LAST:event_jAccessedAfterCheckItemStateChanged
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int res = JOptionPane.showConfirmDialog(this, "Press OK to clear all configuration settings", "Restore all defaults?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (res != JOptionPane.OK_OPTION) return; //Cancel
+        try {
+            prefs.clear();
+            this.Restore();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(SearchEntryPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
