@@ -190,10 +190,20 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
                 formComponentResized(evt);
             }
         });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(searchSummary2, java.awt.BorderLayout.SOUTH);
 
+        jSplitPane2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSplitPane2PropertyChange(evt);
+            }
+        });
         jSplitPane2.setLeftComponent(searchEntryPanel1);
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -374,19 +384,35 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        Save(1);
+        Save(FLAG_SAVE_RECT);
     }//GEN-LAST:event_formComponentResized
 
     private void formComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentMoved
-        Save(2);
+        Save(FLAG_SAVE_POS);
     }//GEN-LAST:event_formComponentMoved
 
     private void jSplitPane1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSplitPane1PropertyChange
         if (evt.getPropertyName().equals(JSplitPane.DIVIDER_LOCATION_PROPERTY))
         {
-            Save(4);
+            Save(FLAG_SAVE_DIV_RESULTS);
         }
     }//GEN-LAST:event_jSplitPane1PropertyChange
+
+    static private final int FLAG_SAVE_RECT = 0x01;
+    static private final int FLAG_SAVE_POS = 0x02;
+    static private final int FLAG_SAVE_DIV_MAIN = 0x04; // Divider position between left and right main panel
+    static private final int FLAG_SAVE_DIV_RESULTS = 0x08; // Divider position between top and bottom results
+    static private final int FLAG_SAVE_SEARCH = 0x10; // Save the search panel options (i.e. before closing)
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Save(FLAG_SAVE_SEARCH);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jSplitPane2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSplitPane2PropertyChange
+        if (evt.getPropertyName().equals(JSplitPane.DIVIDER_LOCATION_PROPERTY))
+        {
+            Save(FLAG_SAVE_DIV_MAIN);
+        }
+    }//GEN-LAST:event_jSplitPane2PropertyChange
 
     boolean first_time = true;
     private void Save(int flag) throws SecurityException
@@ -399,20 +425,33 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
             Dimension sz = getSize();
             Point pt = getLocationOnScreen();
         
-            if ((flag & 0x1) == 0x1)
+            if ((flag & FLAG_SAVE_RECT) == FLAG_SAVE_RECT)
             {
                 prefs.putInt("Height", sz.height);
                 prefs.putInt("Width", sz.width);
             }
-            if ((flag & 0x2) == 0x2)
+            if ((flag & FLAG_SAVE_POS) == FLAG_SAVE_POS)
             {
                 prefs.putInt("x", pt.x);
                 prefs.putInt("y", pt.y);        
             }
         }
         
+        // Get results main panel orientation and location
+        if ((flag & FLAG_SAVE_DIV_MAIN) == FLAG_SAVE_DIV_MAIN)
+        {
+            boolean isHoriz = (jSplitPane2.getOrientation() == JSplitPane.HORIZONTAL_SPLIT);
+            prefs.putBoolean("div_main_horiz", isHoriz);
+            if (isHoriz)
+            {
+                prefs.putInt("div_main_hpos", jSplitPane2.getDividerLocation());
+            } else {
+                prefs.putInt("div_main_vpos", jSplitPane2.getDividerLocation());
+            }
+        }
+
         // Get results split panel orientation and location
-        if ((flag & 0x4) == 0x4)
+        if ((flag & FLAG_SAVE_DIV_RESULTS) == FLAG_SAVE_DIV_RESULTS)
         {
             boolean isHoriz = (jSplitPane1.getOrientation() == JSplitPane.HORIZONTAL_SPLIT);
             prefs.putBoolean("div_horiz", isHoriz);
@@ -422,6 +461,12 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
             } else {
                 prefs.putInt("div_vpos", jSplitPane1.getDividerLocation());
             }
+        }
+        
+        // Save the search panel
+        if ((flag & FLAG_SAVE_SEARCH) == FLAG_SAVE_SEARCH)
+        {
+            searchEntryPanel1.Save();
         }
     }
     
@@ -438,21 +483,33 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         if (h != -1 && w != -1) {
             setSize(w, h);
         }
-        //SwingUtilities.invokeLater(() -> {
 
-            // Get results split panel orientation and location
-            boolean isHoriz = prefs.getBoolean("div_horiz", false); // default to vertical
-            int pos;
-            if (isHoriz)
-            {
-                pos = prefs.getInt("div_hpos", 250);
-            } else {
-                pos = prefs.getInt("div_vpos", 250);
-            }
-            jSplitPane1.setDividerLocation(pos);
-            
-            first_time = false;
-        //});
+        boolean isHoriz;
+        int pos;
+
+        // Get results split panel orientation and location
+        isHoriz = prefs.getBoolean("div_main_horiz", true); // default to horizontal
+        if (isHoriz)
+        {
+            pos = prefs.getInt("div_main_hpos", 250);
+       } else {
+            pos = prefs.getInt("div_main_vpos", 250);
+        }
+        jSplitPane2.setOrientation(isHoriz ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT);
+        jSplitPane2.setDividerLocation(pos);
+
+        // Get results split panel orientation and location
+        isHoriz = prefs.getBoolean("div_horiz", false); // default to vertical
+        if (isHoriz)
+        {
+            pos = prefs.getInt("div_hpos", 250);
+        } else {
+            pos = prefs.getInt("div_vpos", 250);
+        }
+        jSplitPane1.setOrientation(isHoriz ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT);
+        jSplitPane1.setDividerLocation(pos);
+
+        first_time = false;
 
     }
 

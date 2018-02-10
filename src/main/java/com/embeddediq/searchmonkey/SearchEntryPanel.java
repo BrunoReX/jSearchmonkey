@@ -25,17 +25,20 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
@@ -149,7 +152,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     int maxCombo = 10;
     private String getSelectedItem(JComboBox jCombo)
     {
-        String val = (String)jCombo.getSelectedItem();
+        
+        //String val = (String)jCombo.getSelectedItem();
+        String val = (String)jCombo.getEditor().getItem();
         if (val != null && val.length() > 0)
         {
             DefaultComboBoxModel model = (DefaultComboBoxModel)jCombo.getModel();
@@ -306,30 +311,38 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     {
         Save("LookIn", jLookIn);
         Save("FileName", jFileName);
-        Save("ContainingText", jContainingText);
+        Save("FileNameRegex", jFileName1);
+        prefs.putBoolean("ContainingRegexTextToggle", jCheckBox2.isSelected());
+        Save("ContainingRegexText", jContainingText);
+        prefs.putBoolean("ContainingTextToggle", jCheckBox3.isSelected());
+        Save("ContainingText", jContainingText1);
         
         prefs.putBoolean("LookInSubFolders", jSubFolders.isSelected());
-        prefs.putInt("FileSizeScaler", jFileSizeScaler.getSelectedIndex());
-        this.
+        prefs.putInt("LessThanScaler", jFileSizeScaler.getSelectedIndex());
+        prefs.putInt("GreaterThanScaler", jFileSizeScaler.getSelectedIndex());
         prefs.putBoolean("GreaterThanToggle", jMoreThanCheck.isSelected());
         prefs.putDouble("GreaterThan", (Double)jGreaterThanSpinner.getValue());
         prefs.putBoolean("LessThanToggle", jLessThanCheck.isSelected());
         prefs.putDouble("LessThan", (Double)jLessThanSpinner.getValue());
+        
         prefs.putBoolean("AfterToggle", jModifiedAfterCheck.isSelected());
         Save("AfterSpinner", jAfterSpinner);
         prefs.putBoolean("BeforeToggle", jModifiedBeforeCheck.isSelected());
         Save("BeforeSpinner", jBeforeSpinner);
+        
         // Search options
         prefs.putBoolean("IgnoreHiddenFiles", jIgnoreHiddenFiles.isSelected());
         prefs.putBoolean("IgnoreHiddenFolders", jIgnoreHiddenFolders.isSelected());
         prefs.putBoolean("IgnoreSymbolicLinks", jIgnoreSymbolicLinks.isSelected());
         prefs.putBoolean("UseContentRegex", jUseContentRegex.isSelected());
         prefs.putBoolean("UseFileRegex", jUseFileRegex.isSelected());
+        
         // Adanced search settings
         prefs.putBoolean("AfterToggle1", jCreatedAfterCheck.isSelected());
         Save("AfterSpinner1", jAfterSpinner1);
         prefs.putBoolean("BeforeToggle1", jCreatedBeforeCheck.isSelected());
         Save("BeforeSpinner1", jBeforeSpinner1);
+        
         prefs.putBoolean("AfterToggle2", jAccessedAfterCheck.isSelected());
         Save("AfterSpinner2", jAfterSpinner2);
         prefs.putBoolean("BeforeToggle2", jAccessedBeforeCheck.isSelected());
@@ -340,12 +353,18 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         Date date = new Date();
         boolean enabled;
 
-        String home = System.getProperty("user.desktop");
+        String home = System.getProperty("user.home");
         Restore("LookIn", jLookIn, new String[] {home});
         Restore("FileName", jFileName, new String[] {"*.txt", "*.[c|h]"});
-        Restore("ContainingText", jContainingText, new String[] {});
+        Restore("FileNameRegex", jFileName1, new String[] {".*txt", ".*[c|h]"});
+        jCheckBox2.setSelected(prefs.getBoolean("ContainingRegexTextToggle", false));
+        Restore("ContainingRegexText", jContainingText, new String[] {});
+        jCheckBox3.setSelected(prefs.getBoolean("ContainingTextToggle", false));
+        Restore("ContainingText", jContainingText1, new String[] {});
+        
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
-        jFileSizeScaler.setSelectedIndex(prefs.getInt("FileSizeScaler", 1)); // Select KBytes by default
+        jFileSizeScaler.setSelectedIndex(prefs.getInt("LessThanScaler", 1)); // Select KBytes by default
+        jFileSizeScaler1.setSelectedIndex(prefs.getInt("GreaterThanScaler", 1)); // Select KBytes by default
         enabled = prefs.getBoolean("GreaterThanToggle", false);
         jMoreThanCheck.setSelected(enabled);
         jGreaterThanSpinner.setValue(prefs.getDouble("GreaterThan", 0.0));
@@ -354,6 +373,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jLessThanCheck.setSelected(enabled);
         jLessThanSpinner.setValue(prefs.getDouble("LessThan", 0.0));
         jLessThanSpinner.setEnabled(enabled);
+        
         enabled = prefs.getBoolean("AfterToggle", false);
         jModifiedAfterCheck.setSelected(enabled);
         Restore("AfterSpinner", jAfterSpinner, date);
@@ -362,12 +382,18 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jModifiedBeforeCheck.setSelected(enabled);
         Restore("BeforeSpinner", jBeforeSpinner, date);
         jBeforeSpinner.setEnabled(enabled);
+        
         // Search options
         jIgnoreHiddenFiles.setSelected(prefs.getBoolean("IgnoreHiddenFiles", false));
         jIgnoreHiddenFolders.setSelected(prefs.getBoolean("IgnoreHiddenFolders", false));
         jIgnoreSymbolicLinks.setSelected(prefs.getBoolean("IgnoreSymbolicLinks", false));
-        jUseContentRegex.setSelected(prefs.getBoolean("UseContentRegex", false));
-        jUseFileRegex.setSelected(prefs.getBoolean("UseFileRegex", false));
+        enabled = prefs.getBoolean("UseContentRegex", true);
+        jUseContentRegex.setSelected(enabled);
+        jUseContentSearch.setSelected(!enabled);
+        enabled = prefs.getBoolean("UseFileRegex", false);
+        jUseFileRegex.setSelected(enabled);
+        jUseFileGlobs.setSelected(!enabled);
+        
         // Adanced search settings
         enabled = prefs.getBoolean("AfterToggle1", false);
         jCreatedAfterCheck.setSelected(enabled);
@@ -377,6 +403,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jCreatedBeforeCheck.setSelected(prefs.getBoolean("BeforeToggle1", false));
         Restore("BeforeSpinner1", jBeforeSpinner1, date);
         jBeforeSpinner1.setEnabled(enabled);
+        
         enabled = prefs.getBoolean("AfterToggle2", false);
         jAccessedAfterCheck.setSelected(enabled);
         Restore("AfterSpinner2", jAfterSpinner2, date);
@@ -511,6 +538,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jUseContentRegex = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jButton3 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -537,7 +565,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         });
 
         jFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
+        jFileSizeScaler.setSelectedIndex(1);
         jFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler.toolTipText")); // NOI18N
+        jFileSizeScaler.setEnabled(false);
 
         jLessThanCheck.setText(bundle.getString("SearchEntryPanel.jLessThanCheck.text")); // NOI18N
         jLessThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanCheck.toolTipText")); // NOI18N
@@ -556,7 +586,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jGreaterThanSpinner.setEnabled(false);
 
         jFileSizeScaler1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
+        jFileSizeScaler1.setSelectedIndex(1);
         jFileSizeScaler1.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler1.toolTipText")); // NOI18N
+        jFileSizeScaler1.setEnabled(false);
 
         javax.swing.GroupLayout jFileSizePanelLayout = new javax.swing.GroupLayout(jFileSizePanel);
         jFileSizePanel.setLayout(jFileSizePanelLayout);
@@ -1127,9 +1159,19 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jAccessedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jAccessedBeforeCheck.text")); // NOI18N
         jAccessedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jAccessedBeforeCheck.toolTipText")); // NOI18N
+        jAccessedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jAccessedBeforeCheckItemStateChanged(evt);
+            }
+        });
 
         jAccessedAfterCheck.setText(bundle.getString("SearchEntryPanel.jAccessedAfterCheck.text")); // NOI18N
         jAccessedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jAccessedAfterCheck.toolTipText")); // NOI18N
+        jAccessedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jAccessedAfterCheckItemStateChanged(evt);
+            }
+        });
 
         jBeforeSpinner2.setModel(new javax.swing.SpinnerDateModel());
         jBeforeSpinner2.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner2.toolTipText")); // NOI18N
@@ -1294,14 +1336,15 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jPanel15.border.title"))); // NOI18N
 
         ContentSearchType.add(jUseContentSearch);
-        jUseContentSearch.setSelected(true);
         jUseContentSearch.setText(bundle.getString("SearchEntryPanel.jUseContentSearch.text")); // NOI18N
         jUseContentSearch.setToolTipText(bundle.getString("SearchEntryPanel.jUseContentSearch.toolTipText")); // NOI18N
 
+        jIgnoreCase.setSelected(true);
         jIgnoreCase.setText(bundle.getString("SearchEntryPanel.jIgnoreCase.text")); // NOI18N
         jIgnoreCase.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreCase.toolTipText")); // NOI18N
 
         ContentSearchType.add(jUseContentRegex);
+        jUseContentRegex.setSelected(true);
         jUseContentRegex.setText(bundle.getString("SearchEntryPanel.jUseContentRegex.text")); // NOI18N
         jUseContentRegex.setToolTipText(bundle.getString("SearchEntryPanel.jUseContentRegex.toolTipText")); // NOI18N
         jUseContentRegex.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1356,6 +1399,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addContainerGap())
         );
 
+        jButton3.setText(bundle.getString("SearchEntryPanel.jButton3.text")); // NOI18N
+
         javax.swing.GroupLayout jOptionsLayout = new javax.swing.GroupLayout(jOptions);
         jOptions.setLayout(jOptionsLayout);
         jOptionsLayout.setHorizontalGroup(
@@ -1367,6 +1412,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                     .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jOptionsLayout.createSequentialGroup()
+                .addGap(157, 157, 157)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jOptionsLayout.setVerticalGroup(
             jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1376,6 +1425,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addComponent(jButton3)
                 .addContainerGap())
         );
 
@@ -1591,6 +1642,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jAfterSpinner1.setEnabled(jCreatedAfterCheck.isSelected());
     }//GEN-LAST:event_jCreatedAfterCheckItemStateChanged
 
+    private void jAccessedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jAccessedBeforeCheckItemStateChanged
+        this.jBeforeSpinner2.setEnabled(jAccessedBeforeCheck.isSelected());
+    }//GEN-LAST:event_jAccessedBeforeCheckItemStateChanged
+
+    private void jAccessedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jAccessedAfterCheckItemStateChanged
+        this.jAfterSpinner2.setEnabled(jAccessedAfterCheck.isSelected());
+    }//GEN-LAST:event_jAccessedAfterCheckItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
     private javax.swing.ButtonGroup FilenameSearchType;
@@ -1615,6 +1674,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

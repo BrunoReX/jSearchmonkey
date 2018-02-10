@@ -10,7 +10,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -22,8 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import javax.swing.Timer;
 import javax.swing.text.JTextComponent;
 
@@ -208,6 +205,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                 {
                     if (isCancelled()) break; // Check for cancel
                     // String line = lineIterator.nextLine();
+                    previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
                     i ++;
                     if (match != null)
                     {
@@ -215,9 +213,14 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                         if (results.size() > 0)
                         {
                             publish(new MatchResult2(i, line, results));
+                            for (MatchResult res: results)
+                            {
+                                int s = previewDoc.getLength() + res.start() - line.length() - 1;
+                                int e = res.end() - res.start();
+                                previewDoc.setCharacterAttributes(s, e, doc.linkStyle, true);
+                            }
                         }
                     }
-                    previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
                 }
                 // return resultList;
             }
