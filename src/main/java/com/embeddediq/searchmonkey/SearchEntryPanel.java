@@ -197,7 +197,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
         
         // Get containing text
-        if (jContainingText.getSelectedItem() != null)
+        if (jCheckBox2.isSelected() && jContainingText.getSelectedItem() != null)
         {
             strItem = getSelectedItem(jContainingText);
             if (strItem.length() > 0) // Is there a content match to make?
@@ -211,11 +211,12 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
         
         // Get min/max size
-        double scaler = Math.pow(1024,jFileSizeScaler.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
         if (jLessThanCheck.isSelected()) {
+            double scaler = Math.pow(1024,jFileSizeScaler.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
             req.lessThan = (long)(scaler * (double)jLessThanSpinner.getValue());
         }
         if (jMoreThanCheck.isSelected()) {
+            double scaler = Math.pow(1024,jFileSizeScaler1.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
             req.greaterThan = (long)(scaler * (double)jGreaterThanSpinner.getValue());
         }
 
