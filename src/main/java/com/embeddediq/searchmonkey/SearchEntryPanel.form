@@ -74,7 +74,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jModifiedDate" max="32767" attributes="0"/>
                               <Component id="jFileSizePanel" max="32767" attributes="0"/>
-                              <Component id="jBasicSearch" pref="402" max="32767" attributes="0"/>
+                              <Component id="jBasicSearch" max="32767" attributes="0"/>
                               <Component id="jModifiedPanel1" max="32767" attributes="0"/>
                               <Component id="jModifiedPanel2" alignment="0" max="32767" attributes="0"/>
                           </Group>
@@ -118,23 +118,15 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLessThanSpinner" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jFileSizeScaler1" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jMoreThanCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLessThanCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jGreaterThanSpinner" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jFileSizeScaler" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jLessThanCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLessThanSpinner" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jMoreThanCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jGreaterThanSpinner" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jFileSizeScaler1" alignment="1" max="-2" attributes="0"/>
+                                  <Component id="jFileSizeScaler" alignment="1" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -146,15 +138,15 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLessThanCheck" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jGreaterThanSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jFileSizeScaler" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jFileSizeScaler" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLessThanSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jMoreThanCheck" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLessThanSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jGreaterThanSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jFileSizeScaler1" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -172,6 +164,9 @@
                           <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jMoreThanCheck.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jMoreThanCheckItemStateChanged"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="jFileSizeScaler">
                       <Properties>
@@ -201,6 +196,9 @@
                           <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jLessThanCheck.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jLessThanCheckItemStateChanged"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="jLessThanSpinner">
                       <Properties>
@@ -354,7 +352,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jModifiedBeforeCheckStateChanged"/>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jModifiedBeforeCheckItemStateChanged"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="jAfterSpinner">
@@ -407,7 +405,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jModifiedAfterCheckStateChanged"/>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jModifiedAfterCheckItemStateChanged"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -696,7 +694,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="134" max="32767" attributes="0"/>
                                       </Group>
                                       <Component id="jFileName1" alignment="0" max="32767" attributes="0"/>
                                   </Group>
@@ -846,7 +844,7 @@
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCheckBox2StateChanged"/>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBox2ItemStateChanged"/>
                           </Events>
                         </Component>
                         <Container class="javax.swing.JToolBar" name="jToolBar1">
@@ -981,6 +979,9 @@
                               <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jCheckBox3.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBox3ItemStateChanged"/>
+                          </Events>
                         </Component>
                         <Container class="javax.swing.JToolBar" name="jToolBar11">
                           <Properties>
@@ -1096,6 +1097,9 @@
                           <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jCreatedBeforeCheck.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCreatedBeforeCheckItemStateChanged"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="jBeforeSpinner1">
                       <Properties>
@@ -1146,6 +1150,9 @@
                           <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jCreatedAfterCheck.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCreatedAfterCheckItemStateChanged"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JSpinner" name="jAfterSpinner1">
                       <Properties>

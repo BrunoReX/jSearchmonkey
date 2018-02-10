@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -529,12 +530,22 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jMoreThanCheck.setText(bundle.getString("SearchEntryPanel.jMoreThanCheck.text")); // NOI18N
         jMoreThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jMoreThanCheck.toolTipText")); // NOI18N
+        jMoreThanCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jMoreThanCheckItemStateChanged(evt);
+            }
+        });
 
         jFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
         jFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler.toolTipText")); // NOI18N
 
         jLessThanCheck.setText(bundle.getString("SearchEntryPanel.jLessThanCheck.text")); // NOI18N
         jLessThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanCheck.toolTipText")); // NOI18N
+        jLessThanCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jLessThanCheckItemStateChanged(evt);
+            }
+        });
 
         jLessThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
         jLessThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanSpinner.toolTipText")); // NOI18N
@@ -554,19 +565,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             .addGroup(jFileSizePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                        .addComponent(jLessThanSpinner)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jFileSizeScaler1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                        .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jMoreThanCheck, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLessThanCheck, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                        .addComponent(jGreaterThanSpinner)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jFileSizeScaler, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLessThanCheck)
+                    .addComponent(jLessThanSpinner)
+                    .addComponent(jMoreThanCheck)
+                    .addComponent(jGreaterThanSpinner))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jFileSizePanelLayout.setVerticalGroup(
@@ -575,14 +581,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addContainerGap()
                 .addComponent(jLessThanCheck)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jGreaterThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLessThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jMoreThanCheck)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLessThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jGreaterThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -610,9 +616,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jModifiedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.text")); // NOI18N
         jModifiedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.toolTipText")); // NOI18N
-        jModifiedBeforeCheck.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jModifiedBeforeCheckStateChanged(evt);
+        jModifiedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jModifiedBeforeCheckItemStateChanged(evt);
             }
         });
 
@@ -636,9 +642,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jModifiedAfterCheck.setText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.text")); // NOI18N
         jModifiedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.toolTipText")); // NOI18N
-        jModifiedAfterCheck.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jModifiedAfterCheckStateChanged(evt);
+        jModifiedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jModifiedAfterCheckItemStateChanged(evt);
             }
         });
 
@@ -826,7 +832,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 134, Short.MAX_VALUE))
                     .addComponent(jFileName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -847,9 +853,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jCheckBox2.setText(bundle.getString("SearchEntryPanel.jCheckBox2.text_1")); // NOI18N
         jCheckBox2.setToolTipText(bundle.getString("SearchEntryPanel.jCheckBox2.toolTipText")); // NOI18N
-        jCheckBox2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox2StateChanged(evt);
+        jCheckBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBox2ItemStateChanged(evt);
             }
         });
 
@@ -919,6 +925,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jCheckBox3.setText(bundle.getString("SearchEntryPanel.jCheckBox3.text")); // NOI18N
         jCheckBox3.setToolTipText(bundle.getString("SearchEntryPanel.jCheckBox3.toolTipText")); // NOI18N
+        jCheckBox3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBox3ItemStateChanged(evt);
+            }
+        });
 
         jToolBar11.setFloatable(false);
         jToolBar11.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -1025,6 +1036,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jCreatedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jCreatedBeforeCheck.text")); // NOI18N
         jCreatedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jCreatedBeforeCheck.toolTipText")); // NOI18N
+        jCreatedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCreatedBeforeCheckItemStateChanged(evt);
+            }
+        });
 
         jBeforeSpinner1.setModel(new javax.swing.SpinnerDateModel());
         jBeforeSpinner1.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner1.toolTipText")); // NOI18N
@@ -1046,6 +1062,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jCreatedAfterCheck.setText(bundle.getString("SearchEntryPanel.jCreatedAfterCheck.text")); // NOI18N
         jCreatedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jCreatedAfterCheck.toolTipText")); // NOI18N
+        jCreatedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCreatedAfterCheckItemStateChanged(evt);
+            }
+        });
 
         jAfterSpinner1.setModel(new javax.swing.SpinnerDateModel());
         jAfterSpinner1.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner1.toolTipText")); // NOI18N
@@ -1193,7 +1214,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGroup(jSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jModifiedDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFileSizePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBasicSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+                    .addComponent(jBasicSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jModifiedPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jModifiedPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -1533,17 +1554,42 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel6.setVisible(!sel);
     }//GEN-LAST:event_jUseContentRegexStateChanged
 
-    private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
+    private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
         jContainingText.setEnabled(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox2StateChanged
+    }//GEN-LAST:event_jCheckBox2ItemStateChanged
 
-    private void jModifiedBeforeCheckStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jModifiedBeforeCheckStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jModifiedBeforeCheckStateChanged
+    private void jCheckBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox3ItemStateChanged
+        jContainingText.setEnabled(jCheckBox3.isSelected());
+    }//GEN-LAST:event_jCheckBox3ItemStateChanged
 
-    private void jModifiedAfterCheckStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jModifiedAfterCheckStateChanged
+    private void jModifiedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedAfterCheckItemStateChanged
+        this.jAfterSpinner.setEnabled(jModifiedAfterCheck.isSelected());
+    }//GEN-LAST:event_jModifiedAfterCheckItemStateChanged
+
+    private void jModifiedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedBeforeCheckItemStateChanged
+        this.jBeforeSpinner.setEnabled(jModifiedBeforeCheck.isSelected());
+    }//GEN-LAST:event_jModifiedBeforeCheckItemStateChanged
+
+    private void jLessThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLessThanCheckItemStateChanged
+        boolean sel = jLessThanCheck.isSelected();
+        this.jLessThanSpinner.setEnabled(sel);
+        this.jFileSizeScaler.setEnabled(sel);
+    }//GEN-LAST:event_jLessThanCheckItemStateChanged
+
+    private void jMoreThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jMoreThanCheckItemStateChanged
+        boolean sel = jMoreThanCheck.isSelected();
+        this.jGreaterThanSpinner.setEnabled(sel);
+        this.jFileSizeScaler1.setEnabled(sel);
         // TODO add your handling code here:
-    }//GEN-LAST:event_jModifiedAfterCheckStateChanged
+    }//GEN-LAST:event_jMoreThanCheckItemStateChanged
+
+    private void jCreatedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCreatedBeforeCheckItemStateChanged
+        this.jBeforeSpinner1.setEnabled(jCreatedBeforeCheck.isSelected());
+    }//GEN-LAST:event_jCreatedBeforeCheckItemStateChanged
+
+    private void jCreatedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCreatedAfterCheckItemStateChanged
+        this.jAfterSpinner1.setEnabled(jCreatedAfterCheck.isSelected());
+    }//GEN-LAST:event_jCreatedAfterCheckItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
