@@ -191,15 +191,15 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
         req.lookInSubFolders = jSubFolders.isSelected();
         
-        // Get filename folder
-        strItem = getSelectedItem(jFileName);
+        // Get filename
+        strItem = getSelectedItem(jUseFileRegex.isSelected() ? jFileName1 : jFileName);
         String prefix = (jUseFileRegex.isSelected() ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
         req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
         
         // Get containing text
         if (jCheckBox2.isSelected() && jContainingText.getSelectedItem() != null)
         {
-            strItem = getSelectedItem(jContainingText);
+            strItem = getSelectedItem(jUseContentRegex.isSelected() ? jContainingText : jContainingText1);
             if (strItem.length() > 0) // Is there a content match to make?
             {
                 int flags = 0;
@@ -610,6 +610,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jModifiedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.text")); // NOI18N
         jModifiedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.toolTipText")); // NOI18N
+        jModifiedBeforeCheck.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jModifiedBeforeCheckStateChanged(evt);
+            }
+        });
 
         jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
         jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
@@ -631,6 +636,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jModifiedAfterCheck.setText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.text")); // NOI18N
         jModifiedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.toolTipText")); // NOI18N
+        jModifiedAfterCheck.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jModifiedAfterCheckStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jModifiedDateLayout = new javax.swing.GroupLayout(jModifiedDate);
         jModifiedDate.setLayout(jModifiedDateLayout);
@@ -1524,6 +1534,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
         jContainingText.setEnabled(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2StateChanged
+
+    private void jModifiedBeforeCheckStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jModifiedBeforeCheckStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jModifiedBeforeCheckStateChanged
+
+    private void jModifiedAfterCheckStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jModifiedAfterCheckStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jModifiedAfterCheckStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
