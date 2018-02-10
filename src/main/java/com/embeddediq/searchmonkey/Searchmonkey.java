@@ -151,11 +151,12 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        searchSummary2 = new com.embeddediq.searchmonkey.SearchSummaryPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
         searchEntryPanel1 = new com.embeddediq.searchmonkey.SearchEntryPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         searchResultsTable1 = new com.embeddediq.searchmonkey.SearchResultsTable();
         searchMatchView1 = new com.embeddediq.searchmonkey.SearchMatchView();
-        searchSummary2 = new com.embeddediq.searchmonkey.SearchSummaryPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButton3 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -191,7 +192,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         });
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(searchEntryPanel1, java.awt.BorderLayout.WEST);
+        jPanel1.add(searchSummary2, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane2.setLeftComponent(searchEntryPanel1);
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.5);
@@ -204,8 +207,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jSplitPane1.setTopComponent(searchResultsTable1);
         jSplitPane1.setBottomComponent(searchMatchView1);
 
-        jPanel1.add(jSplitPane1, java.awt.BorderLayout.CENTER);
-        jPanel1.add(searchSummary2, java.awt.BorderLayout.SOUTH);
+        jSplitPane2.setRightComponent(jSplitPane1);
+
+        jPanel1.add(jSplitPane2, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -545,6 +549,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
