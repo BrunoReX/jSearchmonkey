@@ -71,6 +71,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jAfter2.addMouseListener(new MyMouseAdapter(jAfter2, jAfterSpinner2));
         jBefore2.addMouseListener(new MyMouseAdapter(jBefore2, jBeforeSpinner2));
         
+        jPanel3.setVisible(false); // hide the regex view
+        jPanel6.setVisible(false); // hide the context word search
+
         // Restore the settings
         Restore();
 
@@ -833,6 +836,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jCheckBox2.setText(bundle.getString("SearchEntryPanel.jCheckBox2.text_1")); // NOI18N
         jCheckBox2.setToolTipText(bundle.getString("SearchEntryPanel.jCheckBox2.toolTipText")); // NOI18N
+        jCheckBox2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBox2StateChanged(evt);
+            }
+        });
 
         jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -1511,6 +1519,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel4.setVisible(sel);
         jPanel6.setVisible(!sel);
     }//GEN-LAST:event_jUseContentRegexStateChanged
+
+    private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
+        jContainingText.setEnabled(jCheckBox2.isSelected());
+    }//GEN-LAST:event_jCheckBox2StateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
