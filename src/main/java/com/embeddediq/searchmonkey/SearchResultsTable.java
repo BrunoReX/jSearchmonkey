@@ -162,7 +162,10 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         storeColumnOrder("ColumnOrder");
     }
     
-    public void Restore()
+    /**
+     *
+     */
+    private void Restore()
     {
         restoreColumnWidth("ColumnWidth", SearchResult.COLUMN_WIDTH);
         restoreColumnOrder("ColumnOrder", IntStream.range(0, SearchResult.COLUMN_WIDTH.length).toArray());

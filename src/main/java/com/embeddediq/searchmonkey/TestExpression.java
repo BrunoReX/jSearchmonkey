@@ -29,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
 
 /**
  *
@@ -87,10 +86,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         String item = g.fromJson(json, String.class);
         jTextPane2.setText(item);
     }
-    private void RestoreDefaults() // Load back previous example content
-    {
-        jTextPane2.setText(def1);
-    }
+//    private void RestoreDefaults() // Load back previous example content
+//    {
+//        jTextPane2.setText(def1);
+//    }
     
     public void Save()
     {
@@ -116,8 +115,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jTextField1.setText(val);
     }
     
-    private Style as;
-    private Style def;
     private int flags;
     private void UpdateRegex()
     {

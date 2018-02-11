@@ -567,24 +567,18 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         setDefaultLookAndFeelDecorated(true); // Speed up the resize time
         
         // Fix a bug in the Nimbus look and feel
-        UIManager.put("TextPane[Enabled].backgroundPainter", new Painter<JComponent>() { 
-            @Override
-            public void paint(Graphics2D g, JComponent comp, int width, int height) { 
-                if (comp.isOpaque())
-                {
-                    g.setColor(comp.getBackground()); 
-                    g.fillRect(0, 0, width, height); 
-                }
+        UIManager.put("TextPane[Enabled].backgroundPainter",
+                (Painter<JComponent>)(Graphics2D g, JComponent comp, int width1, int height1) -> {
+            if (comp.isOpaque()) {
+                g.setColor(comp.getBackground());
+                g.fillRect(0, 0, width1, height1);
             } 
         });         
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Searchmonkey s = new Searchmonkey();
-                s.addActionListeners();
-                s.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            Searchmonkey s = new Searchmonkey();
+            s.addActionListeners();
+            s.setVisible(true);
         });
     }
 

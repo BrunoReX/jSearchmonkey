@@ -16,11 +16,21 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
      */
     public SearchSummaryPanel() {
         initComponents();
-        ShowProgress(false);
-        SetProgress("Pending");
-        SetStatus("Ready");
-        SetSearched("");
-        SetSelected("");
+        
+        //ShowProgress(false);
+        jStatus.setVisible(!false);
+        jProgressBar1.setVisible(false);
+        // SetProgress("Pending");
+        jProgressBar1.setIndeterminate(true);
+        jProgressBar1.setString("Pending");
+        jProgressBar1.setStringPainted(true);
+        //SetStatus("Ready");
+        jStatus.setText("");
+        // SetSearched("");
+        jSearchSummary.setText("");
+        // SetSelected("");
+        jSearchSummary.setText("");
+        jSearchSelect.setText("");
     }
     
     public void SetSelected(String msg)

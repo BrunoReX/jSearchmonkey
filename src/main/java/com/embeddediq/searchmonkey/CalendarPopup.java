@@ -44,22 +44,16 @@ public class CalendarPopup extends javax.swing.JPanel {
         jTable1.setCellSelectionEnabled(true);
 
         // Handle row changes
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener () {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                //Ignore extra messages.
-                if (e.getValueIsAdjusting()) return;
-                updateDate();
-            }
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            //Ignore extra messages.
+            if (e.getValueIsAdjusting()) return;
+            updateDate();
         });
 
         // Handle column changes
-        jTable1.getColumnModel().getSelectionModel().addListSelectionListener(new ListSelectionListener () {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) return;
-                updateDate();
-            }
+        jTable1.getColumnModel().getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if (e.getValueIsAdjusting()) return;
+            updateDate();
         });
     }
     
