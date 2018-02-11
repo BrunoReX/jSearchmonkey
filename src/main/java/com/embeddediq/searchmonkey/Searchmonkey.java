@@ -110,7 +110,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         searchResultsTable1.clearTable();
         searchTask = new SearchWorker(entry, searchResultsTable1);
         searchTask.addPropertyChangeListener(this);
-        searchMatchView1.setContentMatch(entry.containingText); // Update the content match
+        searchMatchView1.setContentMatch(entry); // Update the content match
         searchTask.execute();
         jButton1.setEnabled(false);
         jButton2.setEnabled(true);

@@ -19,8 +19,11 @@ import java.util.Set;
 public class SearchEntry {
     public List<Path> lookIn; // Add one or more folders to look in
     public boolean lookInSubFolders; // List of folders vs look in all
-    public PathMatcher fileName; // Filename match object
-    public ContentMatch containingText; // Text contents
+    public String fileNameRegex; // User entered text
+    //public PathMatcher fileName; // Filename match object
+    // public ContentMatch containingText; // Text contents
+    public String containingText; // User entered text
+    //public Pattern containingTextRegex; // Text contents regex
     public FileTime modifiedBefore; // null is off, otherwise set to max date
     public FileTime modifiedAfter; // null is off, otherwise set to min date
     public FileTime createdBefore; // null is off, otherwise set to max date

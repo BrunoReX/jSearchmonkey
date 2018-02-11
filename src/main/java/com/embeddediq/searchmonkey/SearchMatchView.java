@@ -74,9 +74,11 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
 
      
     private ContentMatch match;
+    private SearchEntry entry;
 
-    public void setContentMatch(ContentMatch match) {
-        this.match = match;
+    public void setContentMatch(SearchEntry entry) { //ContentMatch match) {
+        this.entry = entry;
+        this.match = new ContentMatch(entry);
         this.jTextArea1.setText("");
     }
     public ContentMatch getContentMatch() {

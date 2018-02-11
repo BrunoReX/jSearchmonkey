@@ -39,9 +39,17 @@ import org.mozilla.universalchardet.UniversalDetector;
  */
 public class ContentMatch {
     final private Pattern regexMatch;
-    public ContentMatch(Pattern regex)
+    //public ContentMatch(Pattern regex)
+    //{
+//        regexMatch = regex;
+//    }
+    public ContentMatch(SearchEntry entry)
     {
-        regexMatch = regex;
+        int flags = 0;
+        if (!entry.flags.useContentRegex) flags |= Pattern.LITERAL;
+        if (entry.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
+        //Pattern regex = Pattern.compile(strItem, flags);
+        regexMatch = Pattern.compile(entry.containingText, flags);
     }
     /*
     public ContentMatch(String pattern) throws PatternSyntaxException

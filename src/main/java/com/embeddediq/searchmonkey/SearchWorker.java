@@ -8,6 +8,7 @@ package com.embeddediq.searchmonkey;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.System.nanoTime;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
@@ -37,8 +38,9 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
     {
         super();
         this.entry = entry;
-        this.contentMatch = entry.containingText;
-        this.matcher = entry.fileName;
+        this.contentMatch = new ContentMatch(entry);
+        String prefix = (entry.flags.useFilenameRegex ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
+        this.matcher = FileSystems.getDefault().getPathMatcher(prefix + entry.fileNameRegex);
         this.table = table;
     }
 
@@ -50,7 +52,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         Path startingDir = entry.lookIn.get(0);
         summary.startTime = nanoTime();
         try {
-            if (entry.flags.lookInSubFolders) {
+            if (entry.lookInSubFolders) {
                 Files.walkFileTree(startingDir, this);
             } else {
                 Files.walkFileTree(startingDir, new HashSet<>(), 0, this);

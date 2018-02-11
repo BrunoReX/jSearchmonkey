@@ -86,7 +86,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
         
         // TODO - future stuff
-        this.jExpertMode.setVisible(false);
+        // this.jExpertMode.setVisible(false);
         this.jButton7.setVisible(false);
         this.jButton8.setVisible(false);
         this.jButton10.setVisible(false);
@@ -176,64 +176,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         SearchEntry req = new SearchEntry();
         String strItem;
 
-        // Get look in folder
-        req.lookIn = new ArrayList<>();
-        Object folder = getSelectedItem(jLookIn);
-        if (folder.getClass().equals(String.class))
-        {
-            strItem = (String)folder;
-            req.lookIn.add(Paths.get(strItem));
-        }
-        else if (folder.getClass().equals(List.class))
-        { // Check for list
-            for (String item: (List<String>)folder)
-            {
-                req.lookIn.add(Paths.get(item));
-            }
-        } else { // Unsupported
-            System.out.println("Error! Unsupported class type..");
-        }
-        req.lookInSubFolders = jSubFolders.isSelected();
-        
-        // Get filename
-        strItem = getSelectedItem(jUseFileRegex.isSelected() ? jFileName1 : jFileName);
-        String prefix = (jUseFileRegex.isSelected() ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
-        req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
-        
-        // Get containing text
-        if (jCheckBox2.isSelected() && jContainingText.getSelectedItem() != null)
-        {
-            strItem = getSelectedItem(jUseContentRegex.isSelected() ? jContainingText : jContainingText1);
-            if (strItem.length() > 0) // Is there a content match to make?
-            {
-                int flags = 0;
-                if (this.jUseContentSearch.isSelected()) flags |= Pattern.LITERAL;
-                if (this.jIgnoreContentCase.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
-                Pattern regex = Pattern.compile(strItem, flags);
-                req.containingText = new ContentMatch(regex);
-            }
-        }
-        
-        // Get min/max size
-        if (jLessThanCheck.isSelected()) {
-            double scaler = Math.pow(1024,jFileSizeScaler.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
-            req.lessThan = (long)(scaler * (double)jLessThanSpinner.getValue());
-        }
-        if (jMoreThanCheck.isSelected()) {
-            double scaler = Math.pow(1024,jFileSizeScaler1.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
-            req.greaterThan = (long)(scaler * (double)jGreaterThanSpinner.getValue());
-        }
-
-        // Get modifed before/after date
-        if (jModifiedAfterCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jAfterSpinner.getModel()).getDate();
-            req.modifiedAfter = FileTime.from(d.toInstant());
-        }
-        if (jModifiedBeforeCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jBeforeSpinner.getModel()).getDate();
-            req.modifiedBefore = FileTime.from(d.toInstant());
-        }
-
         // Set flags from the options tab
         req.flags.usePowerSearch = jExpertMode.isSelected();
         req.flags.disablePlugins = jDisable3rdParty.isSelected();
@@ -265,6 +207,67 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             longVal = (Long)jMaxRecurse.getValue();
         }
         req.maxRecurse = longVal;
+
+        // Get look in folder
+        req.lookIn = new ArrayList<>();
+        Object folder = getSelectedItem(jLookIn);
+        if (folder.getClass().equals(String.class))
+        {
+            strItem = (String)folder;
+            req.lookIn.add(Paths.get(strItem));
+        }
+        else if (folder.getClass().equals(List.class))
+        { // Check for list
+            for (String item: (List<String>)folder)
+            {
+                req.lookIn.add(Paths.get(item));
+            }
+        } else { // Unsupported
+            System.out.println("Error! Unsupported class type..");
+        }
+        req.lookInSubFolders = jSubFolders.isSelected();
+        
+        // Get filename
+        strItem = getSelectedItem(jUseFileRegex.isSelected() ? jFileName1 : jFileName);
+        //String prefix = (jUseFileRegex.isSelected() ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
+        //req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
+        req.fileNameRegex = strItem;
+        
+        // Get containing text
+        if (jCheckBox2.isSelected() && jContainingText.getSelectedItem() != null)
+        {
+            strItem = getSelectedItem(jUseContentRegex.isSelected() ? jContainingText : jContainingText1);
+            if (strItem.length() > 0) // Is there a content match to make?
+            {
+                req.containingText = strItem;
+//                int flags = 0;
+//                if (!req.flags.useContentRegex) flags |= Pattern.LITERAL;
+//                if (req.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
+//                //Pattern regex = Pattern.compile(strItem, flags);
+//                req.containingTextRegex = Pattern.compile(strItem, flags);
+                //req.containingText = new ContentMatch(regex);
+            }
+        }
+        
+        // Get min/max size
+        if (jLessThanCheck.isSelected()) {
+            double scaler = Math.pow(1024,jFileSizeScaler.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
+            req.lessThan = (long)(scaler * (double)jLessThanSpinner.getValue());
+        }
+        if (jMoreThanCheck.isSelected()) {
+            double scaler = Math.pow(1024,jFileSizeScaler1.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
+            req.greaterThan = (long)(scaler * (double)jGreaterThanSpinner.getValue());
+        }
+
+        // Get modifed before/after date
+        if (jModifiedAfterCheck.isSelected()) {
+            Date d = ((SpinnerDateModel)jAfterSpinner.getModel()).getDate();
+            req.modifiedAfter = FileTime.from(d.toInstant());
+        }
+        if (jModifiedBeforeCheck.isSelected()) {
+            Date d = ((SpinnerDateModel)jBeforeSpinner.getModel()).getDate();
+            req.modifiedBefore = FileTime.from(d.toInstant());
+        }
 
         // Get created before/after date
         if (jCreatedAfterCheck.isSelected()) {
@@ -572,7 +575,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jExpertMode = new javax.swing.JCheckBox();
         jDisable3rdParty = new javax.swing.JCheckBox();
         jDisableUnicodeDetection = new javax.swing.JCheckBox();
-        jButton3 = new javax.swing.JButton();
+        jRestoreAll = new javax.swing.JButton();
         jPanel16 = new javax.swing.JPanel();
         jIgnoreFolderCase = new javax.swing.JCheckBox();
         jLimitMaxRecurse = new javax.swing.JCheckBox();
@@ -1343,9 +1346,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLimitMaxFileSize.setSelected(true);
         jLimitMaxFileSize.setText(bundle.getString("SearchEntryPanel.jLimitMaxFileSize.text")); // NOI18N
-        jLimitMaxFileSize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jLimitMaxFileSizeActionPerformed(evt);
+        jLimitMaxFileSize.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jLimitMaxFileSizeItemStateChanged(evt);
             }
         });
 
@@ -1423,6 +1426,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jLimitMaxHits.setSelected(true);
         jLimitMaxHits.setText(bundle.getString("SearchEntryPanel.jLimitMaxHits.text")); // NOI18N
         jLimitMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxHits.toolTipText")); // NOI18N
+        jLimitMaxHits.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jLimitMaxHitsItemStateChanged(evt);
+            }
+        });
 
         jMaxHits.setModel(new javax.swing.SpinnerNumberModel(50, null, null, 1));
         jMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jMaxHits.toolTipText")); // NOI18N
@@ -1492,11 +1500,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addContainerGap())
         );
 
-        jButton3.setText(bundle.getString("SearchEntryPanel.jButton3.text")); // NOI18N
-        jButton3.setToolTipText(bundle.getString("SearchEntryPanel.jButton3.toolTipText")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jRestoreAll.setText(bundle.getString("SearchEntryPanel.jRestoreAll.text")); // NOI18N
+        jRestoreAll.setToolTipText(bundle.getString("SearchEntryPanel.jRestoreAll.toolTipText")); // NOI18N
+        jRestoreAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jRestoreAllActionPerformed(evt);
             }
         });
 
@@ -1508,6 +1516,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLimitMaxRecurse.setText(bundle.getString("SearchEntryPanel.jLimitMaxRecurse.text")); // NOI18N
         jLimitMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxRecurse.toolTipText")); // NOI18N
+        jLimitMaxRecurse.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jLimitMaxRecurseItemStateChanged(evt);
+            }
+        });
 
         jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel());
         jMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jMaxRecurse.toolTipText")); // NOI18N
@@ -1567,7 +1580,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                     .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jOptionsLayout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(jRestoreAll)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1576,13 +1589,13 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             .addGroup(jOptionsLayout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(jRestoreAll)
                 .addContainerGap())
         );
 
@@ -1803,7 +1816,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jAfterSpinner2.setEnabled(jAccessedAfterCheck.isSelected());
     }//GEN-LAST:event_jAccessedAfterCheckItemStateChanged
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jRestoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRestoreAllActionPerformed
         int res = JOptionPane.showConfirmDialog(this, "Press OK to clear all configuration settings", "Restore all defaults?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (res != JOptionPane.OK_OPTION) return; //Cancel
         try {
@@ -1812,15 +1825,23 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         } catch (BackingStoreException ex) {
             Logger.getLogger(SearchEntryPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jLimitMaxFileSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimitMaxFileSizeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLimitMaxFileSizeActionPerformed
+    }//GEN-LAST:event_jRestoreAllActionPerformed
 
     private void jManageSkipFoldersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jManageSkipFoldersActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jManageSkipFoldersActionPerformed
+
+    private void jLimitMaxFileSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxFileSizeItemStateChanged
+        jMaxFileSize.setEnabled(jLimitMaxFileSize.isSelected());
+    }//GEN-LAST:event_jLimitMaxFileSizeItemStateChanged
+
+    private void jLimitMaxRecurseItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxRecurseItemStateChanged
+        jMaxRecurse.setEnabled(jLimitMaxRecurse.isSelected());
+    }//GEN-LAST:event_jLimitMaxRecurseItemStateChanged
+
+    private void jLimitMaxHitsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxHitsItemStateChanged
+        jMaxHits.setEnabled(jLimitMaxHits.isSelected());
+    }//GEN-LAST:event_jLimitMaxHitsItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
@@ -1846,7 +1867,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -1904,6 +1924,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JButton jRestoreAll;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jSearch;
