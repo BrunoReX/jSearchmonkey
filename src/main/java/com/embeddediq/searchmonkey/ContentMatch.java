@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import static java.lang.System.nanoTime;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -107,22 +108,22 @@ public class ContentMatch {
 
         try {
             String contentType = Files.probeContentType(path);
-            if (contentType.matches("application/pdf")) // PDF
+            if (contentType != null)
             {
-                return GetContentPDF(path);
+                if (contentType.matches("application/pdf")) // PDF
+                {
+                    return GetContentPDF(path);
+                }
+                else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
+                {
+                    return GetContentDocx(path); // DOCX
+                }
+                else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
+                {
+                    return GetContentOdt(path); // ODT
+                }
             }
-            else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
-            {
-                return GetContentDocx(path); // DOCX
-            }
-            else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
-            {
-                return GetContentOdt(path); // ODT
-            }
-            else
-            {
-                return GetContentText(path);
-            }
+            return GetContentText(path);
         } catch (IOException ex) {
             Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -208,12 +209,17 @@ public class ContentMatch {
                 
     public String GetContentText(Path path)
     {
+        long startTime = nanoTime();
         String lines = "";
         String encoding = TestFile(path);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
+                if ((nanoTime() - startTime) > 5*1000*1000*1000) {
+                    break;
+                    lines += " -- SIC -- \n"
+                } // Early exit after 5 seconds
             }
         } catch (IOException er) {
             // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
