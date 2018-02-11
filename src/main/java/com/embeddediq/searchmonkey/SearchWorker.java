@@ -98,7 +98,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
             }
             
             long count = -1;
-            if (contentMatch != null)
+            if (entry.containingText != null)
             {
                 count = contentMatch.CheckContent(file);
                 if (count > 0)
@@ -109,7 +109,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 }
             }
 
-            if ((contentMatch == null) || (count > 0))
+            if ((entry.containingText == null) || (count > 0))
             {
                 // Collect matching files
                 // TODO - support long in the SearchResult

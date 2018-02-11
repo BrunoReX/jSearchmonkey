@@ -44,10 +44,16 @@ public class ContentMatch {
     public ContentMatch(SearchEntry entry)
     {
         this.entry = entry;
-        int flags = 0;
-        if (!entry.flags.useContentRegex) flags |= Pattern.LITERAL;
-        if (entry.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
-        regexMatch = Pattern.compile(entry.containingText, flags);
+        
+        if (entry.containingText != null)
+        {
+            int flags = 0;
+            if (!entry.flags.useContentRegex) flags |= Pattern.LITERAL;
+            if (entry.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
+            regexMatch = Pattern.compile(entry.containingText, flags);
+        } else {
+            regexMatch = null;
+        }
     }
     /*
     public ContentMatch(String pattern) throws PatternSyntaxException

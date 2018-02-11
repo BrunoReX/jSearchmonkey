@@ -258,6 +258,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             double scaler = Math.pow(1024,jFileSizeScaler1.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
             req.greaterThan = (long)(scaler * (double)jGreaterThanSpinner.getValue());
         }
+        // If max size is not set, then use the built in override
+        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
+            req.lessThan = req.maxFileSize;
+        }
 
         // Get modifed before/after date
         if (jModifiedAfterCheck.isSelected()) {
@@ -465,7 +469,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jUseContentSearch.setSelected(!enabled);
         jIgnoreContentCase.setSelected(prefs.getBoolean("IgnoreContentCase", true));
         jLimitMaxHits.setSelected(prefs.getBoolean("LimitMaxHits", true));
-        jMaxHits.setValue(prefs.getLong("MaxHits", 50L)); // limit to 50 hits
+        jMaxHits.setValue(prefs.getLong("MaxHits", 999L)); // limit to 999 hits
 
         jIgnoreFolderCase.setSelected(prefs.getBoolean("IgnoreFolderCase", true));
         jIgnoreHiddenFolders.setSelected(prefs.getBoolean("IgnoreHiddenFolders", false));

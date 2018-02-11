@@ -129,14 +129,41 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         {
             jTextArea1.append(String.format("Content found: %d hit%s\n", ss.totalContentMatch, ss.totalContentMatch != 1 ? "s" : ""));
         }
+        if (ss.totalFolders > 0)
+        {
+            jTextArea1.append(String.format("Processed: %d folder%s\n", ss.totalFolders, ss.totalFolders != 1 ? "s" : ""));
+        }
         if (ss.skippedFolders > 0)
         {
             jTextArea1.append(String.format("Skipped: %d folder%s\n", ss.skippedFolders, ss.skippedFolders != 1 ? "s" : ""));
         }
+        if (ss.totalFiles > 0)
+        {
+            jTextArea1.append(String.format("Processed: %d file%s\n", ss.totalFiles, ss.totalFiles != 1 ? "s" : ""));
+        }
         if (ss.skippedFiles > 0)
         {
             jTextArea1.append(String.format("Skipped: %d file%s\n", ss.skippedFiles, ss.skippedFiles != 1 ? "s" : ""));
-        }        
+        }
+        if (ss.maxMatchBytes > 0)
+        {
+            int order = getFileOrder(ss.maxMatchBytes);
+            double divider = Math.pow(1024, order);
+            
+            jTextArea1.append(String.format("\nLargest file size: %.1f %s\n", ((double)ss.maxMatchBytes / divider), FSIZE[order]));
+        }
+        if (ss.maxContentMatch > 0)
+        {
+            jTextArea1.append(String.format("Largest matches per file: %d hit%s\n", ss.maxContentMatch, ss.maxContentMatch != 1 ? "s" : ""));
+        }
+        if (ss.firstCreated != null)
+        {
+            jTextArea1.append(String.format("Oldest file: %s\n", ss.firstCreated));
+        }
+        if (ss.lastModified != null)
+        {
+            jTextArea1.append(String.format("Most recent file: %s\n", ss.lastModified));
+        }
     }
             
     public class MatchResult2 {
@@ -210,7 +237,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                     // String line = lineIterator.nextLine();
                     previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
                     i ++;
-                    if (match != null)
+                    if (entry.containingText != null)
                     {
                         List<MatchResult> results = match.getMatches(line);
                         if (results.size() > 0)
