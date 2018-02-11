@@ -487,8 +487,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
                     }
                     break;
                 case SearchResult.COUNT: // Handle Count
-                    int count = (int)value;
-                    if (count < 0)
+                    long count = (long)value;
+                    if (count < 0L)
                     {
                         txtVal = "N/A"; // Not applicable
                         txtToolTip = "Not applicable";

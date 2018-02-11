@@ -231,7 +231,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         strItem = getSelectedItem(jUseFileRegex.isSelected() ? jFileName1 : jFileName);
         //String prefix = (jUseFileRegex.isSelected() ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
         //req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
-        req.fileNameRegex = strItem;
+        req.fileNameText = strItem;
         
         // Get containing text
         if (jCheckBox2.isSelected() && jContainingText.getSelectedItem() != null)

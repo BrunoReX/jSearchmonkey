@@ -195,7 +195,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         private void consumePath(Path path, PreviewResultDoc previewDoc)
         {
             // ContentMatch cm = new ContentMatch();
-            String lines = ContentMatch.GetContent(path);
+            
+            String lines = match.GetContent(path); // ContentMatch.GetContent(path);
             if (lines == null || lines.equals("")) return;
             
             try /*(LineIterator lineIterator = FileUtils.lineIterator(path.toFile())) */ {

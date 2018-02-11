@@ -6,7 +6,6 @@
 package com.embeddediq.searchmonkey;
 
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.nio.file.attribute.FileTime;
 import java.util.HashSet;
 import java.util.List;
@@ -19,11 +18,8 @@ import java.util.Set;
 public class SearchEntry {
     public List<Path> lookIn; // Add one or more folders to look in
     public boolean lookInSubFolders; // List of folders vs look in all
-    public String fileNameRegex; // User entered text
-    //public PathMatcher fileName; // Filename match object
-    // public ContentMatch containingText; // Text contents
+    public String fileNameText; // User entered text
     public String containingText; // User entered text
-    //public Pattern containingTextRegex; // Text contents regex
     public FileTime modifiedBefore; // null is off, otherwise set to max date
     public FileTime modifiedAfter; // null is off, otherwise set to min date
     public FileTime createdBefore; // null is off, otherwise set to max date
@@ -42,11 +38,9 @@ public class SearchEntry {
         public boolean ignoreHiddenFiles;
         public boolean ignoreHiddenFolders;
         public boolean ignoreSymbolicLinks;
-        // public boolean lookInSubFolders;
         public boolean ignoreContentCase;
         public boolean ignoreFilenameCase;
         public boolean ignoreFolderCase;
-        //public boolean useRecurseLimit;
         public boolean skipBinaryFiles;
         public boolean disablePlugins; // Disable 3rd party pluging e.g. word detection
         public boolean disableUnicodeDetection; // Use native files only

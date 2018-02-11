@@ -39,16 +39,14 @@ import org.mozilla.universalchardet.UniversalDetector;
  */
 public class ContentMatch {
     final private Pattern regexMatch;
-    //public ContentMatch(Pattern regex)
-    //{
-//        regexMatch = regex;
-//    }
+
+    private final SearchEntry entry;
     public ContentMatch(SearchEntry entry)
     {
+        this.entry = entry;
         int flags = 0;
         if (!entry.flags.useContentRegex) flags |= Pattern.LITERAL;
         if (entry.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
-        //Pattern regex = Pattern.compile(strItem, flags);
         regexMatch = Pattern.compile(entry.containingText, flags);
     }
     /*
@@ -62,41 +60,45 @@ public class ContentMatch {
      * @param path
      * @return 
     */
-    public int CheckContent(Path path)
-    {
-        try {
-            String contentType = Files.probeContentType(path);
-            if (contentType.matches("application/pdf")) // PDF
-            {
-                return CheckContentPDF(path);
-            }
-            else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
-            {
-                return CheckContentDocx(path); // DOCX
-            }
-            else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
-            {
-                return CheckContentOdt(path); // ODT
-            }
-            else
-            {
-                return CheckContentText(path);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        // Fail
-        return 0;
-    }
+//    public int CheckContent(Path path)
+//    {
+//        if (entry.flags.disablePlugins) return CheckContentText(path);
+//        
+//        try {
+//            String contentType = Files.probeContentType(path);
+//            if (contentType.matches("application/pdf")) // PDF
+//            {
+//                return CheckContentPDF(path);
+//            }
+//            else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
+//            {
+//                return CheckContentDocx(path); // DOCX
+//            }
+//            else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
+//            {
+//                return CheckContentOdt(path); // ODT
+//            }
+//            else
+//            {
+//                return CheckContentText(path);
+//            }
+//        } catch (IOException ex) {
+//            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        // Fail
+//        return 0;
+//    }
     
     /**
      * Simple file reader with basic matching
      * @param path
      * @return 
     */
-    static public String GetContent(Path path)
+    public String GetContent(Path path)
     {
+        if (entry.flags.disablePlugins) return GetContentText(path);
+
         try {
             String contentType = Files.probeContentType(path);
             if (contentType.matches("application/pdf")) // PDF
@@ -123,7 +125,7 @@ public class ContentMatch {
         return "";
     }
 
-    static public String GetContentPDF(Path path)
+    public String GetContentPDF(Path path)
     {
         try (RandomAccessBufferedFileInputStream fd = new RandomAccessBufferedFileInputStream(path.toFile())){
             PDFParser parser = new PDFParser(fd);
@@ -139,7 +141,7 @@ public class ContentMatch {
         return "";
     }
     
-    static public String GetContentOdt(Path path)
+    public String GetContentOdt(Path path)
     {
         String output = "";
         // OutputStream out = new StringOutputStream(path.toFile());
@@ -182,7 +184,7 @@ public class ContentMatch {
         return output;
     }
     
-    static public String GetContentDocx(Path path)
+    public String GetContentDocx(Path path)
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
@@ -198,7 +200,7 @@ public class ContentMatch {
         return text;
     }
                 
-    static public String GetContentText(Path path)
+    public String GetContentText(Path path)
     {
         String lines = "";
         String encoding = TestFile(path);
@@ -214,70 +216,85 @@ public class ContentMatch {
         return lines;
     }
     
-    /**
-     * Simple file reader with basic matching
-     * @param path
-     * @return 
-    */
-    private int CheckContentPDF(Path path)
+    public long CheckContent(Path path)
     {
-        int count = 0;
-        String lines = GetContentPDF(path);
+        long count = 0;
+        String lines = GetContent(path);
         for (String line: lines.split("\n")) {
                 count += getMatchCount(line);
+                if (entry.maxHits > 0 && count > entry.maxHits) {
+                    count = entry.maxHits;
+                    break;
+                }
         }
         return count;
     }
 
-    /**
-     * Simple file reader with basic matching
-     * @param path
-     * @return 
-    */
-    private int CheckContentDocx(Path path)
-    {
-        int count = 0;
-        String lines = GetContentDocx(path);
-        for (String line: lines.split("\n")) {
-                count += getMatchCount(line);
-        }
-        return count;
-    }
+//    /**
+//     * Simple file reader with basic matching
+//     * @param path
+//     * @return 
+//    */
+//    private int CheckContentPDF(Path path)
+//    {
+//        int count = 0;
+//        String lines = GetContentPDF(path);
+//        for (String line: lines.split("\n")) {
+//                count += getMatchCount(line);
+//        }
+//        return count;
+//    }
+//
+//    /**
+//     * Simple file reader with basic matching
+//     * @param path
+//     * @return 
+//    */
+//    private int CheckContentDocx(Path path)
+//    {
+//        int count = 0;
+//        String lines = GetContentDocx(path);
+//        for (String line: lines.split("\n")) {
+//                count += getMatchCount(line);
+//        }
+//        return count;
+//    }
+//    
+//    /**
+//     * Simple file reader with basic matching
+//     * @param path
+//     * @return 
+//    */
+//    private int CheckContentOdt(Path path)
+//    {
+//        int count = 0;
+//        String lines = GetContentOdt(path);
+//        for (String line: lines.split("\n")) {
+//                count += getMatchCount(line);
+//        }
+//        return count;
+//    }
+//
+//    /**
+//     * Simple file reader with basic matching
+//     * @param path
+//     * @return 
+//    */
+//    private int CheckContentText(Path path)
+//    {
+//        int count = 0;
+//        String encoding = TestFile(path);
+//        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                count += getMatchCount(line);
+//            }
+//        } catch (IOException er) {
+//            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
+//        }
+//        return count;
+//    }
     
-    /**
-     * Simple file reader with basic matching
-     * @param path
-     * @return 
-    */
-    private int CheckContentOdt(Path path)
-    {
-        int count = 0;
-        String lines = GetContentOdt(path);
-        for (String line: lines.split("\n")) {
-                count += getMatchCount(line);
-        }
-        return count;
-    }
-
-    /**
-     * Simple file reader with basic matching
-     * @param path
-     * @return 
-    */
-    private int CheckContentText(Path path)
-    {
-        int count = 0;
-        String encoding = TestFile(path);
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                count += getMatchCount(line);
-            }
-        } catch (IOException er) {
-            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
-        }
-        return count;
-    }
 
     private int getMatchCount(String line)
     {
@@ -301,8 +318,10 @@ public class ContentMatch {
         return results;
     }
 
-    static private String TestFile(Path path)
+    private String TestFile(Path path)
     {
+        if (entry.flags.disableUnicodeDetection) return Charset.defaultCharset().name(); // UTF8
+
         String encoding = null;
         
         byte[] buf = new byte[4096];

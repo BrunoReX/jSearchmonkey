@@ -40,7 +40,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         this.entry = entry;
         this.contentMatch = new ContentMatch(entry);
         String prefix = (entry.flags.useFilenameRegex ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
-        this.matcher = FileSystems.getDefault().getPathMatcher(prefix + entry.fileNameRegex);
+        this.matcher = FileSystems.getDefault().getPathMatcher(prefix + entry.fileNameText);
         this.table = table;
     }
 
@@ -97,7 +97,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 return CONTINUE;
             }
             
-            int count = -1;
+            long count = -1;
             if (contentMatch != null)
             {
                 count = contentMatch.CheckContent(file);
@@ -112,6 +112,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
             if ((contentMatch == null) || (count > 0))
             {
                 // Collect matching files
+                // TODO - support long in the SearchResult
                 SearchResult result = new SearchResult(file, attrs, count);
                 publish(result);
                 int lastResult = summary.matchFileCount;

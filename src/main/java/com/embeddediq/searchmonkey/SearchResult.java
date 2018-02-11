@@ -19,7 +19,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author cottr
  */
 public class SearchResult {
-    public SearchResult(Path file, BasicFileAttributes attrs, int matchCount)
+    public SearchResult(Path file, BasicFileAttributes attrs, long matchCount)
     {
         fileName = FilenameUtils.getName(file.toString());
         fileExtension = FilenameUtils.getExtension(fileName);
@@ -82,7 +82,7 @@ public class SearchResult {
     public FileTime lastAccessTime;
     public FileTime creationTime;
     public int fileFlags;
-    public int matchCount;
+    public long matchCount;
     public String contentType;
 
     // Flags
@@ -109,8 +109,8 @@ public class SearchResult {
     public final static Class[] COLUMN_CLASSES = new Class[]  {
         String.class,
         String.class,
-        Integer.class,
-        Integer.class,
+        Long.class,
+        Long.class,
         FileTime.class,
         FileTime.class,
         FileTime.class,
