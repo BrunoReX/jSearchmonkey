@@ -246,12 +246,10 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         public void addRows(List<SearchResult> objects) { 
             for (SearchResult vals: objects) {
                 rowData.add(vals);
-//                super.addRow(vals.toArray());
                 
                 int rowNr = rowData.size() - 1;
                 this.fireTableRowsInserted(rowNr, rowNr);
             }
-            fireTableDataChanged();
         }
         
         @Override
