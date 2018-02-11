@@ -11,6 +11,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,6 +33,8 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.mozilla.universalchardet.UniversalDetector;
+
 /**
  *
  * @author cottr
@@ -190,7 +195,8 @@ public class ContentMatch {
     static public String GetContentText(Path path)
     {
         String lines = "";
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
+        String encoding = TestFile(path);
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
@@ -255,7 +261,8 @@ public class ContentMatch {
     private int CheckContentText(Path path)
     {
         int count = 0;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
+        String encoding = TestFile(path);
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 count += getMatchCount(line);
@@ -286,6 +293,39 @@ public class ContentMatch {
             results.add(match.toMatchResult());
         }
         return results;
+    }
+
+    static private String TestFile(Path path)
+    {
+        String encoding = null;
+        
+        byte[] buf = new byte[4096];
+        try (java.io.InputStream fis = java.nio.file.Files.newInputStream(path)) // java.nio.file.Paths.get("test.txt"));
+        {
+            // (1)
+            UniversalDetector detector = new UniversalDetector(null);
+
+            // (2)
+            int nread;
+            while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+              detector.handleData(buf, 0, nread);
+            }
+            // (3)
+            detector.dataEnd();
+
+            // (4)
+            encoding = detector.getDetectedCharset();
+
+            // (5)
+            detector.reset();
+        } catch (IOException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (encoding == null) {
+            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, "Unknown encoding type..");
+            encoding = Charset.defaultCharset().name(); // UTF8
+        }
+        return encoding;
     }
 }
 

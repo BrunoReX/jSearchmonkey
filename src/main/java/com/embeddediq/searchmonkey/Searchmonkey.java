@@ -29,7 +29,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.Painter;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -81,6 +80,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         this.openMenuItem.setVisible(false);
         this.saveAsMenuItem.setVisible(false);
         this.saveMenuItem.setVisible(false);
+        this.jToolBar1.setVisible(false);
         this.pack();
         this.setVisible(true);
 
