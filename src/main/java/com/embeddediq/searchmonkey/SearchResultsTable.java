@@ -19,6 +19,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -39,6 +40,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -223,8 +225,13 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
     }
 }
 
-    private class MyTableModel extends DefaultTableModel 
+    private class MyTableModel extends AbstractTableModel 
     {
+        MyTableModel()
+        {
+            super();
+        }
+        
         @Override
         public String getColumnName(int col) {
             return SearchResult.COLUMN_NAMES[col];
@@ -240,9 +247,13 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
             for (SearchResult vals: objects) {
                 rowData.add(vals);
 //                super.addRow(vals.toArray());
+                
+                int rowNr = rowData.size() - 1;
+                this.fireTableRowsInserted(rowNr, rowNr);
             }
             fireTableDataChanged();
         }
+        
         @Override
         public int getRowCount() { 
             return rowData.size();
@@ -252,13 +263,15 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
             rowData.clear();
             fireTableDataChanged();
         }
+        
         @Override
         public int getColumnCount() {
             return SearchResult.COLUMN_NAMES.length; // Constan
         }
+        
         @Override
         public Object getValueAt(int row, int col) {
-            SearchResult val = rowData.get(jTable1.convertRowIndexToModel(row));
+            SearchResult val = rowData.get(row);
             return val.get(col);
         }
         @Override
