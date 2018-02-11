@@ -217,7 +217,7 @@ public class ContentMatch {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
-                if ((nanoTime() - startTime) > 5*1000*1000*1000) {
+                if ((entry.FileTimeout > 0) && ((nanoTime() - startTime) > entry.FileTimeout)) {
                     lines += " -- SIC -- \n";
                     break;
                 } // Early exit after 5 seconds

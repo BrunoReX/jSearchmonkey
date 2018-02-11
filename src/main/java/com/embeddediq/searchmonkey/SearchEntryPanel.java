@@ -15,7 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
@@ -173,6 +172,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     
     public SearchEntry getSearchRequest() {
         long longVal;
+        int intVal;
         SearchEntry req = new SearchEntry();
         String strItem;
 
@@ -191,6 +191,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             longVal = (long)(1024.0 * 1024.0 * (Double)jMaxFileSize.getValue());
         }
         req.maxFileSize = longVal;
+        intVal = 0;
+        if (jEnableFileTimeout.isSelected()) {
+            intVal = (int)jFileTimeout.getValue();
+        }
+        req.FileTimeout = 1000*1000*intVal; // Convert ms -> ns
         
         req.flags.useContentRegex = jUseContentRegex.isSelected();
         req.flags.ignoreContentCase = jIgnoreContentCase.isSelected();
@@ -346,7 +351,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         
         prefs.putBoolean("LookInSubFolders", jSubFolders.isSelected());
         prefs.putInt("LessThanScaler", jFileSizeScaler.getSelectedIndex());
-        prefs.putInt("GreaterThanScaler", jFileSizeScaler.getSelectedIndex());
+        prefs.putInt("GreaterThanScaler", jFileSizeScaler1.getSelectedIndex());
         prefs.putBoolean("GreaterThanToggle", jMoreThanCheck.isSelected());
         prefs.putDouble("GreaterThan", (Double)jGreaterThanSpinner.getValue());
         prefs.putBoolean("LessThanToggle", jLessThanCheck.isSelected());
@@ -369,6 +374,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         prefs.putBoolean("IgnoreFileCase", jIgnoreFilenameCase.isSelected());
         prefs.putBoolean("LimitMaxFileSize", jLimitMaxFileSize.isSelected());
         prefs.putDouble("MaxFileSize", (Double)jMaxFileSize.getValue());
+        prefs.putBoolean("EnableFileTimeout", jEnableFileTimeout.isSelected());
+        prefs.putInt("FileTimeout", (Integer)jFileTimeout.getValue());
 
         prefs.putBoolean("UseContentRegex", jUseContentRegex.isSelected());
         prefs.putBoolean("IgnoreContentCase", jIgnoreContentCase.isSelected());
@@ -463,6 +470,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jIgnoreFilenameCase.setSelected(prefs.getBoolean("IgnoreFileCase", true));
         jLimitMaxFileSize.setSelected(prefs.getBoolean("LimitMaxFileSize", true));
         jMaxFileSize.setValue(prefs.getDouble("MaxFileSize", 10.0)); // limit to 10 MBytes
+        jEnableFileTimeout.setSelected(prefs.getBoolean("EnableFileTimeout", true));
+        jFileTimeout.setValue(prefs.getInt("FileTimeout", 5000)); // limit to 5 seconds per file
 
         enabled = prefs.getBoolean("UseContentRegex", true);
         jUseContentRegex.setSelected(enabled);
@@ -569,6 +578,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jSkipBinaryFiles = new javax.swing.JCheckBox();
         jMaxFileSize = new javax.swing.JSpinner();
         jIgnoreFilenameCase = new javax.swing.JCheckBox();
+        jEnableFileTimeout = new javax.swing.JCheckBox();
+        jFileTimeout = new javax.swing.JSpinner();
         jPanel15 = new javax.swing.JPanel();
         jUseContentSearch = new javax.swing.JRadioButton();
         jIgnoreContentCase = new javax.swing.JCheckBox();
@@ -751,13 +762,13 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             .addGroup(jModifiedDateLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jModifiedBeforeCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBeforeSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jModifiedAfterCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAfterSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1189,14 +1200,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jModifiedPanel1Layout.createSequentialGroup()
                         .addComponent(jCreatedBeforeCheck)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(0, 0, 0)
                         .addComponent(jBeforeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jToolBar9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jModifiedPanel1Layout.createSequentialGroup()
                         .addComponent(jCreatedAfterCheck)
-                        .addGap(12, 12, 12)
+                        .addGap(0, 0, 0)
                         .addComponent(jAfterSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jToolBar6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -1282,12 +1293,12 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jModifiedPanel2Layout.createSequentialGroup()
                         .addComponent(jAccessedBeforeCheck)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 0, 0)
                         .addComponent(jBeforeSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jToolBar8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jAccessedAfterCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAfterSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1333,11 +1344,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jPanel14.border.title"))); // NOI18N
 
         jIgnoreSymbolicLinks.setText(bundle.getString("SearchEntryPanel.jIgnoreSymbolicLinks.text")); // NOI18N
+        jIgnoreSymbolicLinks.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreSymbolicLinks.toolTipText")); // NOI18N
 
         jIgnoreHiddenFiles.setText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFiles.text")); // NOI18N
+        jIgnoreHiddenFiles.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFiles.toolTipText")); // NOI18N
 
         FilenameSearchType.add(jUseFileRegex);
         jUseFileRegex.setText(bundle.getString("SearchEntryPanel.jUseFileRegex.text")); // NOI18N
+        jUseFileRegex.setToolTipText(bundle.getString("SearchEntryPanel.jUseFileRegex.toolTipText")); // NOI18N
         jUseFileRegex.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jUseFileRegexStateChanged(evt);
@@ -1347,9 +1361,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         FilenameSearchType.add(jUseFileGlobs);
         jUseFileGlobs.setSelected(true);
         jUseFileGlobs.setText(bundle.getString("SearchEntryPanel.jUseFileGlobs.text")); // NOI18N
+        jUseFileGlobs.setToolTipText(bundle.getString("SearchEntryPanel.jUseFileGlobs.toolTipText")); // NOI18N
 
         jLimitMaxFileSize.setSelected(true);
         jLimitMaxFileSize.setText(bundle.getString("SearchEntryPanel.jLimitMaxFileSize.text")); // NOI18N
+        jLimitMaxFileSize.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxFileSize.toolTipText")); // NOI18N
         jLimitMaxFileSize.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jLimitMaxFileSizeItemStateChanged(evt);
@@ -1358,6 +1374,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jSkipBinaryFiles.setSelected(true);
         jSkipBinaryFiles.setText(bundle.getString("SearchEntryPanel.jSkipBinaryFiles.text")); // NOI18N
+        jSkipBinaryFiles.setToolTipText(bundle.getString("SearchEntryPanel.jSkipBinaryFiles.toolTipText")); // NOI18N
 
         jMaxFileSize.setModel(new javax.swing.SpinnerNumberModel(64.0f, 0.0f, null, 1.0f));
         jMaxFileSize.setToolTipText(bundle.getString("SearchEntryPanel.jMaxFileSize.toolTipText")); // NOI18N
@@ -1365,6 +1382,19 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jIgnoreFilenameCase.setSelected(true);
         jIgnoreFilenameCase.setText(bundle.getString("SearchEntryPanel.jIgnoreFilenameCase.text")); // NOI18N
         jIgnoreFilenameCase.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreFilenameCase.toolTipText")); // NOI18N
+
+        jEnableFileTimeout.setSelected(true);
+        jEnableFileTimeout.setText(bundle.getString("SearchEntryPanel.jEnableFileTimeout.text")); // NOI18N
+        jEnableFileTimeout.setToolTipText(bundle.getString("SearchEntryPanel.jEnableFileTimeout.toolTipText")); // NOI18N
+        jEnableFileTimeout.setActionCommand(bundle.getString("SearchEntryPanel.jEnableFileTimeout.actionCommand")); // NOI18N
+        jEnableFileTimeout.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jEnableFileTimeoutItemStateChanged(evt);
+            }
+        });
+
+        jFileTimeout.setModel(new javax.swing.SpinnerNumberModel(5000, 250, 300000, 250));
+        jFileTimeout.setToolTipText(bundle.getString("SearchEntryPanel.jFileTimeout.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -1382,7 +1412,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                         .addComponent(jMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jIgnoreFilenameCase)
                     .addComponent(jIgnoreSymbolicLinks)
-                    .addComponent(jSkipBinaryFiles))
+                    .addComponent(jSkipBinaryFiles)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jEnableFileTimeout)
+                        .addGap(6, 6, 6)
+                        .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel14Layout.setVerticalGroup(
@@ -1392,18 +1426,22 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addComponent(jUseFileRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jUseFileGlobs)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jIgnoreHiddenFiles)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jIgnoreSymbolicLinks)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jSkipBinaryFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jIgnoreFilenameCase)
-                .addGap(2, 2, 2)
+                .addGap(0, 0, 0)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLimitMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jEnableFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1436,7 +1474,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             }
         });
 
-        jMaxHits.setModel(new javax.swing.SpinnerNumberModel(50, null, null, 1));
+        jMaxHits.setModel(new javax.swing.SpinnerNumberModel(500, 1, null, 1));
         jMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jMaxHits.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -1475,10 +1513,14 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jExpertMode.setSelected(true);
         jExpertMode.setText(bundle.getString("SearchEntryPanel.jExpertMode.text")); // NOI18N
+        jExpertMode.setToolTipText(bundle.getString("SearchEntryPanel.jExpertMode.toolTipText")); // NOI18N
+        jExpertMode.setEnabled(false);
 
         jDisable3rdParty.setText(bundle.getString("SearchEntryPanel.jDisable3rdParty.text")); // NOI18N
+        jDisable3rdParty.setToolTipText(bundle.getString("SearchEntryPanel.jDisable3rdParty.toolTipText")); // NOI18N
 
         jDisableUnicodeDetection.setText(bundle.getString("SearchEntryPanel.jDisableUnicodeDetection.text")); // NOI18N
+        jDisableUnicodeDetection.setToolTipText(bundle.getString("SearchEntryPanel.jDisableUnicodeDetection.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1497,9 +1539,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jExpertMode)
+                .addGap(0, 0, 0)
+                .addComponent(jDisable3rdParty, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDisable3rdParty)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jDisableUnicodeDetection)
                 .addContainerGap())
         );
@@ -1526,7 +1568,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             }
         });
 
-        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel());
+        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel(5, 1, 100, 1));
         jMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jMaxRecurse.toolTipText")); // NOI18N
         jMaxRecurse.setEnabled(false);
 
@@ -1539,6 +1581,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         });
 
         jIgnoreHiddenFolders.setText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.text")); // NOI18N
+        jIgnoreHiddenFolders.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -1847,6 +1890,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jMaxHits.setEnabled(jLimitMaxHits.isSelected());
     }//GEN-LAST:event_jLimitMaxHitsItemStateChanged
 
+    private void jEnableFileTimeoutItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jEnableFileTimeoutItemStateChanged
+        jFileTimeout.setEnabled(jEnableFileTimeout.isSelected());
+    }//GEN-LAST:event_jEnableFileTimeoutItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
     private javax.swing.ButtonGroup FilenameSearchType;
@@ -1885,6 +1932,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JCheckBox jCreatedBeforeCheck;
     private javax.swing.JCheckBox jDisable3rdParty;
     private javax.swing.JCheckBox jDisableUnicodeDetection;
+    private javax.swing.JCheckBox jEnableFileTimeout;
     private javax.swing.JCheckBox jExpertMode;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JComboBox<String> jFileName;
@@ -1892,6 +1940,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JPanel jFileSizePanel;
     private javax.swing.JComboBox<String> jFileSizeScaler;
     private javax.swing.JComboBox<String> jFileSizeScaler1;
+    private javax.swing.JSpinner jFileTimeout;
     private javax.swing.JSpinner jGreaterThanSpinner;
     private javax.swing.JCheckBox jIgnoreContentCase;
     private javax.swing.JCheckBox jIgnoreFilenameCase;
