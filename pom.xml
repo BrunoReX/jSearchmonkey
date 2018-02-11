@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.embeddediq</groupId>
     <artifactId>searchmonkey</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,8 @@
                 <configuration>
                   <archive>
                     <manifest>
+                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         <addClasspath>true</addClasspath>
                         <mainClass>com.embeddediq.searchmonkey.Searchmonkey</mainClass>
                         <classpathPrefix>dist/</classpathPrefix>
@@ -44,6 +46,8 @@
                 </descriptorRefs>
                   <archive>
                     <manifest>
+                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         <addClasspath>true</addClasspath>
                         <mainClass>com.embeddediq.searchmonkey.Searchmonkey</mainClass>
                         <classpathPrefix>dist/</classpathPrefix>

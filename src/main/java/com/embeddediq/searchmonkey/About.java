@@ -92,7 +92,7 @@ public class About extends javax.swing.JPanel {
 
         jTextPane2.setEditable(false);
         jTextPane2.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        jTextPane2.setText("Version: 3.0.0");
+        jTextPane2.setText("Version: 3.0.1");
         jScrollPane3.setViewportView(jTextPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
