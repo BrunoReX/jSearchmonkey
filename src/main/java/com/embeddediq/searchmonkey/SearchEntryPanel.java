@@ -172,6 +172,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     }
     
     public SearchEntry getSearchRequest() {
+        long longVal;
         SearchEntry req = new SearchEntry();
         String strItem;
 
@@ -234,14 +235,36 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
 
         // Set flags from the options tab
+        req.flags.usePowerSearch = jExpertMode.isSelected();
+        req.flags.disablePlugins = jDisable3rdParty.isSelected();
+        req.flags.disableUnicodeDetection = jDisableUnicodeDetection.isSelected();
+        
         req.flags.useFilenameRegex = jUseFileRegex.isSelected();
-        req.flags.useContentRegex = jUseContentRegex.isSelected();
-        req.flags.ignoreHiddenFiles = jIgnoreHiddenFiles.isSelected();
-        req.flags.ignoreHiddenFolders = jIgnoreHiddenFolders.isSelected() && jIgnoreHiddenFolders.isVisible(); // unless hidden
         req.flags.ignoreHiddenFiles = jIgnoreHiddenFiles.isSelected();
         req.flags.ignoreSymbolicLinks = jIgnoreSymbolicLinks.isSelected();
-        req.flags.lookInSubFolders = jSubFolders.isSelected();
-        req.flags.caseInsensitive = jIgnoreContentCase.isSelected();
+        req.flags.skipBinaryFiles = jSkipBinaryFiles.isSelected();
+        req.flags.ignoreFilenameCase = jIgnoreFilenameCase.isSelected();
+        longVal = 0L;
+        if (jLimitMaxFileSize.isSelected()) {
+            longVal = (long)(1024.0 * 1024.0 * (Double)jMaxFileSize.getValue());
+        }
+        req.maxFileSize = longVal;
+        
+        req.flags.useContentRegex = jUseContentRegex.isSelected();
+        req.flags.ignoreContentCase = jIgnoreContentCase.isSelected();
+        longVal = 0L;
+        if (jLimitMaxHits.isSelected()) {
+            longVal = (Long)jMaxHits.getValue();
+        }
+        req.maxHits = longVal;
+        
+        req.flags.ignoreFolderCase = jIgnoreFolderCase.isSelected();
+        req.flags.ignoreHiddenFolders = jIgnoreHiddenFolders.isSelected() && jIgnoreHiddenFolders.isVisible(); // unless hidden
+        longVal = 0L;
+        if (jLimitMaxRecurse.isSelected()) {
+            longVal = (Long)jMaxRecurse.getValue();
+        }
+        req.maxRecurse = longVal;
 
         // Get created before/after date
         if (jCreatedAfterCheck.isSelected()) {

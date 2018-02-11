@@ -33,22 +33,24 @@ public class SearchEntry {
     public Set<Path> ignoreFolderSet = new HashSet<>(); // Set of paths to ignore
 
     public class Flags {
-        public boolean usePowerSearch; // Not sure what this does!
+        public boolean usePowerSearch; // Not sure what this does yet!!
         public boolean useFilenameRegex;
         public boolean useContentRegex;
         public boolean ignoreHiddenFiles;
         public boolean ignoreHiddenFolders;
         public boolean ignoreSymbolicLinks;
-        public boolean lookInSubFolders;
-        public boolean caseInsensitive;
-        public boolean useRecurseLimit;
+        // public boolean lookInSubFolders;
+        public boolean ignoreContentCase;
+        public boolean ignoreFilenameCase;
+        public boolean ignoreFolderCase;
+        //public boolean useRecurseLimit;
         public boolean skipBinaryFiles;
         public boolean disablePlugins; // Disable 3rd party pluging e.g. word detection
         public boolean disableUnicodeDetection; // Use native files only
     }
     
     // Some advanced 'safety' features
-    public int MaxRecurse; // <= 0 is off, otherwise limit recurse depth
+    public long maxRecurse; // <= 0 is off, otherwise limit recurse depth
     public long maxFileSize; // max file (in bytes) size we support (set in options)
     public long maxHits; // <=0 is off, otherwise limit hits to this value
     
