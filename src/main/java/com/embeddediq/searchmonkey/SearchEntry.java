@@ -33,6 +33,7 @@ public class SearchEntry {
     public Set<Path> ignoreFolderSet = new HashSet<>(); // Set of paths to ignore
 
     public class Flags {
+        public boolean usePowerSearch; // Not sure what this does!
         public boolean useFilenameRegex;
         public boolean useContentRegex;
         public boolean ignoreHiddenFiles;
@@ -40,7 +41,17 @@ public class SearchEntry {
         public boolean ignoreSymbolicLinks;
         public boolean lookInSubFolders;
         public boolean caseInsensitive;
+        public boolean useRecurseLimit;
+        public boolean skipBinaryFiles;
+        public boolean disablePlugins; // Disable 3rd party pluging e.g. word detection
+        public boolean disableUnicodeDetection; // Use native files only
     }
+    
+    // Some advanced 'safety' features
+    public int MaxRecurse; // <= 0 is off, otherwise limit recurse depth
+    public long maxFileSize; // max file (in bytes) size we support (set in options)
+    public long maxHits; // <=0 is off, otherwise limit hits to this value
+    
     
     // List of PREFIX based on glob type
     public final static String PREFIX_GLOB = "glob:";
