@@ -403,8 +403,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     static private final int FLAG_SAVE_DIV_MAIN = 0x04; // Divider position between left and right main panel
     static private final int FLAG_SAVE_DIV_RESULTS = 0x08; // Divider position between top and bottom results
     static private final int FLAG_SAVE_SEARCH = 0x10; // Save the search panel options (i.e. before closing)
+    static private final int FLAG_SAVE_RESULTS = 0x20; // Save the search results
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Save(FLAG_SAVE_SEARCH);
+        Save(FLAG_SAVE_SEARCH | FLAG_SAVE_RESULTS);
     }//GEN-LAST:event_formWindowClosing
 
     private void jSplitPane2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSplitPane2PropertyChange
@@ -467,6 +468,17 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         if ((flag & FLAG_SAVE_SEARCH) == FLAG_SAVE_SEARCH)
         {
             searchEntryPanel1.Save();
+        }
+
+        // Save the results panel (column order, visibility)
+        if ((flag & FLAG_SAVE_SEARCH) == FLAG_SAVE_SEARCH)
+        {
+            searchEntryPanel1.Save();
+        }
+
+        if ((flag & FLAG_SAVE_RESULTS) == FLAG_SAVE_RESULTS)
+        {
+            this.searchResultsTable1.Save();
         }
     }
     

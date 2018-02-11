@@ -19,7 +19,6 @@ import java.awt.RenderingHints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
-import static java.awt.image.ImageObserver.WIDTH;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -42,7 +41,6 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -130,7 +128,14 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         
         for (int i=0; i<SearchResult.COLUMN_NAMES.length; i++)
         {
-            jTable1.getColumn(SearchResult.COLUMN_NAMES[i]).setPreferredWidth(indices[i]);
+            try
+            {
+                jTable1.getColumn(SearchResult.COLUMN_NAMES[i]).setPreferredWidth(indices[i]);
+            }
+            catch (IllegalArgumentException ex)
+            {
+                Logger.getLogger(SearchResultsTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -140,7 +145,14 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         int[] indices = new int[SearchResult.COLUMN_NAMES.length];
         for (int i=0; i<SearchResult.COLUMN_NAMES.length; i++)
         {
-            indices[i] = jTable1.getColumn(SearchResult.COLUMN_NAMES[i]).getWidth();
+            try
+            {
+                indices[i] = jTable1.getColumn(SearchResult.COLUMN_NAMES[i]).getWidth();
+            }
+            catch (IllegalArgumentException ex)
+            {
+                // Logger.getLogger(SearchResultsTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         prefs.put(name, g.toJson(indices));
     }
@@ -596,6 +608,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jPopupMenu1.add(jColumnMenu);
 
         setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setComponentPopupMenu(jPopupMenu1);
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
