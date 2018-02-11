@@ -209,6 +209,7 @@ public class ContentMatch {
                 
     public String GetContentText(Path path)
     {
+        // TODO - make this timeout configurable
         long startTime = nanoTime();
         String lines = "";
         String encoding = TestFile(path);
@@ -217,8 +218,8 @@ public class ContentMatch {
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
                 if ((nanoTime() - startTime) > 5*1000*1000*1000) {
+                    lines += " -- SIC -- \n";
                     break;
-                    lines += " -- SIC -- \n"
                 } // Early exit after 5 seconds
             }
         } catch (IOException er) {
