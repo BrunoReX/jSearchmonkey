@@ -66,7 +66,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 //        }
 
         // Create some styles
-        MyStyledDocument doc = new MyStyledDocument();
+        PreviewResultDoc doc = new PreviewResultDoc();
         try {
             doc.insertString(0, jTextPane2.getText(), doc.nameStyle);
         } catch (BadLocationException ex) {
@@ -134,7 +134,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             if (txt.length() == 0) return;
             Pattern compile = Pattern.compile(txt, flags);
             Matcher m = compile.matcher(this.jTextPane2.getText().replaceAll("(?!\\r)\\n", ""));
-            MyStyledDocument doc = (MyStyledDocument)this.jTextPane2.getDocument();
+            PreviewResultDoc doc = (PreviewResultDoc)this.jTextPane2.getDocument();
             doc.setCharacterAttributes(0, doc.getLength(), doc.nameStyle, true);
             if (m.find())
             {

@@ -25,13 +25,13 @@ import javax.swing.text.StyleConstants;
  *
  * @author cottr
  */
-public class MyStyledDocument extends DefaultStyledDocument
+public class PreviewResultDoc extends DefaultStyledDocument
 {
     public Style nameStyle;
     public Style pathStyle;
     public Style numberStyle;
     public Style linkStyle;
-    public MyStyledDocument()
+    public PreviewResultDoc()
     {
         nameStyle = addStyle("nameStyle", null);
         pathStyle = addStyle("pathStyle", null);

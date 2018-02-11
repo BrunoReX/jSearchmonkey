@@ -5,6 +5,7 @@
  */
 package com.embeddediq.searchmonkey;
 
+import com.embeddediq.searchmonkey.RegexWizard.RegexBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Component;
@@ -414,36 +415,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jBeforeSpinner2.setEnabled(enabled);
     }
     
-    /**
-    * this class was created by two ibm authors.
-    * @see http://www.ibm.com/developerworks/web/library/us-j2d/
-    */
-    public class RolloverIcon extends ImageIcon
-    {
-        /**
-         * Generated SUID
-         */
-        private static final long serialVersionUID = 3757470229899737051L;
-        protected ImageIcon fIcon;
-
-        /**
-         * Construct us with the icon we will create paint a rollover icon for
-         * @param component
-         * @param anIcon
-         */
-        public RolloverIcon(Component component, ImageIcon anIcon) {
-            super();
-            int width = anIcon.getImage().getWidth(null);
-            int height = anIcon.getImage().getHeight(null);
-            BufferedImage bufferedImage = new BufferedImage(width ,height, BufferedImage.TYPE_4BYTE_ABGR);
-            Graphics2D g2D = (Graphics2D) bufferedImage.getGraphics();
-            g2D.setComposite(RolloverComposite.getInstance());
-            anIcon.paintIcon(component, g2D, 0, 0);
-            setImage(bufferedImage);
-        }
-        
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

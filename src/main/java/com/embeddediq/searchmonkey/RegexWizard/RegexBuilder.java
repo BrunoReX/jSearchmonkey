@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.embeddediq.searchmonkey;
+package com.embeddediq.searchmonkey.RegexWizard;
 
+import com.embeddediq.searchmonkey.RegexExpression;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;

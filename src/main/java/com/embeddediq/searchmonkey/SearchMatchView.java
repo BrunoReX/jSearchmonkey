@@ -40,7 +40,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         DefaultCaret caret = (DefaultCaret) jTextPane1.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         
-        doc = new MyStyledDocument();
+        doc = new PreviewResultDoc();
         jTextPane1.setDocument(doc);
 
         // Create delay
@@ -51,7 +51,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         timer.setCoalesce(true);
     }
 
-    MyStyledDocument doc;
+    PreviewResultDoc doc;
 
     /*
     @Override
@@ -160,7 +160,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         public int end; // List of start/end results
     }
 
-    public class ViewUpdate extends SwingWorker<MyStyledDocument, MatchResult2> { 
+    public class ViewUpdate extends SwingWorker<PreviewResultDoc, MatchResult2> { 
         Path[] paths;
         public ViewUpdate(Path[] paths)
         {
@@ -170,8 +170,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         
 
         @Override
-        protected MyStyledDocument doInBackground() {            
-            MyStyledDocument previewDoc = new MyStyledDocument();
+        protected PreviewResultDoc doInBackground() {            
+            PreviewResultDoc previewDoc = new PreviewResultDoc();
             for (Path path: paths)
             {
                 if (isCancelled()) break; // Check for cancel
@@ -184,13 +184,13 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         protected void done() {
             if (isCancelled()) return; // Ignore cancelled
             try {
-                MyStyledDocument doc2 = get();
+                PreviewResultDoc doc2 = get();
                 jTextPane2.setDocument(doc2);
             } catch (InterruptedException | ExecutionException ex) {
                 Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        private void consumePath(Path path, MyStyledDocument previewDoc)
+        private void consumePath(Path path, PreviewResultDoc previewDoc)
         {
             // ContentMatch cm = new ContentMatch();
             String lines = ContentMatch.GetContent(path);
