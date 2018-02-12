@@ -31,7 +31,15 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.POITextExtractor;
+import org.apache.poi.extractor.ExtractorFactory;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
+import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
+import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.xmlbeans.XmlException;
 import org.mozilla.universalchardet.UniversalDetector;
 
 /**
@@ -114,11 +122,29 @@ public class ContentMatch {
                 {
                     return GetContentPDF(path);
                 }
-                else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
+                // else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
+                else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.")) // DOCX
                 {
                     return GetContentDocx(path); // DOCX
                 }
-                else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
+                else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml.")) // XSLX
+                {
+                    return GetContentExcelx(path); // DOCX
+                }
+                else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.presentationml.")) // PPTX
+                {
+                    return GetContentPptx(path); // DOCX
+                }
+                else if (contentType.startsWith("application/vnd.ms-visio.")) // Visio
+                {
+                    return GetContentVisiox(path); // VSDX
+                }
+                else if (contentType.startsWith("application/vnd.ms-") || contentType.startsWith("application/msword")) // DOC, XSL, PPT
+                {
+                    return GetContentDoc(path); // DOCX
+                }
+                //else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
+                else if (contentType.startsWith("application/vnd.oasis.opendocument")) // ODT, ODS, ODP, etc
                 {
                     return GetContentOdt(path); // ODT
                 }
@@ -198,6 +224,7 @@ public class ContentMatch {
         {
                 XWPFDocument doc = new XWPFDocument(fs);
                 XWPFWordExtractor ex = new XWPFWordExtractor(doc);
+                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
                 text = ex.getText();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,6 +234,68 @@ public class ContentMatch {
         return text;
     }
                 
+    public String GetContentExcelx(Path path)
+    {
+        String text = "";
+        try (FileInputStream fs = new FileInputStream(path.toFile()))
+        {
+            
+                OPCPackage xlsx = OPCPackage.open(fs);
+                XSSFExcelExtractor ex = new XSSFExcelExtractor(xlsx);
+                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
+                text = ex.getText();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | XmlException | OpenXML4JException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
+    }
+    public String GetContentPptx(Path path)
+    {
+        String text = "";
+        try (FileInputStream fs = new FileInputStream(path.toFile()))
+        {
+                OPCPackage xlsx = OPCPackage.open(fs);
+                XSLFPowerPointExtractor ex = new XSLFPowerPointExtractor(xlsx);
+                text = ex.getText();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | XmlException | OpenXML4JException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
+    }
+    public String GetContentVisiox(Path path)
+    {
+        String text = "";
+        try (FileInputStream fs = new FileInputStream(path.toFile()))
+        {
+                OPCPackage xlsx = OPCPackage.open(fs);
+                XDGFVisioExtractor ex = new XDGFVisioExtractor(xlsx);
+                text = ex.getText();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | OpenXML4JException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
+    }
+    public String GetContentDoc(Path path)
+    {
+        String text = "";
+        try (FileInputStream fs = new FileInputStream(path.toFile()))
+        {
+                POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
+                text = po_ex.getText();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | OpenXML4JException | XmlException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
+    }
+
     public String GetContentText(Path path)
     {
         // TODO - make this timeout configurable
