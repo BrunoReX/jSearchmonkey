@@ -33,6 +33,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.POITextExtractor;
 import org.apache.poi.extractor.ExtractorFactory;
+import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
@@ -149,16 +150,14 @@ public class ContentMatch {
                     return GetContentOdt(path); // ODT
                 }
             }
-            return GetContentText(path);
-        } catch (IOException ex) {
+        } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException ex) {
             Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        // Fail
-        return "";
+        return GetContentText(path);
     }
 
-    public String GetContentPDF(Path path)
+    public String GetContentPDF(Path path) throws IOException
     {
         try (RandomAccessBufferedFileInputStream fd = new RandomAccessBufferedFileInputStream(path.toFile())){
             PDFParser parser = new PDFParser(fd);
@@ -168,13 +167,10 @@ public class ContentMatch {
                 PDDocument pdDoc = new PDDocument(cosDoc);
                 return pdfStripper.getText(pdDoc);
             }
-        } catch (IOException er) {
-            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
         }
-        return "";
     }
     
-    public String GetContentOdt(Path path)
+    public String GetContentOdt(Path path) throws IOException
     {
         String output = "";
         // OutputStream out = new StringOutputStream(path.toFile());
@@ -208,16 +204,12 @@ public class ContentMatch {
                     break;
                 }
             }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return output;
     }
     
-    public String GetContentDocx(Path path)
+    public String GetContentDocx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
@@ -226,15 +218,11 @@ public class ContentMatch {
                 XWPFWordExtractor ex = new XWPFWordExtractor(doc);
                 // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
                 text = ex.getText();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return text;
     }
                 
-    public String GetContentExcelx(Path path)
+    public String GetContentExcelx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
@@ -244,14 +232,10 @@ public class ContentMatch {
                 XSSFExcelExtractor ex = new XSSFExcelExtractor(xlsx);
                 // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
                 text = ex.getText();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | XmlException | OpenXML4JException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return text;
     }
-    public String GetContentPptx(Path path)
+    public String GetContentPptx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
@@ -259,14 +243,10 @@ public class ContentMatch {
                 OPCPackage xlsx = OPCPackage.open(fs);
                 XSLFPowerPointExtractor ex = new XSLFPowerPointExtractor(xlsx);
                 text = ex.getText();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | XmlException | OpenXML4JException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return text;
     }
-    public String GetContentVisiox(Path path)
+    public String GetContentVisiox(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
@@ -274,24 +254,16 @@ public class ContentMatch {
                 OPCPackage xlsx = OPCPackage.open(fs);
                 XDGFVisioExtractor ex = new XDGFVisioExtractor(xlsx);
                 text = ex.getText();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | OpenXML4JException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return text;
     }
-    public String GetContentDoc(Path path)
+    public String GetContentDoc(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
         {
                 POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
                 text = po_ex.getText();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | OpenXML4JException | XmlException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return text;
     }
