@@ -87,6 +87,7 @@ public class ContentMatch {
 //        // Fail
 //        return 0;
 //    }
+    Tika tika = new Tika();
     
     /**
      * Simple file reader with basic matching
@@ -95,12 +96,11 @@ public class ContentMatch {
     */
     public String GetContent(Path path)
     {
-        if (!entry.flags.disablePlugins)
+        // if (!entry.flags.disablePlugins)
         {
             try {
-                Tika tika = new Tika();
                 return tika.parseToString(path.toFile());
-            } catch (IOException | TikaException | IllegalArgumentException ex) {
+            } catch (IOException | TikaException | IllegalArgumentException | NoSuchMethodException ex) {
                 Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
