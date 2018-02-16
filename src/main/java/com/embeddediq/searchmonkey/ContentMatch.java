@@ -27,6 +27,7 @@ import java.util.zip.ZipInputStream;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.rtf.RTFEditorKit;
+import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -125,7 +126,6 @@ public class ContentMatch {
                 {
                     return GetContentPDF(path);
                 }
-                // else if (contentType.matches("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) // DOCX
                 else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.")) // DOCX
                 {
                     return GetContentDocx(path); // DOCX
@@ -144,12 +144,11 @@ public class ContentMatch {
                 }
                 else if (contentType.startsWith("application/vnd.ms-") || contentType.startsWith("application/msword")) // DOC, XSL, PPT
                 {
-                    return GetContentDoc(path); // DOC, XSL, PPT or RTF (note this is a different handler)
+                    return GetContentDoc(path); // DOC, XSL, PPT or RTF (note: rtf is in fact a different handler)
                 }
-                //else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
                 else if (contentType.startsWith("application/vnd.oasis.opendocument")) // ODT, ODS, ODP, etc
                 {
-                    return GetContentOdt(path); // ODT
+                    return GetContentOdt(path); // ODT, ODS, ODP, etc
                 }
             }
         } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException | BadLocationException ex) {
