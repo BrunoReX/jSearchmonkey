@@ -17,18 +17,13 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
     public SearchSummaryPanel() {
         initComponents();
         
-        //ShowProgress(false);
         jStatus.setVisible(!false);
         jProgressBar1.setVisible(false);
-        // SetProgress("Pending");
         jProgressBar1.setIndeterminate(true);
-        jProgressBar1.setString("Pending");
+        jProgressBar1.setString("");
         jProgressBar1.setStringPainted(true);
-        //SetStatus("Ready");
         jStatus.setText("");
-        // SetSearched("");
         jSearchSummary.setText("");
-        // SetSelected("");
         jSearchSummary.setText("");
         jSearchSelect.setText("");
     }
@@ -49,14 +44,14 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
     public void SetProgress(String msg)
     {
         jProgressBar1.setIndeterminate(true);
-        jProgressBar1.setString(msg);
+        // jProgressBar1.setString(msg);
         jProgressBar1.setStringPainted(true);
     }
     
     public void SetProgress(int val)
     {
         jProgressBar1.setIndeterminate(false);
-        jProgressBar1.setString(String.format("%d%%", val));
+        //jProgressBar1.setString(String.format("%d%%", val));
         jProgressBar1.setValue(val);
     }
     public void SetStatus(String msg)

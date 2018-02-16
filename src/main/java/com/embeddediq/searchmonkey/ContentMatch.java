@@ -26,13 +26,11 @@ import java.util.zip.ZipInputStream;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.rtf.RTFEditorKit;
-import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.xml.sax.ContentHandler;
 
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+//import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.poi.POITextExtractor;
 import org.apache.poi.extractor.ExtractorFactory;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -41,8 +39,16 @@ import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
 import org.apache.xmlbeans.XmlException;
 import org.mozilla.universalchardet.UniversalDetector;
+
+// Replace lots of separate handlers with one handler
+import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -149,16 +155,25 @@ public class ContentMatch {
                     return GetContentOdt(path); // ODT, ODS, ODP, etc
                 }
             }
-        } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException | BadLocationException ex) {
+        } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException | BadLocationException | TikaException | SAXException ex) {
             Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return GetContentText(path);
     }
 
-    public String GetContentPDF(Path path) throws IOException
-    {
-        try (RandomAccessBufferedFileInputStream fd = new RandomAccessBufferedFileInputStream(path.toFile())){
+    public String GetContentPDF(Path path) throws IOException, TikaException, SAXException
+    { // RandomAccessBufferedFileInputStream
+        try (FileInputStream fd = new FileInputStream(path.toFile())) {
+            PDFParser parser = new PDFParser();
+            ContentHandler handler = new BodyContentHandler(Integer.MAX_VALUE);
+            Metadata metadata = new Metadata();
+            parser.parse(fd, handler, metadata, new ParseContext()); // parse the stream
+            String text = handler.toString();
+
+            return text;
+            
+            /*
             PDFParser parser = new PDFParser(fd);
             parser.parse();
             try (COSDocument cosDoc = parser.getDocument()) {
@@ -166,6 +181,7 @@ public class ContentMatch {
                 PDDocument pdDoc = new PDDocument(cosDoc);
                 return pdfStripper.getText(pdDoc);
             }
+            */
         }
     }
     
