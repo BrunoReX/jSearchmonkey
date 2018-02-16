@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import static java.lang.System.nanoTime;
 import java.nio.charset.Charset;
@@ -39,6 +40,7 @@ import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -121,6 +123,13 @@ public class ContentMatch {
     public String GetContent(Path path)
     {
         if (entry.flags.disablePlugins) return GetContentText(path);
+
+        try {
+            Tika tika = new Tika();
+            return tika.parseToString(path.toFile());
+        } catch (IOException | TikaException | IllegalArgumentException ex) {
+            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             String contentType = Files.probeContentType(path);
