@@ -5,15 +5,12 @@
  */
 package com.embeddediq.searchmonkey;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import static java.lang.System.nanoTime;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,35 +19,11 @@ import java.util.logging.Logger;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.rtf.RTFEditorKit;
-import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.xml.sax.ContentHandler;
-
-//import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.poi.POITextExtractor;
-import org.apache.poi.extractor.ExtractorFactory;
-import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
-import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.xmlbeans.XmlException;
 import org.mozilla.universalchardet.UniversalDetector;
 
 // Replace lots of separate handlers with one handler
-import org.apache.tika.parser.pdf.PDFParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -122,15 +95,20 @@ public class ContentMatch {
     */
     public String GetContent(Path path)
     {
-        if (entry.flags.disablePlugins) return GetContentText(path);
-
-        try {
-            Tika tika = new Tika();
-            return tika.parseToString(path.toFile());
-        } catch (IOException | TikaException | IllegalArgumentException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+        if (!entry.flags.disablePlugins)
+        {
+            try {
+                Tika tika = new Tika();
+                return tika.parseToString(path.toFile());
+            } catch (IOException | TikaException | IllegalArgumentException ex) {
+                Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
+        // Fallback
+        return GetContentText(path);
+
+        /*
         try {
             String contentType = Files.probeContentType(path);
             if (contentType != null)
@@ -169,137 +147,138 @@ public class ContentMatch {
         }
         
         return GetContentText(path);
+        */
     }
 
-    public String GetContentPDF(Path path) throws IOException, TikaException, SAXException
-    { // RandomAccessBufferedFileInputStream
-        try (FileInputStream fd = new FileInputStream(path.toFile())) {
-            PDFParser parser = new PDFParser();
-            ContentHandler handler = new BodyContentHandler(Integer.MAX_VALUE);
-            Metadata metadata = new Metadata();
-            parser.parse(fd, handler, metadata, new ParseContext()); // parse the stream
-            String text = handler.toString();
-
-            return text;
-            
-            /*
-            PDFParser parser = new PDFParser(fd);
-            parser.parse();
-            try (COSDocument cosDoc = parser.getDocument()) {
-                PDFTextStripper pdfStripper = new PDFTextStripper();
-                PDDocument pdDoc = new PDDocument(cosDoc);
-                return pdfStripper.getText(pdDoc);
-            }
-            */
-        }
-    }
-    
-    public String GetContentOdt(Path path) throws IOException
-    {
-        String output = "";
-        // OutputStream out = new StringOutputStream(path.toFile());
-        // FileInputStream fin = ;
-        try (ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(path.toFile())))) {
-            ZipEntry ze;
-            while ((ze = zin.getNextEntry()) != null) {
-                if (ze.getName().equals("content.xml")) {
-                    if (ze.getSize() == -1) continue; // skip empty files
-                    
-                    // TODO - Handle very large files (currently this code will not work beyond int size)
-                    int sz = (int)ze.getSize();
-                    if (sz < 0) sz = 64*1024*1024; // 64 MByte limit
-                    byte[] buffer = new byte[sz];
-                    int so = 0;
-                    int eo = 0;
-                    if (zin.read(buffer) != -1)
-                    {
-                        String tmp = new String(buffer); // Parse this file as text (XML)
-                        
-                        while (true)
-                        {
-                            so = tmp.indexOf("<text:p>", eo + 8);
-                            if (so == -1) break;
-                            eo = tmp.indexOf("</text:p>", so + 8); 
-                            if (eo == -1) break;
-                        
-                            output += tmp.substring(so + 8, eo);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        
-        return output;
-    }
-    
-    public String GetContentDocx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
-    {
-        String text = "";
-        try (FileInputStream fs = new FileInputStream(path.toFile()))
-        {
-                XWPFDocument doc = new XWPFDocument(fs);
-                XWPFWordExtractor ex = new XWPFWordExtractor(doc);
-                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
-                text = ex.getText();
-        }
-        return text;
-    }
-                
-    public String GetContentExcelx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
-    {
-        String text = "";
-        try (FileInputStream fs = new FileInputStream(path.toFile()))
-        {
-            
-                OPCPackage xlsx = OPCPackage.open(fs);
-                XSSFExcelExtractor ex = new XSSFExcelExtractor(xlsx);
-                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
-                text = ex.getText();
-        }
-        return text;
-    }
-    public String GetContentPptx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
-    {
-        String text = "";
-        try (FileInputStream fs = new FileInputStream(path.toFile()))
-        {
-                OPCPackage xlsx = OPCPackage.open(fs);
-                XSLFPowerPointExtractor ex = new XSLFPowerPointExtractor(xlsx);
-                text = ex.getText();
-        }
-        return text;
-    }
-    public String GetContentVisiox(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
-    {
-        String text = "";
-        try (FileInputStream fs = new FileInputStream(path.toFile()))
-        {
-                OPCPackage xlsx = OPCPackage.open(fs);
-                XDGFVisioExtractor ex = new XDGFVisioExtractor(xlsx);
-                text = ex.getText();
-        }
-        return text;
-    }
-    public String GetContentDoc(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException, BadLocationException
-    {
-        String text = "";
-        try (FileInputStream fs = new FileInputStream(path.toFile()))
-        {
-            if (path.toString().toLowerCase().endsWith(".rtf"))
-            {
-                RTFEditorKit rtfParser = new RTFEditorKit();
-                Document document = rtfParser.createDefaultDocument();
-                rtfParser.read(fs, document, 0);
-                text = document.getText(0, document.getLength());
-            } else {
-                POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
-                text = po_ex.getText();
-            }
-        }
-        return text;
-    }
-
+//    public String GetContentPDF(Path path) throws IOException, TikaException, SAXException
+//    { // RandomAccessBufferedFileInputStream
+//        try (FileInputStream fd = new FileInputStream(path.toFile())) {
+//            PDFParser parser = new PDFParser();
+//            ContentHandler handler = new BodyContentHandler(Integer.MAX_VALUE);
+//            Metadata metadata = new Metadata();
+//            parser.parse(fd, handler, metadata, new ParseContext()); // parse the stream
+//            String text = handler.toString();
+//
+//            return text;
+//            
+//            /*
+//            PDFParser parser = new PDFParser(fd);
+//            parser.parse();
+//            try (COSDocument cosDoc = parser.getDocument()) {
+//                PDFTextStripper pdfStripper = new PDFTextStripper();
+//                PDDocument pdDoc = new PDDocument(cosDoc);
+//                return pdfStripper.getText(pdDoc);
+//            }
+//            */
+//        }
+//    }
+//    
+//    public String GetContentOdt(Path path) throws IOException
+//    {
+//        String output = "";
+//        // OutputStream out = new StringOutputStream(path.toFile());
+//        // FileInputStream fin = ;
+//        try (ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(path.toFile())))) {
+//            ZipEntry ze;
+//            while ((ze = zin.getNextEntry()) != null) {
+//                if (ze.getName().equals("content.xml")) {
+//                    if (ze.getSize() == -1) continue; // skip empty files
+//                    
+//                    // TODO - Handle very large files (currently this code will not work beyond int size)
+//                    int sz = (int)ze.getSize();
+//                    if (sz < 0) sz = 64*1024*1024; // 64 MByte limit
+//                    byte[] buffer = new byte[sz];
+//                    int so = 0;
+//                    int eo = 0;
+//                    if (zin.read(buffer) != -1)
+//                    {
+//                        String tmp = new String(buffer); // Parse this file as text (XML)
+//                        
+//                        while (true)
+//                        {
+//                            so = tmp.indexOf("<text:p>", eo + 8);
+//                            if (so == -1) break;
+//                            eo = tmp.indexOf("</text:p>", so + 8); 
+//                            if (eo == -1) break;
+//                        
+//                            output += tmp.substring(so + 8, eo);
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//        
+//        return output;
+//    }
+//    
+//    public String GetContentDocx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
+//    {
+//        String text = "";
+//        try (FileInputStream fs = new FileInputStream(path.toFile()))
+//        {
+//                XWPFDocument doc = new XWPFDocument(fs);
+//                XWPFWordExtractor ex = new XWPFWordExtractor(doc);
+//                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
+//                text = ex.getText();
+//        }
+//        return text;
+//    }
+//                
+//    public String GetContentExcelx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
+//    {
+//        String text = "";
+//        try (FileInputStream fs = new FileInputStream(path.toFile()))
+//        {
+//            
+//                OPCPackage xlsx = OPCPackage.open(fs);
+//                XSSFExcelExtractor ex = new XSSFExcelExtractor(xlsx);
+//                // POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
+//                text = ex.getText();
+//        }
+//        return text;
+//    }
+//    public String GetContentPptx(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
+//    {
+//        String text = "";
+//        try (FileInputStream fs = new FileInputStream(path.toFile()))
+//        {
+//                OPCPackage xlsx = OPCPackage.open(fs);
+//                XSLFPowerPointExtractor ex = new XSLFPowerPointExtractor(xlsx);
+//                text = ex.getText();
+//        }
+//        return text;
+//    }
+//    public String GetContentVisiox(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
+//    {
+//        String text = "";
+//        try (FileInputStream fs = new FileInputStream(path.toFile()))
+//        {
+//                OPCPackage xlsx = OPCPackage.open(fs);
+//                XDGFVisioExtractor ex = new XDGFVisioExtractor(xlsx);
+//                text = ex.getText();
+//        }
+//        return text;
+//    }
+//    public String GetContentDoc(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException, BadLocationException
+//    {
+//        String text = "";
+//        try (FileInputStream fs = new FileInputStream(path.toFile()))
+//        {
+//            if (path.toString().toLowerCase().endsWith(".rtf"))
+//            {
+//                RTFEditorKit rtfParser = new RTFEditorKit();
+//                Document document = rtfParser.createDefaultDocument();
+//                rtfParser.read(fs, document, 0);
+//                text = document.getText(0, document.getLength());
+//            } else {
+//                POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
+//                text = po_ex.getText();
+//            }
+//        }
+//        return text;
+//    }
+//
     public String GetContentText(Path path)
     {
         // TODO - make this timeout configurable
