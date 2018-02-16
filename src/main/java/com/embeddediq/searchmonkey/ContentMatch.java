@@ -7,8 +7,8 @@ package com.embeddediq.searchmonkey;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import static java.lang.System.nanoTime;
@@ -24,6 +24,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.rtf.RTFEditorKit;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -33,7 +36,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.POITextExtractor;
 import org.apache.poi.extractor.ExtractorFactory;
-import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xdgf.extractor.XDGFVisioExtractor;
@@ -130,11 +132,11 @@ public class ContentMatch {
                 }
                 else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml.")) // XSLX
                 {
-                    return GetContentExcelx(path); // DOCX
+                    return GetContentExcelx(path); // XLSX
                 }
                 else if (contentType.startsWith("application/vnd.openxmlformats-officedocument.presentationml.")) // PPTX
                 {
-                    return GetContentPptx(path); // DOCX
+                    return GetContentPptx(path); // PPTX
                 }
                 else if (contentType.startsWith("application/vnd.ms-visio.")) // Visio
                 {
@@ -142,7 +144,7 @@ public class ContentMatch {
                 }
                 else if (contentType.startsWith("application/vnd.ms-") || contentType.startsWith("application/msword")) // DOC, XSL, PPT
                 {
-                    return GetContentDoc(path); // DOCX
+                    return GetContentDoc(path); // DOC, XSL, PPT or RTF (note this is a different handler)
                 }
                 //else if (contentType.matches("application/vnd.oasis.opendocument.text")) // ODT
                 else if (contentType.startsWith("application/vnd.oasis.opendocument")) // ODT, ODS, ODP, etc
@@ -150,7 +152,7 @@ public class ContentMatch {
                     return GetContentOdt(path); // ODT
                 }
             }
-        } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException ex) {
+        } catch (IOException | XmlException | OpenXML4JException | IllegalArgumentException | BadLocationException ex) {
             Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -257,13 +259,21 @@ public class ContentMatch {
         }
         return text;
     }
-    public String GetContentDoc(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException
+    public String GetContentDoc(Path path) throws IOException, XmlException, OpenXML4JException, IllegalArgumentException, BadLocationException
     {
         String text = "";
         try (FileInputStream fs = new FileInputStream(path.toFile()))
         {
+            if (path.toString().toLowerCase().endsWith(".rtf"))
+            {
+                RTFEditorKit rtfParser = new RTFEditorKit();
+                Document document = rtfParser.createDefaultDocument();
+                rtfParser.read(fs, document, 0);
+                text = document.getText(0, document.getLength());
+            } else {
                 POITextExtractor po_ex = ExtractorFactory.createExtractor(fs);
                 text = po_ex.getText();
+            }
         }
         return text;
     }
