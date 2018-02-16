@@ -74,8 +74,10 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 32767));
         jStatus = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jSearchSummary = new javax.swing.JLabel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
@@ -83,7 +85,9 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
         jSearchSelect = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 32767));
 
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        add(filler5);
 
         jStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jStatus.setText("Ready");
@@ -94,6 +98,7 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
         jProgressBar1.setPreferredSize(new java.awt.Dimension(100, 14));
         jProgressBar1.setStringPainted(true);
         add(jProgressBar1);
+        add(filler4);
         add(filler1);
 
         jSearchSummary.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -118,6 +123,8 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JLabel jSearchSelect;
     private javax.swing.JLabel jSearchSummary;
