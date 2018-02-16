@@ -7,7 +7,6 @@ package com.embeddediq.searchmonkey;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,7 +26,6 @@ import java.util.zip.ZipInputStream;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.rtf.RTFEditorKit;
-import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
