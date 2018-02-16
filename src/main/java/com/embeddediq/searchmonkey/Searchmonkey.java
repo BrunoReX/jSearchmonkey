@@ -555,10 +555,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
      */
     public static void main(String args[]) {
         System.setProperty("sun.java2d.noddraw", Boolean.TRUE.toString()); // Speed up the resize time
-        java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.SEVERE);
+        // java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.SEVERE);
         //PlatformLogger platformLogger = PlatformLogger.getLogger("java.util.prefs");
         //platformLogger.setLevel(PlatformLogger.Level.SEVERE);
-
+        // java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
