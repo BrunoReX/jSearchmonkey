@@ -96,12 +96,18 @@ public class ContentMatch {
     */
     public String GetContent(Path path)
     {
-        // if (!entry.flags.disablePlugins)
+        // Let's not process empty files...
+        if (path.toFile().length() == 0) {
+            return "";
+        }
+        
+        // Check to see if we're using plugins
+        if (!entry.flags.disablePlugins)
         {
             try {
                 return tika.parseToString(path.toFile());
-            } catch (IOException | TikaException | IllegalArgumentException | NoSuchMethodException ex) {
-                Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | TikaException | IllegalArgumentException ex) {
+                //Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

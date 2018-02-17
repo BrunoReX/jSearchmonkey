@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.embeddediq</groupId>
     <artifactId>searchmonkey</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -141,5 +141,7 @@
             <version>1.7.25</version>
         </dependency>
     </dependencies>
-    <description>First release</description>
+    <description>Adding a lot of new functionality e.g. ability to search pretty much any text file on disl.
+Works in Linux or Windows or Mac.</description>
+    <name>Power serarching without the pain</name>
 </project>
