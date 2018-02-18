@@ -335,8 +335,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         List<String> items = new ArrayList<>();
         for (int i=0; i<jCombo.getItemCount(); i++)
         {
-            items.add((String)
-                    jCombo.getItemAt(i));
+            String item = (String)jCombo.getItemAt(i);
+            if (!item.startsWith("<<")) {
+                items.add(item);
+            }
         }
         String json = g.toJson(items);
         prefs.put(name, json); // Add list of look in folders        
@@ -1258,8 +1260,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/start-search.png"))); // NOI18N
         jButton1.setText(bundle.getString("SearchEntryPanel.jButton1.text")); // NOI18N
         jButton1.setToolTipText(bundle.getString("SearchEntryPanel.jButton1.toolTipText")); // NOI18N
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -1268,9 +1272,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel5.add(jButton1);
         jPanel5.add(filler1);
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stop-search.png"))); // NOI18N
         jButton2.setText(bundle.getString("SearchEntryPanel.jButton2.text")); // NOI18N
         jButton2.setToolTipText(bundle.getString("SearchEntryPanel.jButton2.toolTipText")); // NOI18N
         jButton2.setEnabled(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
