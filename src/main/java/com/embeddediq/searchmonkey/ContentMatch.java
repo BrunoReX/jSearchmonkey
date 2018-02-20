@@ -46,12 +46,10 @@ public class ContentMatch {
         } else {
             regexMatch = null;
         }
+        
+        // The dawn of a new age..
+        tika = new Tika();
     }
-    /*
-    public ContentMatch(String pattern) throws PatternSyntaxException
-    {
-        regexMatch = Pattern.compile(pattern);
-    }*/
 
     /**
      * Simple file reader with basic matching
@@ -87,7 +85,7 @@ public class ContentMatch {
 //        // Fail
 //        return 0;
 //    }
-    Tika tika = new Tika();
+    Tika tika;
     
     /**
      * Simple file reader with basic matching
