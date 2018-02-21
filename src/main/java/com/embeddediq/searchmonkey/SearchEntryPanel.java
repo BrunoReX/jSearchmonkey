@@ -114,15 +114,15 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
             // TODO - allow the item name to select which dialog is shown
             String name = jAccessedCombo.getName();
-            SelectModifiedDate();
-//            SelectAccessedDate();
+//            SelectModifiedDate();
+            SelectAccessedDate();
         });
         AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
             jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
             // TODO - allow the item name to select which dialog is shown
             String name = jCreatedCombo.getName();
-            SelectModifiedDate();
-//            SelectCreatedDate();
+//            SelectModifiedDate();
+            SelectCreatedDate();
         });
         
         
@@ -1753,29 +1753,44 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
     }
     
-    private void SelectModifiedDate()
+    private void SelectDate(JComboBox jCombo, String msg)
     {
-        JOptionPane frame = new JOptionPane("Enter modified date", JOptionPane.PLAIN_MESSAGE);
+       JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
         
         FileDatePanel panel = new FileDatePanel();
-        // panel.set(new FileSizeEntry());
+        // panel.set(new FileDateEntry());
         frame.setMessage(panel);
         frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
         frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
         frame.setMinimumSize(new Dimension(0, 0));
         frame.setPreferredSize(new Dimension(450, 300));
-        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter modified date");
+        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), msg);
         dlg.pack();
         dlg.setVisible(true);
         Object ret = frame.getValue();
 
         if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
         {
-            //FileSizeEntry entry = panel.get();
-            //jModifiedCombo.getModel().setSelectedItem(entry.toString());
+            //FileDateEntry entry = panel.get();
+            //jCombo.getModel().setSelectedItem(entry.toString());
         }
     }
     
+    private void SelectModifiedDate()
+    {
+        SelectDate(jModifiedCombo, "Enter modified date");
+    }
+
+    private void SelectAccessedDate()
+    {
+        SelectDate(jAccessedCombo, "Enter accessed date");
+    }
+
+    private void SelectCreatedDate()
+    {
+        SelectDate(jCreatedCombo, "Enter created date");
+    }
+
     private void jLookInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLookInActionPerformed
 
     }//GEN-LAST:event_jLookInActionPerformed
