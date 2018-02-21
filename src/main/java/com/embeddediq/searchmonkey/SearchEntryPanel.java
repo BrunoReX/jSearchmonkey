@@ -8,6 +8,7 @@ package com.embeddediq.searchmonkey;
 import com.embeddediq.searchmonkey.RegexWizard.RegexBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -88,24 +89,40 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
         
         // Add a browse button to the jCombobox
-        final String browse = "<<BROWSE>>";
-        jLookIn.addItem( browse );
-        jLookIn.addItemListener((ItemEvent e) -> {
-            if ( e.getStateChange() == ItemEvent.SELECTED)
-            {
-                if (browse.equals( e.getItem())) {
-                    // Get last selected..
-                    
-                    SwingUtilities.invokeLater(() -> {
-                        jLookIn.getModel().setSelectedItem(lastItem);
-                        SelectLookInFolder();
-                    });
-                    System.out.println(lastItem);
-                } else {
-                    lastItem = (String)jLookIn.getEditor().getItem();
-                }
-            }
-        });        
+        AddComboHandler(jLookIn, "<<BROWSE>>", () -> {
+            jLookIn.getModel().setSelectedItem(jLookIn.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jLookIn.getName();
+            SelectLookInFolder();
+        });
+
+        AddComboHandler(jFilesizeCombo, "<<Others>>", () -> {
+            jLookIn.getModel().setSelectedItem(jLookIn.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jLookIn.getName();
+            SelectFileSize();
+        });
+        AddComboHandler(jModifiedCombo, "<<Others>>", () -> {
+            jModifiedCombo.getModel().setSelectedItem(jModifiedCombo.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jModifiedCombo.getName();
+            SelectFileSize();
+            //SelectModifiedDate();
+        });
+        AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
+            jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jAccessedCombo.getName();
+            SelectFileSize();
+//            SelectAccessedDate();
+        });
+        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
+            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jCreatedCombo.getName();
+            SelectFileSize();
+//            SelectCreatedDate();
+        });
         
         
         // TODO - future stuff
@@ -121,7 +138,22 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jModifiedDate.setVisible(false);
         this.jModifiedPanel1.setVisible(false);
         this.jModifiedPanel2.setVisible(false);
-        
+    }
+    
+    private void AddComboHandler(JComboBox item, String browse, Runnable callback)
+    {
+        // Add a browse button to the jCombobox
+        // final String browse = txt; // "<<BROWSE>>";
+        item.addItem( browse );
+        item.addItemListener((ItemEvent e) -> {
+            if ( e.getStateChange() == ItemEvent.SELECTED)
+            {
+                if (browse.equals( e.getItem())) {
+                    // Get last selected..
+                    SwingUtilities.invokeLater(callback);
+                }
+            }
+        });
     }
     
     public class PopupCalendar extends JPopupMenu {
@@ -226,6 +258,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
         req.FileTimeout = 1000*1000*intVal; // Convert ms -> ns
         
+        req.flags.strictFilenameChecks = jStrictFilenameSearch.isSelected();
         req.flags.useContentRegex = jUseContentRegex.isSelected();
         req.flags.ignoreContentCase = jIgnoreContentCase.isSelected();
         longVal = 0L;
@@ -354,12 +387,21 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     
     private void Restore(String name, JComboBox jCombo, Object def)
     {
-        jCombo.removeAllItems();
+        int count = jCombo.getItemCount();
+        if ((count > 0) && (jCombo.getItemAt(count - 1).toString().startsWith("<<")))
+        {
+            count --; // Special case e.g. <<Browse>> or <<Other>>
+        }
+        for (int i=0; i<count; i++) {
+            jCombo.removeItemAt(0);
+        }
         Gson g = new Gson();
         String json = prefs.get(name, g.toJson(def));
         List<String> items = g.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
-        for (String item: items) {
-            jCombo.addItem(item);
+        for (int i = items.size(); --i >= 0;)
+        {
+            jCombo.insertItemAt(items.get(i), 0);
+            // jCombo.addItem(item);
         }
     }
     private void Restore(String name, JSpinner jSpinner, Object def) throws SecurityException
@@ -402,6 +444,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         prefs.putBoolean("IgnoreHiddenFiles", jIgnoreHiddenFiles.isSelected());
         prefs.putBoolean("IgnoreSymbolicLinks", jIgnoreSymbolicLinks.isSelected());
         prefs.putBoolean("SkipBinaryFiles", jSkipBinaryFiles.isSelected());
+        prefs.putBoolean("StrictFilenameSearch", jStrictFilenameSearch.isSelected());
         prefs.putBoolean("IgnoreFileCase", jIgnoreFilenameCase.isSelected());
         prefs.putBoolean("LimitMaxFileSize", jLimitMaxFileSize.isSelected());
         prefs.putDouble("MaxFileSize", (Double)jMaxFileSize.getValue());
@@ -498,6 +541,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jIgnoreHiddenFiles.setSelected(prefs.getBoolean("IgnoreHiddenFiles", false));
         jIgnoreSymbolicLinks.setSelected(prefs.getBoolean("IgnoreSymbolicLinks", false));
         jSkipBinaryFiles.setSelected(prefs.getBoolean("SkipBinaryFiles", true));
+        jStrictFilenameSearch.setSelected(prefs.getBoolean("StrictFilenameSearch", false));
         jIgnoreFilenameCase.setSelected(prefs.getBoolean("IgnoreFileCase", true));
         jLimitMaxFileSize.setSelected(prefs.getBoolean("LimitMaxFileSize", true));
         jMaxFileSize.setValue(prefs.getDouble("MaxFileSize", 10.0)); // limit to 10 MBytes
@@ -585,13 +629,13 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jCheckBox3 = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jFilesizeCombo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        jModifiedCombo = new javax.swing.JComboBox<>();
+        jCreatedCombo = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        jAccessedCombo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
@@ -615,6 +659,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jIgnoreFilenameCase = new javax.swing.JCheckBox();
         jEnableFileTimeout = new javax.swing.JCheckBox();
         jFileTimeout = new javax.swing.JSpinner();
+        jStrictFilenameSearch = new javax.swing.JCheckBox();
         jPanel15 = new javax.swing.JPanel();
         jUseContentSearch = new javax.swing.JRadioButton();
         jIgnoreContentCase = new javax.swing.JCheckBox();
@@ -1120,7 +1165,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addGap(0, 0, 0)
                 .addComponent(jCheckBox3)
                 .addGap(18, 18, 18)
-                .addComponent(jContainingText1, 0, 124, Short.MAX_VALUE))
+                .addComponent(jContainingText1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1146,7 +1191,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jBasicSearchLayout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLookIn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jBasicSearchLayout.createSequentialGroup()
@@ -1181,26 +1226,26 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Between 1 KB and 64 MB", "Up to 128 MBytes", "More than 5 KBytes" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Between 1 KB and 64 MB", "Up to 128 MBytes", "More than 5 KBytes" }));
+        jFilesizeCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jFilesizeComboActionPerformed(evt);
             }
         });
 
         jLabel5.setText(bundle.getString("SearchEntryPanel.jLabel5.text")); // NOI18N
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        jModifiedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
+        jModifiedCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                jModifiedComboActionPerformed(evt);
             }
         });
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        jCreatedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
+        jCreatedCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                jCreatedComboActionPerformed(evt);
             }
         });
 
@@ -1208,10 +1253,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLabel7.setText(bundle.getString("SearchEntryPanel.jLabel7.text")); // NOI18N
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+        jAccessedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
+        jAccessedCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox4ActionPerformed(evt);
+                jAccessedComboActionPerformed(evt);
             }
         });
 
@@ -1228,10 +1273,10 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, 148, Short.MAX_VALUE))
+                    .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 262, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1240,19 +1285,19 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFilesizeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jAccessedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1394,6 +1439,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jFileTimeout.setModel(new javax.swing.SpinnerNumberModel(5000, 250, 300000, 250));
         jFileTimeout.setToolTipText(bundle.getString("SearchEntryPanel.jFileTimeout.toolTipText")); // NOI18N
 
+        jStrictFilenameSearch.setText(bundle.getString("SearchEntryPanel.jStrictFilenameSearch.text")); // NOI18N
+        jStrictFilenameSearch.setToolTipText(bundle.getString("SearchEntryPanel.jStrictFilenameSearch.toolTipText")); // NOI18N
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
@@ -1414,7 +1462,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addComponent(jEnableFileTimeout)
                         .addGap(6, 6, 6)
-                        .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jStrictFilenameSearch))
                 .addContainerGap())
         );
         jPanel14Layout.setVerticalGroup(
@@ -1428,6 +1477,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 .addComponent(jIgnoreHiddenFiles)
                 .addGap(0, 0, 0)
                 .addComponent(jIgnoreSymbolicLinks)
+                .addGap(0, 0, 0)
+                .addComponent(jStrictFilenameSearch)
                 .addGap(0, 0, 0)
                 .addComponent(jSkipBinaryFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -1678,6 +1729,24 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             jLookIn.getModel().setSelectedItem(fname.getPath());
         }
     }
+    private void SelectFileSize()
+    {
+        final JDialog frame = new JDialog((Frame)SwingUtilities.getWindowAncestor(this),
+                "Enter file size criteria", true);
+        frame.getContentPane().add(new FileSizePanel());
+        frame.pack();
+        frame.setVisible(true);
+        
+        // TODO - if OK clicked, then set the options here
+        /*
+        if (ret == JFileChooser.APPROVE_OPTION)
+        {
+            File fname = jFileChooser1.getSelectedFile();
+            jLookIn.getModel().setSelectedItem(fname.getPath());
+        }
+         */
+    }
+    
     
     private void jLookInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLookInActionPerformed
 
@@ -1775,22 +1844,22 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         // TODO add your handling code here:
     }//GEN-LAST:event_jSubFoldersActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jFilesizeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFilesizeComboActionPerformed
 
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jFilesizeComboActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void jModifiedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jModifiedComboActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_jModifiedComboActionPerformed
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+    private void jCreatedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatedComboActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+    }//GEN-LAST:event_jCreatedComboActionPerformed
 
-    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+    private void jAccessedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAccessedComboActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox4ActionPerformed
+    }//GEN-LAST:event_jAccessedComboActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
@@ -1798,6 +1867,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.Box.Filler filler1;
     private javax.swing.JCheckBox jAccessedAfterCheck;
     private javax.swing.JCheckBox jAccessedBeforeCheck;
+    private javax.swing.JComboBox<String> jAccessedCombo;
     private javax.swing.JButton jAfter;
     private javax.swing.JButton jAfter1;
     private javax.swing.JButton jAfter2;
@@ -1815,14 +1885,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jContainingText;
     private javax.swing.JComboBox<String> jContainingText1;
     private javax.swing.JCheckBox jCreatedAfterCheck;
     private javax.swing.JCheckBox jCreatedBeforeCheck;
+    private javax.swing.JComboBox<String> jCreatedCombo;
     private javax.swing.JCheckBox jDisable3rdParty;
     private javax.swing.JCheckBox jDisableUnicodeDetection;
     private javax.swing.JCheckBox jEnableFileTimeout;
@@ -1834,6 +1901,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JComboBox<String> jFileSizeScaler;
     private javax.swing.JComboBox<String> jFileSizeScaler1;
     private javax.swing.JSpinner jFileTimeout;
+    private javax.swing.JComboBox<String> jFilesizeCombo;
     private javax.swing.JSpinner jGreaterThanSpinner;
     private javax.swing.JCheckBox jIgnoreContentCase;
     private javax.swing.JCheckBox jIgnoreFilenameCase;
@@ -1861,6 +1929,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JSpinner jMaxRecurse;
     private javax.swing.JCheckBox jModifiedAfterCheck;
     private javax.swing.JCheckBox jModifiedBeforeCheck;
+    private javax.swing.JComboBox<String> jModifiedCombo;
     private javax.swing.JPanel jModifiedDate;
     private javax.swing.JPanel jModifiedPanel1;
     private javax.swing.JPanel jModifiedPanel2;
@@ -1882,6 +1951,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JPanel jSearch;
     private javax.swing.JCheckBox jSkipBinaryFiles;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JCheckBox jStrictFilenameSearch;
     private javax.swing.JCheckBox jSubFolders;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar4;

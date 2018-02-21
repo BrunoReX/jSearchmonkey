@@ -8,7 +8,6 @@ package com.embeddediq.searchmonkey;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.System.nanoTime;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
@@ -16,7 +15,6 @@ import static java.nio.file.FileVisitResult.TERMINATE;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +29,7 @@ import javax.swing.SwingWorker;
 public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> implements FileVisitor<Path> { 
     private final SearchEntry entry;
     private final ContentMatch contentMatch;
-    private final PathMatcher matcher;
+    private final FileMatch matcher;
     private final SearchResultsTable table;
     
     public SearchWorker(SearchEntry entry, SearchResultsTable table)
@@ -39,8 +37,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         super();
         this.entry = entry;
         this.contentMatch = new ContentMatch(entry);
-        String prefix = (entry.flags.useFilenameRegex ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
-        this.matcher = FileSystems.getDefault().getPathMatcher(prefix + entry.fileNameText);
+        this.matcher = new FileMatch(entry);
         this.table = table;
     }
 
@@ -66,20 +63,13 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         return summary;
     }
     
-    // Compares the glob pattern against
-    // the file or directory name.
-    private boolean isMatch(Path file) {
-        Path name = file.getFileName();
-        return name != null && matcher.matches(name);
-    }
-
     // Invoke the pattern matching
     // method on each file.
     @Override
     public FileVisitResult visitFile(Path file,
             BasicFileAttributes attrs) throws IOException, FileNotFoundException {
         summary.totalFiles ++;
-        if (isMatch(file))
+        if (matcher.matches(file))
         {
             if (
                     (entry.flags.ignoreSymbolicLinks && attrs.isSymbolicLink()) ||

@@ -35,6 +35,7 @@ public class SearchEntry {
         public boolean usePowerSearch; // Not sure what this does yet!!
         public boolean useFilenameRegex;
         public boolean useContentRegex;
+        public boolean strictFilenameChecks; // If not set, then use relaxed searching
         public boolean ignoreHiddenFiles;
         public boolean ignoreHiddenFolders;
         public boolean ignoreSymbolicLinks;

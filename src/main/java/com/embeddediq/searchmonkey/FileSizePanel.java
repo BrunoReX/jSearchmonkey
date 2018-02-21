@@ -148,36 +148,43 @@ public class FileSizePanel extends javax.swing.JPanel {
         this.jFileSizeScaler.setEnabled(sel);
     }//GEN-LAST:event_jLessThanCheckItemStateChanged
 
-    public String getString()
+    public void set(FileSizeEntry init)
     {
-        String lessThan = null;
-        if (jLessThanCheck.isSelected())
-        {
-            lessThan = String.format("%.1f %s", 
-                    (float)jLessThanSpinner.getValue(),
-                    (String)jFileSizeScaler.getSelectedItem());
+        if (init.useMinSize) {
+            int idx = FileSizeEntry.getIndex(init.minSize);
+            jMoreThanCheck.setSelected(true);
+            // jGreaterThanSpinner.setEnabled(true);
+            //this.jFileSizeScaler1.setEnabled(sel);
+            this.jFileSizeScaler1.setSelectedIndex(idx);
+            this.jGreaterThanSpinner.setValue((double)init.minSize / (double)(2^idx));
         }
-        String greaterThan = null;
-        if (jMoreThanCheck.isSelected())
-        {
-            lessThan = String.format("%.1f %s", 
-                    (float)jGreaterThanSpinner.getValue(),
-                    (String)jFileSizeScaler1.getSelectedItem());
+        if (init.useMaxSize) {
+            int idx = FileSizeEntry.getIndex(init.maxSize);
+            jLessThanCheck.setSelected(true);
+            this.jFileSizeScaler.setSelectedIndex(idx);
+            this.jLessThanSpinner.setValue((double)init.maxSize / (double)(2^idx));
         }
-        if (lessThan != null && greaterThan != null)
-        {
-            return String.format("Between %s and %s", lessThan, greaterThan);
-        }
-        else if (jLessThanCheck.isSelected())
-        {
-            return String.format("Less than %s", lessThan);
-            
-        } else if (jMoreThanCheck.isSelected())
-        {
-            return String.format("Greater than %s", greaterThan);
-        }
-        return "File is any size";
     }
+    
+    public FileSizeEntry get()
+    {
+        FileSizeEntry init = new FileSizeEntry();
+        if (jMoreThanCheck.isSelected()) {
+            init.useMinSize = true;
+            init.minSize = (long)((double)jGreaterThanSpinner.getValue() * (double)(2^jFileSizeScaler1.getSelectedIndex()));
+        }
+        if (jLessThanCheck.isSelected()) {
+            init.useMaxSize = true;
+            init.maxSize = (long)((double)jLessThanSpinner.getValue() * (double)(2^jFileSizeScaler.getSelectedIndex()));
+        }
+
+        return init;
+    }
+
+//    public String getString()
+//    {
+//        get().toString();
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jFileSizePanel;
