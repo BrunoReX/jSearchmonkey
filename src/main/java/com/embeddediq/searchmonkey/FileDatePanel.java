@@ -70,6 +70,11 @@ public class FileDatePanel extends javax.swing.JPanel {
         jAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jAfter.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jAfter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jAfterActionPerformed(evt);
+            }
+        });
         jToolBar5.add(jAfter);
 
         jToolBar4.setFloatable(false);
@@ -85,6 +90,11 @@ public class FileDatePanel extends javax.swing.JPanel {
         jBefore.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jBefore.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jBefore.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBefore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBeforeActionPerformed(evt);
+            }
+        });
         jToolBar4.add(jBefore);
 
         jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
@@ -159,6 +169,14 @@ public class FileDatePanel extends javax.swing.JPanel {
     private void jModifiedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedAfterCheckItemStateChanged
         this.jAfterSpinner.setEnabled(jModifiedAfterCheck.isSelected());
     }//GEN-LAST:event_jModifiedAfterCheckItemStateChanged
+
+    private void jAfterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAfterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jAfterActionPerformed
+
+    private void jBeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBeforeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBeforeActionPerformed
 
     public String getString()
     {

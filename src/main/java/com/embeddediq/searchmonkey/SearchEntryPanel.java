@@ -107,21 +107,21 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             jModifiedCombo.getModel().setSelectedItem(jModifiedCombo.getItemAt(0));
             // TODO - allow the item name to select which dialog is shown
             String name = jModifiedCombo.getName();
-            SelectFileSize();
-            //SelectModifiedDate();
+            // SelectFileSize();
+            SelectModifiedDate();
         });
         AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
             jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
             // TODO - allow the item name to select which dialog is shown
             String name = jAccessedCombo.getName();
-            SelectFileSize();
+            SelectModifiedDate();
 //            SelectAccessedDate();
         });
         AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
             jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
             // TODO - allow the item name to select which dialog is shown
             String name = jCreatedCombo.getName();
-            SelectFileSize();
+            SelectModifiedDate();
 //            SelectCreatedDate();
         });
         
@@ -1739,41 +1739,42 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         frame.setMessage(panel);
         frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
         frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
-        frame.setMinimumSize(new Dimension(500, 350));
-        frame.setPreferredSize(new Dimension(500, 350));
+        frame.setMinimumSize(new Dimension(0, 0));
+        frame.setPreferredSize(new Dimension(450, 300));
         JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter file size");
         dlg.pack();
-        // dlg.setResizable(true);
         dlg.setVisible(true);
         Object ret = frame.getValue();
-        
-
-//        int ret = JOptionPane.showConfirmDialog((Frame)SwingUtilities.getWindowAncestor(this),
-//                panel, "Enter file size:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
         {
             FileSizeEntry entry = panel.get();
             jFilesizeCombo.getModel().setSelectedItem(entry.toString());
         }
-        /*
-        final JDialog frame = new JDialog((Frame)SwingUtilities.getWindowAncestor(this),
-                "Enter file size criteria", true);
-        frame.getContentPane().add(new FileSizePanel());
-        frame.pack();
-        frame.setVisible(true);
-        */
-        
-        // TODO - if OK clicked, then set the options here
-        /*
-        if (ret == JFileChooser.APPROVE_OPTION)
-        {
-            File fname = jFileChooser1.getSelectedFile();
-            jLookIn.getModel().setSelectedItem(fname.getPath());
-        }
-         */
     }
     
+    private void SelectModifiedDate()
+    {
+        JOptionPane frame = new JOptionPane("Enter modified date", JOptionPane.PLAIN_MESSAGE);
+        
+        FileDatePanel panel = new FileDatePanel();
+        // panel.set(new FileSizeEntry());
+        frame.setMessage(panel);
+        frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
+        frame.setMinimumSize(new Dimension(0, 0));
+        frame.setPreferredSize(new Dimension(450, 300));
+        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter modified date");
+        dlg.pack();
+        dlg.setVisible(true);
+        Object ret = frame.getValue();
+
+        if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
+        {
+            //FileSizeEntry entry = panel.get();
+            //jModifiedCombo.getModel().setSelectedItem(entry.toString());
+        }
+    }
     
     private void jLookInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLookInActionPerformed
 
