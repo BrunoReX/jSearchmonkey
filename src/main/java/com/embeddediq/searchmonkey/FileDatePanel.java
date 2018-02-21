@@ -41,22 +41,36 @@ public class FileDatePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jModifiedDate = new javax.swing.JPanel();
-        jBeforeSpinner = new javax.swing.JSpinner();
-        jToolBar4 = new javax.swing.JToolBar();
-        jBefore = new javax.swing.JButton();
-        jModifiedBeforeCheck = new javax.swing.JCheckBox();
-        jAfterSpinner = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jToolBar5 = new javax.swing.JToolBar();
         jAfter = new javax.swing.JButton();
+        jToolBar4 = new javax.swing.JToolBar();
+        jBefore = new javax.swing.JButton();
+        jAfterSpinner = new javax.swing.JSpinner();
+        jBeforeSpinner = new javax.swing.JSpinner();
+        jModifiedBeforeCheck = new javax.swing.JCheckBox();
         jModifiedAfterCheck = new javax.swing.JCheckBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
-        jModifiedDate.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jModifiedDate.border.title"))); // NOI18N
+        setLayout(new java.awt.BorderLayout());
 
-        jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel());
-        jBeforeSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner.toolTipText")); // NOI18N
-        jBeforeSpinner.setEnabled(false);
+        jLabel1.setText("<html><p>Setting these date constraints can help to increase the speed of searching because Searchmonkey can simply skip the very old or very new files.</p><br/><p>If one option is checked, then the other constraint will be set to: <em>don't care</em>. You can specify a range, for example <em>between 1st March and 31st March 2018</em>. However, if you want the opposite, then this too is possible, for example <em>before 1st March OR after 31st March 2018</em>. Or you can just use one constraint, for example <em>before 31st March</em></p></html>");
+        add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        jToolBar5.setFloatable(false);
+        jToolBar5.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar5.setRollover(true);
+        jToolBar5.setBorderPainted(false);
+
+        jAfter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jAfter.setToolTipText(bundle.getString("SearchEntryPanel.jAfter.toolTipText")); // NOI18N
+        jAfter.setFocusable(false);
+        jAfter.setHideActionText(true);
+        jAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jAfter.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar5.add(jAfter);
 
         jToolBar4.setFloatable(false);
         jToolBar4.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -73,6 +87,14 @@ public class FileDatePanel extends javax.swing.JPanel {
         jBefore.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar4.add(jBefore);
 
+        jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
+        jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
+        jAfterSpinner.setEnabled(false);
+
+        jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel());
+        jBeforeSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner.toolTipText")); // NOI18N
+        jBeforeSpinner.setEnabled(false);
+
         jModifiedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.text")); // NOI18N
         jModifiedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.toolTipText")); // NOI18N
         jModifiedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
@@ -80,24 +102,6 @@ public class FileDatePanel extends javax.swing.JPanel {
                 jModifiedBeforeCheckItemStateChanged(evt);
             }
         });
-
-        jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
-        jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
-        jAfterSpinner.setEnabled(false);
-
-        jToolBar5.setFloatable(false);
-        jToolBar5.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar5.setRollover(true);
-        jToolBar5.setBorderPainted(false);
-
-        jAfter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jAfter.setToolTipText(bundle.getString("SearchEntryPanel.jAfter.toolTipText")); // NOI18N
-        jAfter.setFocusable(false);
-        jAfter.setHideActionText(true);
-        jAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jAfter.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar5.add(jAfter);
 
         jModifiedAfterCheck.setText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.text")); // NOI18N
         jModifiedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.toolTipText")); // NOI18N
@@ -107,59 +111,45 @@ public class FileDatePanel extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout jModifiedDateLayout = new javax.swing.GroupLayout(jModifiedDate);
-        jModifiedDate.setLayout(jModifiedDateLayout);
-        jModifiedDateLayout.setHorizontalGroup(
-            jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedDateLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jModifiedBeforeCheck)
-                    .addComponent(jModifiedAfterCheck)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jModifiedDateLayout.createSequentialGroup()
-                        .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jAfterSpinner, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBeforeSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jModifiedAfterCheck)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jModifiedBeforeCheck)
+                        .addGap(12, 12, 12)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBeforeSpinner)
+                    .addComponent(jAfterSpinner))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
-        jModifiedDateLayout.setVerticalGroup(
-            jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedDateLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jModifiedBeforeCheck)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBeforeSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jAfterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jModifiedAfterCheck))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jModifiedAfterCheck)
-                .addGap(0, 0, 0)
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jAfterSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBeforeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jModifiedBeforeCheck))
+                .addGap(0, 0, 0))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jModifiedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jModifiedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jModifiedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedBeforeCheckItemStateChanged
@@ -204,9 +194,10 @@ public class FileDatePanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jAfterSpinner;
     private javax.swing.JButton jBefore;
     private javax.swing.JSpinner jBeforeSpinner;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JCheckBox jModifiedAfterCheck;
     private javax.swing.JCheckBox jModifiedBeforeCheck;
-    private javax.swing.JPanel jModifiedDate;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JToolBar jToolBar5;
     // End of variables declaration//GEN-END:variables

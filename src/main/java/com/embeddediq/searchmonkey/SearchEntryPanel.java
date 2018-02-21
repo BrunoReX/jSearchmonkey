@@ -8,6 +8,7 @@ package com.embeddediq.searchmonkey;
 import com.embeddediq.searchmonkey.RegexWizard.RegexBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -1731,14 +1732,26 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     }
     private void SelectFileSize()
     {
+        JOptionPane frame = new JOptionPane("Enter file size", JOptionPane.PLAIN_MESSAGE);
+        
         FileSizePanel panel = new FileSizePanel();
         panel.set(new FileSizeEntry());
+        frame.setMessage(panel);
+        frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
+        frame.setMinimumSize(new Dimension(500, 350));
+        frame.setPreferredSize(new Dimension(500, 350));
+        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter file size");
+        dlg.pack();
+        // dlg.setResizable(true);
+        dlg.setVisible(true);
+        Object ret = frame.getValue();
         
 
-        int ret = JOptionPane.showConfirmDialog((Frame)SwingUtilities.getWindowAncestor(this),
-                panel, "Enter file size:", JOptionPane.OK_CANCEL_OPTION);
+//        int ret = JOptionPane.showConfirmDialog((Frame)SwingUtilities.getWindowAncestor(this),
+//                panel, "Enter file size:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        if (ret == JOptionPane.OK_OPTION)
+        if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
         {
             FileSizeEntry entry = panel.get();
             jFilesizeCombo.getModel().setSelectedItem(entry.toString());
