@@ -38,17 +38,15 @@ public class FileSizePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileSizePanel = new javax.swing.JPanel();
         jMoreThanCheck = new javax.swing.JCheckBox();
-        jFileSizeScaler = new javax.swing.JComboBox<>();
+        jMoreThanSpinner = new javax.swing.JSpinner();
+        jMoreThanFileSizeScaler = new javax.swing.JComboBox<>();
         jLessThanCheck = new javax.swing.JCheckBox();
         jLessThanSpinner = new javax.swing.JSpinner();
-        jGreaterThanSpinner = new javax.swing.JSpinner();
-        jFileSizeScaler1 = new javax.swing.JComboBox<>();
+        jLessThanFileSizeScaler = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
-        jFileSizePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jFileSizePanel.border.title"))); // NOI18N
-
         jMoreThanCheck.setText(bundle.getString("SearchEntryPanel.jMoreThanCheck.text")); // NOI18N
         jMoreThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jMoreThanCheck.toolTipText")); // NOI18N
         jMoreThanCheck.addItemListener(new java.awt.event.ItemListener() {
@@ -57,10 +55,14 @@ public class FileSizePanel extends javax.swing.JPanel {
             }
         });
 
-        jFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
-        jFileSizeScaler.setSelectedIndex(1);
-        jFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler.toolTipText")); // NOI18N
-        jFileSizeScaler.setEnabled(false);
+        jMoreThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+        jMoreThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jGreaterThanSpinner.toolTipText")); // NOI18N
+        jMoreThanSpinner.setEnabled(false);
+
+        jMoreThanFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
+        jMoreThanFileSizeScaler.setSelectedIndex(1);
+        jMoreThanFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler1.toolTipText")); // NOI18N
+        jMoreThanFileSizeScaler.setEnabled(false);
 
         jLessThanCheck.setText(bundle.getString("SearchEntryPanel.jLessThanCheck.text")); // NOI18N
         jLessThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanCheck.toolTipText")); // NOI18N
@@ -74,49 +76,12 @@ public class FileSizePanel extends javax.swing.JPanel {
         jLessThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanSpinner.toolTipText")); // NOI18N
         jLessThanSpinner.setEnabled(false);
 
-        jGreaterThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
-        jGreaterThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jGreaterThanSpinner.toolTipText")); // NOI18N
-        jGreaterThanSpinner.setEnabled(false);
+        jLessThanFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
+        jLessThanFileSizeScaler.setSelectedIndex(2);
+        jLessThanFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler.toolTipText")); // NOI18N
+        jLessThanFileSizeScaler.setEnabled(false);
 
-        jFileSizeScaler1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
-        jFileSizeScaler1.setSelectedIndex(1);
-        jFileSizeScaler1.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler1.toolTipText")); // NOI18N
-        jFileSizeScaler1.setEnabled(false);
-
-        javax.swing.GroupLayout jFileSizePanelLayout = new javax.swing.GroupLayout(jFileSizePanel);
-        jFileSizePanel.setLayout(jFileSizePanelLayout);
-        jFileSizePanelLayout.setHorizontalGroup(
-            jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLessThanCheck)
-                    .addComponent(jLessThanSpinner)
-                    .addComponent(jMoreThanCheck)
-                    .addComponent(jGreaterThanSpinner))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jFileSizePanelLayout.setVerticalGroup(
-            jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLessThanCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLessThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jMoreThanCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jGreaterThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+        jLabel1.setText("<html><p>Setting these file size constraints size can help to increase the speed of searching because Searchmonkey can simply skip the very large or very small files.</p><br/><p>If one option is checked, then the other constraint will be set to: <em>don't care</em>. You can specify a range, for example <em>between 3 KBytes and 10 Mbytes</em>. However, if you want the opposite, then this too is possible, for example <em>greater than 10 MBytes OR less than 3 Kbytes</em>. Or you can just use one constraint, for example <em>Less than 5 MBytes</em></p></html>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -124,28 +89,51 @@ public class FileSizePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jFileSizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jMoreThanCheck)
+                            .addComponent(jLessThanCheck))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLessThanSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(jMoreThanSpinner))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jMoreThanFileSizeScaler, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLessThanFileSizeScaler, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jFileSizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jMoreThanFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jMoreThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jMoreThanCheck))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLessThanCheck)
+                    .addComponent(jLessThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLessThanFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMoreThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jMoreThanCheckItemStateChanged
         boolean sel = jMoreThanCheck.isSelected();
-        this.jGreaterThanSpinner.setEnabled(sel);
-        this.jFileSizeScaler1.setEnabled(sel);
+        this.jMoreThanSpinner.setEnabled(sel);
+        this.jMoreThanFileSizeScaler.setEnabled(sel);
     }//GEN-LAST:event_jMoreThanCheckItemStateChanged
 
     private void jLessThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLessThanCheckItemStateChanged
         boolean sel = jLessThanCheck.isSelected();
         this.jLessThanSpinner.setEnabled(sel);
-        this.jFileSizeScaler.setEnabled(sel);
+        this.jLessThanFileSizeScaler.setEnabled(sel);
     }//GEN-LAST:event_jLessThanCheckItemStateChanged
 
     public void set(FileSizeEntry init)
@@ -155,13 +143,13 @@ public class FileSizePanel extends javax.swing.JPanel {
             jMoreThanCheck.setSelected(true);
             // jGreaterThanSpinner.setEnabled(true);
             //this.jFileSizeScaler1.setEnabled(sel);
-            this.jFileSizeScaler1.setSelectedIndex(idx);
-            this.jGreaterThanSpinner.setValue((double)init.minSize / (double)(2^idx));
+            this.jMoreThanFileSizeScaler.setSelectedIndex(idx);
+            this.jMoreThanSpinner.setValue((double)init.minSize / (double)(2^idx));
         }
         if (init.useMaxSize) {
             int idx = FileSizeEntry.getIndex(init.maxSize);
             jLessThanCheck.setSelected(true);
-            this.jFileSizeScaler.setSelectedIndex(idx);
+            this.jLessThanFileSizeScaler.setSelectedIndex(idx);
             this.jLessThanSpinner.setValue((double)init.maxSize / (double)(2^idx));
         }
     }
@@ -171,11 +159,11 @@ public class FileSizePanel extends javax.swing.JPanel {
         FileSizeEntry init = new FileSizeEntry();
         if (jMoreThanCheck.isSelected()) {
             init.useMinSize = true;
-            init.minSize = (long)((double)jGreaterThanSpinner.getValue() * (double)(2^jFileSizeScaler1.getSelectedIndex()));
+            init.minSize = (long)((double)jMoreThanSpinner.getValue() * (double)(2^jMoreThanFileSizeScaler.getSelectedIndex()));
         }
         if (jLessThanCheck.isSelected()) {
             init.useMaxSize = true;
-            init.maxSize = (long)((double)jLessThanSpinner.getValue() * (double)(2^jFileSizeScaler.getSelectedIndex()));
+            init.maxSize = (long)((double)jLessThanSpinner.getValue() * (double)(2^jLessThanFileSizeScaler.getSelectedIndex()));
         }
 
         return init;
@@ -187,12 +175,12 @@ public class FileSizePanel extends javax.swing.JPanel {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jFileSizePanel;
-    private javax.swing.JComboBox<String> jFileSizeScaler;
-    private javax.swing.JComboBox<String> jFileSizeScaler1;
-    private javax.swing.JSpinner jGreaterThanSpinner;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JCheckBox jLessThanCheck;
+    private javax.swing.JComboBox<String> jLessThanFileSizeScaler;
     private javax.swing.JSpinner jLessThanSpinner;
     private javax.swing.JCheckBox jMoreThanCheck;
+    private javax.swing.JComboBox<String> jMoreThanFileSizeScaler;
+    private javax.swing.JSpinner jMoreThanSpinner;
     // End of variables declaration//GEN-END:variables
 }

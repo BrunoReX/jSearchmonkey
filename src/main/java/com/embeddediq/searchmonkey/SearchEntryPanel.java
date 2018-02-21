@@ -1731,11 +1731,25 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     }
     private void SelectFileSize()
     {
+        FileSizePanel panel = new FileSizePanel();
+        panel.set(new FileSizeEntry());
+        
+
+        int ret = JOptionPane.showConfirmDialog((Frame)SwingUtilities.getWindowAncestor(this),
+                panel, "Enter file size:", JOptionPane.OK_CANCEL_OPTION);
+
+        if (ret == JOptionPane.OK_OPTION)
+        {
+            FileSizeEntry entry = panel.get();
+            jFilesizeCombo.getModel().setSelectedItem(entry.toString());
+        }
+        /*
         final JDialog frame = new JDialog((Frame)SwingUtilities.getWindowAncestor(this),
                 "Enter file size criteria", true);
         frame.getContentPane().add(new FileSizePanel());
         frame.pack();
         frame.setVisible(true);
+        */
         
         // TODO - if OK clicked, then set the options here
         /*
