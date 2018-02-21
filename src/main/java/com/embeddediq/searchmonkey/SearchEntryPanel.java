@@ -369,7 +369,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         for (int i=0; i<jCombo.getItemCount(); i++)
         {
             String item = (String)jCombo.getItemAt(i);
-            if (!item.startsWith("<<")) {
+            if (item != null && !item.startsWith("<<")) {
                 items.add(item);
             }
         }
