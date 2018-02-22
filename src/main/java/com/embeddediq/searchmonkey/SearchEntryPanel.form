@@ -1146,11 +1146,8 @@
                     <Component class="javax.swing.JComboBox" name="jFilesizeCombo">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
+                          <StringArray count="1">
                             <StringItem index="0" value="Don&apos;t care"/>
-                            <StringItem index="1" value="Between 1 KB and 64 MB"/>
-                            <StringItem index="2" value="Up to 128 MBytes"/>
-                            <StringItem index="3" value="More than 5 KBytes"/>
                           </StringArray>
                         </Property>
                       </Properties>
@@ -1221,17 +1218,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="jAccessedCombo">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="5">
-                            <StringItem index="0" value="Don&apos;t care"/>
-                            <StringItem index="1" value="Last week"/>
-                            <StringItem index="2" value="Last month"/>
-                            <StringItem index="3" value="Last year"/>
-                            <StringItem index="4" value="[Other time frame..]"/>
-                          </StringArray>
-                        </Property>
-                      </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jAccessedComboActionPerformed"/>
                       </Events>
@@ -1298,6 +1284,14 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JComboBox" name="jComboBox1">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

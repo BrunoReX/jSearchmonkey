@@ -8,6 +8,8 @@ package com.embeddediq.searchmonkey;
 import com.embeddediq.searchmonkey.RegexWizard.RegexBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -31,22 +33,33 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
+import javax.swing.ListCellRenderer;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataListener;
+import javax.swing.plaf.metal.MetalFileChooserUI;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
 
 /**
@@ -117,15 +130,31 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 //            SelectModifiedDate();
             SelectAccessedDate();
         });
-        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
-            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
-            // TODO - allow the item name to select which dialog is shown
-            String name = jCreatedCombo.getName();
-//            SelectModifiedDate();
-            SelectCreatedDate();
-        });
         
+//        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
+//            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
+//            // TODO - allow the item name to select which dialog is shown
+//            String name = jCreatedCombo.getName();
+////            SelectModifiedDate();
+//            SelectCreatedDate();
+//        });
         
+        //JComboBox x = new JComboBox();
+        //x.a
+        jAccessedCombo = new JComboBox(new Object[] {
+                "Don't care", 
+                new JSeparator(JSeparator.HORIZONTAL),
+                "<<browse>>"});
+        //jAccessedCombo.setModel(new DefaultComboBoxModel(new Object[] {
+                //"Don't care", 
+                //new JSeparator(JSeparator.HORIZONTAL),
+                //"<<browse>>"}));
+        //jCreatedCombo.set
+        jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
+        jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo));
+      
+        //this.jLookIn.setModel(myModel);
+       
         // TODO - future stuff
         // this.jExpertMode.setVisible(false);
         //this.jButton7.setVisible(false);
@@ -139,6 +168,70 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jModifiedDate.setVisible(false);
         this.jModifiedPanel1.setVisible(false);
         this.jModifiedPanel2.setVisible(false);
+    }
+    
+    class SeparatorComboBoxRenderer extends JLabel implements ListCellRenderer // BasicComboBoxRenderer
+    {
+        public SeparatorComboBoxRenderer() {
+            super();
+            setOpaque(true);
+            //setHorizontalAlignment(CENTER);
+            //setVerticalAlignment(CENTER);
+        }
+
+        @Override
+        public Component getListCellRendererComponent( JList list,
+               Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            UIDefaults defaults = UIManager.getDefaults();
+            if (isSelected) {
+                
+                setBackground(defaults.getColor("ComboBox.selectionBackground"));
+                setForeground(defaults.getColor("ComboBox.selectionForeground"));
+                // setForeground(Color.white);
+                // setBackground(Color.white); // list.getSelectionBackground());
+            }
+            else {
+                setBackground(defaults.getColor("ComboBox.background"));
+                setForeground(defaults.getColor("ComboBox.foreground"));
+                
+                //setBackground(Color.white);
+                //setForeground(Color.black);
+            }
+
+          setFont(defaults.getFont("ComboBox.font"));
+          if (value instanceof Icon) {
+             setIcon((Icon)value);
+          }
+          if (value instanceof JSeparator) {
+             return (Component) value;
+          }
+          else {
+             setText((value == null) ? "" : value.toString());
+          }
+
+          return this;
+      } 
+
+    }    
+
+    class SeparatorComboBoxListener implements ActionListener {
+       JComboBox combobox;
+       Object oldItem;
+
+       SeparatorComboBoxListener(JComboBox combobox) {
+          this.combobox = combobox;
+          combobox.setSelectedIndex(0);
+          oldItem = combobox.getSelectedItem();
+       }
+
+       public void actionPerformed(ActionEvent e) {
+          Object selectedItem = combobox.getSelectedItem();
+          if (selectedItem instanceof JSeparator) {
+             combobox.setSelectedItem(oldItem);
+          } else {
+             oldItem = selectedItem;
+          }
+       }
     }
     
     private void AddComboHandler(JComboBox item, String browse, Runnable callback)
@@ -646,6 +739,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jStartButton = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
         jStopButton = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jOptions = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -1232,7 +1326,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
-        jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Between 1 KB and 64 MB", "Up to 128 MBytes", "More than 5 KBytes" }));
+        jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
         jFilesizeCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFilesizeComboActionPerformed(evt);
@@ -1259,7 +1353,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jLabel7.setText(bundle.getString("SearchEntryPanel.jLabel7.text")); // NOI18N
 
-        jAccessedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
         jAccessedCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jAccessedComboActionPerformed(evt);
@@ -1336,6 +1429,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jPanel5.add(jStopButton);
 
         jSearch.add(jPanel5);
+
+        jComboBox1.setEditable(true);
+        jSearch.add(jComboBox1);
 
         jScrollPane1.setViewportView(jSearch);
 
@@ -1931,6 +2027,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JSpinner jBeforeSpinner2;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jContainingText;
     private javax.swing.JComboBox<String> jContainingText1;
     private javax.swing.JCheckBox jCreatedAfterCheck;
