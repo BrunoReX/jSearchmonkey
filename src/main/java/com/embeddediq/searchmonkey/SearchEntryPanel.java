@@ -217,17 +217,22 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         {
             DefaultComboBoxModel model = (DefaultComboBoxModel)jCombo.getModel();
             int idx = model.getIndexOf(val);
+            jCombo.setSelectedIndex(-1); // Deselect all
             if (idx != -1)
             {
                 model.removeElementAt(idx);
             }
             jCombo.insertItemAt(val, 0);
             idx = jCombo.getItemCount();
+            if (idx > 1 && jCombo.getItemAt(idx - 1).toString().startsWith("<<"))
+            {
+                idx --;
+            }
             if (idx > maxCombo)
             {
                 jCombo.removeItemAt(idx - 1);
             }
-            jCombo.setSelectedItem(val);
+            jCombo.setSelectedItem(val); // Reselect item
         }
         return val;
     }
@@ -638,9 +643,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         jLabel7 = new javax.swing.JLabel();
         jAccessedCombo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jStartButton = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
-        jButton2 = new javax.swing.JButton();
+        jStopButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jOptions = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -1306,29 +1311,29 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/start-search.png"))); // NOI18N
-        jButton1.setText(bundle.getString("SearchEntryPanel.jButton1.text")); // NOI18N
-        jButton1.setToolTipText(bundle.getString("SearchEntryPanel.jButton1.toolTipText")); // NOI18N
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jStartButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/start-search.png"))); // NOI18N
+        jStartButton.setText(bundle.getString("SearchEntryPanel.jStartButton.text")); // NOI18N
+        jStartButton.setToolTipText(bundle.getString("SearchEntryPanel.jStartButton.toolTipText")); // NOI18N
+        jStartButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jStartButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jStartButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton1);
+        jPanel5.add(jStartButton);
         jPanel5.add(filler1);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stop-search.png"))); // NOI18N
-        jButton2.setText(bundle.getString("SearchEntryPanel.jButton2.text")); // NOI18N
-        jButton2.setToolTipText(bundle.getString("SearchEntryPanel.jButton2.toolTipText")); // NOI18N
-        jButton2.setEnabled(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jStopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stop-search.png"))); // NOI18N
+        jStopButton.setText(bundle.getString("SearchEntryPanel.jStopButton.text")); // NOI18N
+        jStopButton.setToolTipText(bundle.getString("SearchEntryPanel.jStopButton.toolTipText")); // NOI18N
+        jStopButton.setEnabled(false);
+        jStopButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jStopButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jStopButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton2);
+        jPanel5.add(jStopButton);
 
         jSearch.add(jPanel5);
 
@@ -1680,9 +1685,9 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         listeners.add(listener);
         
         // Make the start button the default i.e. Enter
-        this.getRootPane().setDefaultButton(this.jButton1);
+        this.getRootPane().setDefaultButton(this.jStartButton);
         this.getRootPane().registerKeyboardAction((java.awt.event.ActionEvent evt) -> {
-            jButton2.doClick();
+            jStopButton.doClick();
         },  KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         
     }
@@ -1693,32 +1698,32 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         Save();
         
         // Call the parent
-        jButton1.setEnabled(false);
-        jButton2.setEnabled(true);
+        jStartButton.setEnabled(false);
+        jStopButton.setEnabled(true);
     }
     public void Stop()
     {
-        jButton2.setEnabled(false);
-        jButton1.setEnabled(true);
+        jStopButton.setEnabled(false);
+        jStartButton.setEnabled(true);
     }
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jStartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jStartButtonActionPerformed
         for(ActionListener listener: listeners){
             ActionEvent ae = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Start");
             listener.actionPerformed(ae);
            //  listener.stateChanged(new ChangeEvent(this));
         } 
         //Start();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jStartButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jStopButtonActionPerformed
         for(ActionListener listener: listeners){
             ActionEvent ae = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Stop");
             listener.actionPerformed(ae);
            //  listener.stateChanged(new ChangeEvent(this));
         }
         //Stop();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jStopButtonActionPerformed
 
     private void SelectLookInFolder()
     {
@@ -1924,8 +1929,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JSpinner jBeforeSpinner;
     private javax.swing.JSpinner jBeforeSpinner1;
     private javax.swing.JSpinner jBeforeSpinner2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox<String> jContainingText;
@@ -1994,6 +1997,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private javax.swing.JPanel jSearch;
     private javax.swing.JCheckBox jSkipBinaryFiles;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JButton jStartButton;
+    private javax.swing.JButton jStopButton;
     private javax.swing.JCheckBox jStrictFilenameSearch;
     private javax.swing.JCheckBox jSubFolders;
     private javax.swing.JTabbedPane jTabbedPane1;
