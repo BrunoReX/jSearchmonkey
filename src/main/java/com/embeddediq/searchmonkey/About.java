@@ -36,15 +36,6 @@ public class About extends javax.swing.JPanel {
      */
     public About() {
         initComponents();
-
-        //Color b = this.getBackground();
-        //Color x = new Color(b.getRed(), b.getGreen(), b.getBlue(), 25);
-        this.jTextPane1.setOpaque(false);
-        jTextPane1.setBackground(new Color(0,0,0,0));
-        //this.jTextPane1.setBackground(x);
-        this.jScrollPane2.getViewport().setOpaque(false);
-        this.jScrollPane2.setOpaque(false);
-        //this.jScrollPane2.setBackground(x);
     }
 
     /**
@@ -57,11 +48,11 @@ public class About extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jButton1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextPane2 = new javax.swing.JTextPane();
+        jLabel2 = new javax.swing.JLabel();
+
+        setLayout(new java.awt.BorderLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/about.png"))); // NOI18N
         jLabel1.setToolTipText("http://searchmonkey.embeddediq.com");
@@ -70,57 +61,19 @@ public class About extends javax.swing.JPanel {
                 jLabel1MouseClicked(evt);
             }
         });
-
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        jTextPane1.setEditable(false);
-        jTextPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jTextPane1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextPane1.setText("Searchmonkey is a lightweight but powerful tool for finding files and their content. Searchmonkey was written by searchmonkey@embededdiq.com.  http://searchmonnkey.embeddediq.com");
-        jTextPane1.setToolTipText("");
-        jTextPane1.setOpaque(false);
-        jScrollPane2.setViewportView(jTextPane1);
-
-        jButton1.setText("Close");
-        jButton1.setAlignmentX(0.5F);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        add(jLabel1, java.awt.BorderLayout.NORTH);
 
         jTextPane2.setEditable(false);
+        jTextPane2.setContentType("text/html"); // NOI18N
         jTextPane2.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        jTextPane2.setText("Version: 3.0.1");
+        jTextPane2.setText("<html><h3>JAVA Searchmonkey v3.1.0</h3> <p>JAVA Searchmonkey is copyright Adam Cottrell <a href=\"mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey\">searchmonkey@embededdiq.com</a>. Searchmonkey is open source and released under the GPL license</p><br/> <p>For help and support <a href=\"http://searchmonnkey.embeddediq.com/forum\">visit our forum</a>. <a href=\"http://searchmonnkey.embeddediq.com/downloads\">Download the latest Searchmonkey</a></p> </html>");
         jScrollPane3.setViewportView(jTextPane2);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jButton1))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
-        );
+        add(jScrollPane3, java.awt.BorderLayout.SOUTH);
+
+        jLabel2.setText("<html><h1>Welcome!</h1><p><b>JAVA Searchmonkey</b> is a powerful desktop tool for finding files and their content using regular expressions. Searchmonkey combines the power of find/grep and can look inside most text files including PDF, DOCX, XLSX, ODT, and much more besides.</p><br/> <p>To learn more about what Searchmonkey can do for you, then visit our web page: <a href=\"http://searchmonnkey.embeddediq.com\">http://searchmonnkey.embeddediq.com</a></p></html>");
+        add(jLabel2, java.awt.BorderLayout.CENTER);
+        jLabel2.getAccessibleContext().setAccessibleName("<html><h1>Welcome!</h1><p><b>JAVA Searchmonkey</b> is a powerful desktop tool for finding files and their content using regular expressions. Searchmonkey combines the power of find/grep and can look inside most text files including PDF, DOCX, XLSX, ODT, and much more besides.</p><br/> <p>To learn more about what Searchmonkey can do for you, then visit our web page: <a href=\"http://searchmonnkey.embeddediq.com\">http://searchmonnkey.embeddediq.com</a></p></html>");
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -133,22 +86,11 @@ public class About extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jLabel1MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.getParent().getParent().setVisible(false);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    public JButton getButton()
-    {
-       return jButton1;
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
     // End of variables declaration//GEN-END:variables
 }

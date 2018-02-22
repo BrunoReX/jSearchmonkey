@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.Painter;
 import javax.swing.SwingWorker.StateValue;
@@ -355,13 +356,12 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        JDialog dlg = new JDialog((JFrame)this, "About Searchmonkey", true);
-        About panel = new About();
+        JOptionPane opt = new JOptionPane(new About(), JOptionPane.PLAIN_MESSAGE);
+        // opt.setMessage();
+        opt.setOptions(new Object[]{"Ok"});
+        opt.setPreferredSize(new Dimension(550, 750));
+        JDialog dlg = opt.createDialog((JFrame)this, "About Searchmonkey");
         dlg.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        panel.getButton().addActionListener((ActionEvent evt1) -> {
-            dlg.dispose();
-        });
-        dlg.setContentPane(panel);
         dlg.pack();
         dlg.setLocationRelativeTo(this);
         dlg.setVisible(true);
