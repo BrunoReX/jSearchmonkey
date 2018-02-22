@@ -52,7 +52,7 @@ public class FileSizeEntry {
         {
             int idx = getIndex(maxSize);
             lessThan = String.format("%.1f %s", 
-                    ((double)maxSize / (double)(2^idx)),
+                    ((double)maxSize / Math.pow(1024, idx)),
                     SCALAR[idx]);
         }
         String greaterThan = null;
@@ -60,12 +60,18 @@ public class FileSizeEntry {
         {
             int idx = getIndex(minSize);
             greaterThan = String.format("%.1f %s", 
-                    ((double)minSize / (double)(2^idx)),
+                    ((double)minSize / Math.pow(1024, idx)),
                     SCALAR[idx]);
         }
         if (lessThan != null && greaterThan != null)
         {
-            return String.format("Between %s and %s", lessThan, greaterThan);
+            if (maxSize > minSize ) {
+                return String.format("Between %s and %s", greaterThan, lessThan);
+            } else if (maxSize < minSize ) {
+                return String.format("Greater than %s OR less than %s", greaterThan, lessThan);
+            } else {
+                return String.format("Exactly %s", greaterThan);
+            }
         }
         else if (lessThan != null)
         {

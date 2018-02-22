@@ -146,13 +146,13 @@ public class FileSizePanel extends javax.swing.JPanel {
             // jGreaterThanSpinner.setEnabled(true);
             //this.jFileSizeScaler1.setEnabled(sel);
             this.jMoreThanFileSizeScaler.setSelectedIndex(idx);
-            this.jMoreThanSpinner.setValue((double)init.minSize / (double)(2^idx));
+            this.jMoreThanSpinner.setValue((double)init.minSize / Math.pow(1024, jMoreThanFileSizeScaler.getSelectedIndex()));
         }
         if (init.useMaxSize) {
             int idx = FileSizeEntry.getIndex(init.maxSize);
             jLessThanCheck.setSelected(true);
             this.jLessThanFileSizeScaler.setSelectedIndex(idx);
-            this.jLessThanSpinner.setValue((double)init.maxSize / (double)(2^idx));
+            this.jLessThanSpinner.setValue((double)init.maxSize / Math.pow(1024, jLessThanFileSizeScaler.getSelectedIndex()));
         }
     }
     
@@ -161,11 +161,11 @@ public class FileSizePanel extends javax.swing.JPanel {
         FileSizeEntry init = new FileSizeEntry();
         if (jMoreThanCheck.isSelected()) {
             init.useMinSize = true;
-            init.minSize = (long)((double)jMoreThanSpinner.getValue() * (double)(2^jMoreThanFileSizeScaler.getSelectedIndex()));
+            init.minSize = (long)((double)jMoreThanSpinner.getValue() * Math.pow(1024, jMoreThanFileSizeScaler.getSelectedIndex()));
         }
         if (jLessThanCheck.isSelected()) {
             init.useMaxSize = true;
-            init.maxSize = (long)((double)jLessThanSpinner.getValue() * (double)(2^jLessThanFileSizeScaler.getSelectedIndex()));
+            init.maxSize = (long)((double)jLessThanSpinner.getValue() * Math.pow(1024, jLessThanFileSizeScaler.getSelectedIndex()));
         }
 
         return init;
