@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -35,6 +36,7 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -61,6 +63,10 @@ import javax.swing.event.ListDataListener;
 import javax.swing.plaf.metal.MetalFileChooserUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
+
+
+// Note to self - here is the NIMBUS Default Look and Feel
+// https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html#primary
 
 /**
  *
@@ -123,37 +129,30 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             // SelectFileSize();
             SelectModifiedDate();
         });
-        AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
-            jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
-            // TODO - allow the item name to select which dialog is shown
-            String name = jAccessedCombo.getName();
-//            SelectModifiedDate();
+//        
+//        AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
+//            jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
+//            // TODO - allow the item name to select which dialog is shown
+//            String name = jAccessedCombo.getName();
+////            SelectModifiedDate();
+//            SelectAccessedDate();
+//        });
+        // Creating a custom class for the JComboBox
+        jAccessedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
+        jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, () -> {
             SelectAccessedDate();
+        }));
+        
+        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
+            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
+            // TODO - allow the item name to select which dialog is shown
+            String name = jCreatedCombo.getName();
+//            SelectModifiedDate();
+            SelectCreatedDate();
         });
         
-//        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
-//            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
-//            // TODO - allow the item name to select which dialog is shown
-//            String name = jCreatedCombo.getName();
-////            SelectModifiedDate();
-//            SelectCreatedDate();
-//        });
-        
-        //JComboBox x = new JComboBox();
-        //x.a
-        jAccessedCombo = new JComboBox(new Object[] {
-                "Don't care", 
-                new JSeparator(JSeparator.HORIZONTAL),
-                "<<browse>>"});
-        //jAccessedCombo.setModel(new DefaultComboBoxModel(new Object[] {
-                //"Don't care", 
-                //new JSeparator(JSeparator.HORIZONTAL),
-                //"<<browse>>"}));
-        //jCreatedCombo.set
-        jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo));
-      
-        //this.jLookIn.setModel(myModel);
+     
        
         // TODO - future stuff
         // this.jExpertMode.setVisible(false);
@@ -170,46 +169,58 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         this.jModifiedPanel2.setVisible(false);
     }
     
-    class SeparatorComboBoxRenderer extends JLabel implements ListCellRenderer // BasicComboBoxRenderer
+    class SeparatorComboBoxModel extends DefaultComboBoxModel
+    {
+        //Color[] cols;
+        // Create a basic combobox for the size and date seelction
+        SeparatorComboBoxModel(String button)
+        {
+            //cols = oldColors;
+            super(new Object[] {
+                "Don't care",
+                new JSeparator(JSeparator.HORIZONTAL),
+                new JLabel(button)});
+        }
+    }
+    
+    class SeparatorComboBoxRenderer extends DefaultListCellRenderer // // JLabel implements ListCellRenderer // BasicComboBoxRenderer
     {
         public SeparatorComboBoxRenderer() {
             super();
             setOpaque(true);
-            //setHorizontalAlignment(CENTER);
-            //setVerticalAlignment(CENTER);
         }
 
+        
         @Override
         public Component getListCellRendererComponent( JList list,
                Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            UIDefaults defaults = UIManager.getDefaults();
-            if (isSelected) {
-                
-                setBackground(defaults.getColor("ComboBox.selectionBackground"));
-                setForeground(defaults.getColor("ComboBox.selectionForeground"));
-                // setForeground(Color.white);
-                // setBackground(Color.white); // list.getSelectionBackground());
-            }
-            else {
-                setBackground(defaults.getColor("ComboBox.background"));
-                setForeground(defaults.getColor("ComboBox.foreground"));
-                
-                //setBackground(Color.white);
-                //setForeground(Color.black);
+
+            if (isSelected)
+            {
+                this.setBackground((Color)UIManager.getLookAndFeelDefaults().get("ComboBox:\"ComboBox.listRenderer\"[Selected].background"));
+                this.setForeground((Color)UIManager.getLookAndFeelDefaults().get("ComboBox:\"ComboBox.listRenderer\"[Selected].textForeground"));
+            } else {
+                this.setBackground(UIManager.getLookAndFeelDefaults().getColor("ComboBox.background"));
+                this.setForeground(UIManager.getLookAndFeelDefaults().getColor("ComboBox.foreground"));
             }
 
-          setFont(defaults.getFont("ComboBox.font"));
-          if (value instanceof Icon) {
-             setIcon((Icon)value);
-          }
-          if (value instanceof JSeparator) {
-             return (Component) value;
-          }
-          else {
-             setText((value == null) ? "" : value.toString());
-          }
+            if (value instanceof Icon) {
+               setIcon((Icon)value);
+            }
+            if (value instanceof JSeparator) {
+               return (Component) value;
+            }
 
-          return this;
+            String txt;
+            if (value instanceof JLabel) {
+                txt = ((JLabel)value).getText();
+            } else {
+                txt = (value == null) ? "" : value.toString();
+            }
+
+            this.setText(txt);
+            return this;
+            // return super.getListCellRendererComponent(list, txt, index, isSelected, cellHasFocus);
       } 
 
     }    
@@ -217,20 +228,29 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     class SeparatorComboBoxListener implements ActionListener {
        JComboBox combobox;
        Object oldItem;
+       Runnable callback;
 
-       SeparatorComboBoxListener(JComboBox combobox) {
+       SeparatorComboBoxListener(JComboBox combobox, Runnable callback) {
           this.combobox = combobox;
+          this.callback = callback;
           combobox.setSelectedIndex(0);
           oldItem = combobox.getSelectedItem();
        }
 
+       @Override
        public void actionPerformed(ActionEvent e) {
-          Object selectedItem = combobox.getSelectedItem();
-          if (selectedItem instanceof JSeparator) {
-             combobox.setSelectedItem(oldItem);
-          } else {
-             oldItem = selectedItem;
-          }
+            Object selectedItem = combobox.getSelectedItem();
+            if (selectedItem instanceof JLabel)
+            {
+               combobox.setSelectedItem(oldItem);
+               SwingUtilities.invokeLater(callback);
+            }    
+            else if (selectedItem instanceof JSeparator)
+            {
+               combobox.setSelectedItem(oldItem);
+            } else {
+               oldItem = selectedItem;
+            }
        }
     }
     
