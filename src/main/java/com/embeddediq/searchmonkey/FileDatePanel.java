@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -47,10 +48,15 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         cal.getCalendar().addChangeListener(this);
         
         // Put a right-click menu on these
-        this.jAfter.setComponentPopupMenu(cal);
-        this.jBefore.setComponentPopupMenu(cal);
-        this.jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
-        this.jPanel1.setComponentPopupMenu(cal);
+        //this.jAfter.setComponentPopupMenu(cal);
+        //this.jBefore.setComponentPopupMenu(cal);
+        //this.jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
+        this.jAfterSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
+        //this.jAfterSpinner.setInheritsPopupMenu(true);
+        //this.jBeforeSpinner.setComponentPopupMenu(jPopupMenu1);
+        this.jBeforeSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
+        //this.jBeforeSpinner.setInheritsPopupMenu(true);
+        //this.jPanel1.setComponentPopupMenu(jPopupMenu1);
         
         jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
         jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
@@ -333,31 +339,45 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
     }
     
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, 0)); // Today
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.DAY_OF_MONTH, 0)); // Today
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, -1)); // Yesterday
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.DAY_OF_MONTH, -1));  // Yesterday
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, -7)); // Last week
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.DAY_OF_MONTH, -7)); // Last week
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.MONTH, -1)); // Last month
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.MONTH, -1)); // Last month
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.MONTH, -4)); // Last quarter
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.MONTH, -4)); // Last quarter
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.YEAR, -1)); // Last year
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.YEAR, -1)); // Last year
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.YEAR, -10)); // Last decade
+        JFormattedTextField comp2 = (JFormattedTextField)this.jPopupMenu1.getInvoker();
+        JSpinner.DateEditor comp = (JSpinner.DateEditor)comp2.getParent();
+        comp.getModel().setValue(getDate(Calendar.YEAR, -10)); // Last decade
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     public void set(FileDateEntry init)

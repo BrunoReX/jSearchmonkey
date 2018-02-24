@@ -1838,6 +1838,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
             FileDatePanel panel = new FileDatePanel();
             panel.set(data);
+            frame.setInheritsPopupMenu(true);
+            panel.setInheritsPopupMenu(true);
 
             frame.setMessage(panel);
             frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
@@ -1845,6 +1847,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             frame.setMinimumSize(new Dimension(0, 0));
             frame.setPreferredSize(new Dimension(450, 300));
             JDialog dlg = frame.createDialog(parent, msg);
+            //dlg.setContentPane(frame);
             dlg.pack();
             dlg.setVisible(true);
             Object ret = frame.getValue();

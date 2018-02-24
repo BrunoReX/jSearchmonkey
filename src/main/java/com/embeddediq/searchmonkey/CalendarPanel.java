@@ -57,11 +57,12 @@ public class CalendarPanel extends javax.swing.JPanel {
             updateDate();
         });
         
-        jCalendar.addMouseMotionListener(new MyMouseAdapter());        
+        jCalendar.addMouseMotionListener(new MyMouseAdapter());   
+        jCalendar.setComponentPopupMenu(this.jPopupMenu1);
     }
     private int itsRow = -1;
     private int itsColumn = -1;
-    public class    MyMouseAdapter extends MouseMotionAdapter //extends MouseAdapter
+    public class MyMouseAdapter extends MouseMotionAdapter //extends MouseAdapter
     {
 
         @Override
@@ -282,10 +283,10 @@ public class CalendarPanel extends javax.swing.JPanel {
         jCalendar = new javax.swing.JTable();
         jControlPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jNextPanel = new javax.swing.JPanel();
+        jNextToolBar = new javax.swing.JToolBar();
         jNext = new javax.swing.JButton();
         jNextYear = new javax.swing.JButton();
-        JPrevPanel = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
         jPrevYear = new javax.swing.JButton();
         jPrev = new javax.swing.JButton();
 
@@ -420,12 +421,12 @@ public class CalendarPanel extends javax.swing.JPanel {
         jLabel1.setText("December 2017");
         jControlPanel.add(jLabel1, java.awt.BorderLayout.CENTER);
 
-        jNext.setBackground(new java.awt.Color(102, 102, 102));
+        jNextToolBar.setBorder(null);
+        jNextToolBar.setFloatable(false);
+        jNextToolBar.setRollover(true);
+        jNextToolBar.setBorderPainted(false);
+
         jNext.setText(">");
-        jNext.setBorder(null);
-        jNext.setBorderPainted(false);
-        jNext.setContentAreaFilled(false);
-        jNext.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jNext.setDefaultCapable(false);
         jNext.setFocusPainted(false);
         jNext.setFocusable(false);
@@ -435,31 +436,29 @@ public class CalendarPanel extends javax.swing.JPanel {
                 jNextActionPerformed(evt);
             }
         });
-        jNextPanel.add(jNext);
+        jNextToolBar.add(jNext);
 
-        jNextYear.setBackground(new java.awt.Color(102, 102, 102));
         jNextYear.setText(">>");
-        jNextYear.setBorder(null);
-        jNextYear.setBorderPainted(false);
-        jNextYear.setContentAreaFilled(false);
-        jNextYear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jNextYear.setDefaultCapable(false);
+        jNextYear.setFocusable(false);
         jNextYear.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jNextYear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jNextYearActionPerformed(evt);
             }
         });
-        jNextPanel.add(jNextYear);
+        jNextToolBar.add(jNextYear);
 
-        jControlPanel.add(jNextPanel, java.awt.BorderLayout.EAST);
+        jControlPanel.add(jNextToolBar, java.awt.BorderLayout.EAST);
 
-        jPrevYear.setBackground(new java.awt.Color(102, 102, 102));
+        jToolBar1.setBorder(null);
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setBorderPainted(false);
+
         jPrevYear.setText("<<");
         jPrevYear.setBorder(null);
         jPrevYear.setBorderPainted(false);
-        jPrevYear.setContentAreaFilled(false);
-        jPrevYear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPrevYear.setDefaultCapable(false);
         jPrevYear.setFocusPainted(false);
         jPrevYear.setFocusable(false);
@@ -469,14 +468,11 @@ public class CalendarPanel extends javax.swing.JPanel {
                 jPrevYearActionPerformed(evt);
             }
         });
-        JPrevPanel.add(jPrevYear);
+        jToolBar1.add(jPrevYear);
 
-        jPrev.setBackground(new java.awt.Color(102, 102, 102));
         jPrev.setText("<");
         jPrev.setBorder(null);
         jPrev.setBorderPainted(false);
-        jPrev.setContentAreaFilled(false);
-        jPrev.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPrev.setDefaultCapable(false);
         jPrev.setFocusPainted(false);
         jPrev.setFocusable(false);
@@ -486,9 +482,9 @@ public class CalendarPanel extends javax.swing.JPanel {
                 jPrevActionPerformed(evt);
             }
         });
-        JPrevPanel.add(jPrev);
+        jToolBar1.add(jPrev);
 
-        jControlPanel.add(JPrevPanel, java.awt.BorderLayout.WEST);
+        jControlPanel.add(jToolBar1, java.awt.BorderLayout.WEST);
 
         add(jControlPanel, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
@@ -547,7 +543,6 @@ public class CalendarPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel JPrevPanel;
     private javax.swing.JTable jCalendar;
     private javax.swing.JPanel jControlPanel;
     private javax.swing.JLabel jLabel1;
@@ -559,11 +554,12 @@ public class CalendarPanel extends javax.swing.JPanel {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JButton jNext;
-    private javax.swing.JPanel jNextPanel;
+    private javax.swing.JToolBar jNextToolBar;
     private javax.swing.JButton jNextYear;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JButton jPrev;
     private javax.swing.JButton jPrevYear;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
