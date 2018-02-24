@@ -123,13 +123,13 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             String name = jLookIn.getName();
             SelectFileSize();
         });
-        AddComboHandler(jModifiedCombo, "<<Others>>", () -> {
-            jModifiedCombo.getModel().setSelectedItem(jModifiedCombo.getItemAt(0));
-            // TODO - allow the item name to select which dialog is shown
-            String name = jModifiedCombo.getName();
-            // SelectFileSize();
-            SelectModifiedDate();
-        });
+//        AddComboHandler(jModifiedCombo, "<<Others>>", () -> {
+//            jModifiedCombo.getModel().setSelectedItem(jModifiedCombo.getItemAt(0));
+//            // TODO - allow the item name to select which dialog is shown
+//            String name = jModifiedCombo.getName();
+//            // SelectFileSize();
+//            SelectModifiedDate();
+//        });
 //        
 //        AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
 //            jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
@@ -141,17 +141,21 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         // Creating a custom class for the JComboBox
         jAccessedCombo.setModel(new SeparatorComboBoxModel("Other"));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, () -> {
-            SelectAccessedDate();
-        }));
+        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Accessed");
+        jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
+                
+//        ,
+//                () -> {
+//            SelectAccessedDate();
+//        }));
         
-        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
-            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
-            // TODO - allow the item name to select which dialog is shown
-            String name = jCreatedCombo.getName();
-//            SelectModifiedDate();
-            SelectCreatedDate();
-        });
+//        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
+//            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
+//            // TODO - allow the item name to select which dialog is shown
+//            String name = jCreatedCombo.getName();
+////            SelectModifiedDate();
+//            SelectCreatedDate();
+//        });
         
      
        
@@ -172,15 +176,16 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     
     class SeparatorComboBoxModel extends DefaultComboBoxModel
     {
+        SelectDate callback;
         //Color[] cols;
         // Create a basic combobox for the size and date seelction
         SeparatorComboBoxModel(String button)
         {
             //cols = oldColors;
             super(new Object[] {
-                "Don't care",
+                new FileDateEntry(),
                 new JSeparator(JSeparator.HORIZONTAL),
-                new JLabel(button)});
+                new JButton(button)});
         }
     }
     
@@ -212,46 +217,55 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             }
 
             String txt;
-            if (value instanceof JLabel) {
-                txt = ((JLabel)value).getText();
+            if (value instanceof JButton) {
+                txt = ((JButton)value).getText();
             } else {
                 txt = (value == null) ? "" : value.toString();
             }
 
             setText(txt);
             return this;
-            // return super.getListCellRendererComponent(list, txt, index, isSelected, cellHasFocus);
       } 
-
-    }    
-
+    }
+    
     class SeparatorComboBoxListener implements ActionListener {
-       JComboBox combobox;
-       Object oldItem;
-       Runnable callback;
+        JComboBox combobox;
+        Object oldItem;
+        Object oldValue;
+        // Runnable callback;
+        SelectDate callback;
 
-       SeparatorComboBoxListener(JComboBox combobox, Runnable callback) {
-          this.combobox = combobox;
-          this.callback = callback;
-          combobox.setSelectedIndex(0);
-          oldItem = combobox.getSelectedItem();
-       }
+        SeparatorComboBoxListener(JComboBox combobox, SelectDate callback) { // Frame parent, JComboBox combobox, String msg) {
+            //callback = new SelectDate(parent, combobox, msg);
+            this.combobox = combobox;
+            this.callback = callback;
+            combobox.setSelectedIndex(0);
+            oldItem = combobox.getSelectedItem();
+            oldValue = oldItem;
+        }
 
-       @Override
-       public void actionPerformed(ActionEvent e) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
             Object selectedItem = combobox.getSelectedItem();
-            if (selectedItem instanceof JLabel)
+            if (selectedItem instanceof JButton)
             {
                combobox.setSelectedItem(oldItem);
+               this.callback.setData((FileDateEntry)oldValue);
                SwingUtilities.invokeLater(callback);
             }    
             else if (selectedItem instanceof JSeparator)
             {
                combobox.setSelectedItem(oldItem);
-            } else {
-               oldItem = selectedItem;
             }
-       }
+            else 
+            {
+                oldValue = selectedItem;
+                if (combobox.getSelectedIndex() != -1)
+                {
+                    oldItem = selectedItem;
+                }
+            }
+        }
     }
     
     private void AddComboHandler(JComboBox item, String browse, Runnable callback)
@@ -1874,6 +1888,50 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         }
     }
     
+    class SelectDate implements Runnable {
+        private FileDateEntry data;
+        private final String msg;
+        private final JComboBox jCombo;
+        private final Frame parent;
+
+        public SelectDate(Frame parent, JComboBox jCombo, String msg)
+        {
+            this.parent = parent; //(Frame)SwingUtilities.getWindowAncestor(this)
+            this.jCombo = jCombo;
+            this.msg = msg;
+        }
+        
+        public void setData(FileDateEntry _data)
+        {
+            this.data = _data;
+            
+        }
+        
+        @Override
+        public void run() {
+            JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
+            FileDatePanel panel = new FileDatePanel();
+            panel.set(data);
+
+            frame.setMessage(panel);
+            frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+            frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
+            frame.setMinimumSize(new Dimension(0, 0));
+            frame.setPreferredSize(new Dimension(450, 300));
+            JDialog dlg = frame.createDialog(parent, msg);
+            dlg.pack();
+            dlg.setVisible(true);
+            Object ret = frame.getValue();
+
+            if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
+            {
+                FileDateEntry entry = panel.get();
+                jCombo.getModel().setSelectedItem(entry);
+            }
+        }
+    }
+
+    /*
     private void SelectDate(JComboBox jCombo, String msg)
     {
        JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
@@ -1896,22 +1954,23 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             jCombo.getModel().setSelectedItem(entry);
         }
     }
-    
-    private void SelectModifiedDate()
-    {
-        SelectDate(jModifiedCombo, "Enter modified date");
-    }
-
-    private void SelectAccessedDate()
-    {
-        SelectDate(jAccessedCombo, "Enter accessed date");
-        
-    }
-
-    private void SelectCreatedDate()
-    {
-        SelectDate(jCreatedCombo, "Enter created date");
-    }
+*/
+//    
+//    private void SelectModifiedDate()
+//    {
+//        SelectDate(jModifiedCombo, "Enter modified date");
+//    }
+//
+//    private void SelectAccessedDate()
+//    {
+//        SelectDate(jAccessedCombo, "Enter accessed date");
+//        
+//    }
+//
+//    private void SelectCreatedDate()
+//    {
+//        SelectDate(jCreatedCombo, "Enter created date");
+//    }
 
     private void jLookInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLookInActionPerformed
 

@@ -96,11 +96,11 @@ public class FileDatePanel extends javax.swing.JPanel {
         });
         jToolBar4.add(jBefore);
 
-        jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
+        jAfterSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MONTH));
         jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
         jAfterSpinner.setEnabled(false);
 
-        jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel());
+        jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MONTH));
         jBeforeSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner.toolTipText")); // NOI18N
         jBeforeSpinner.setEnabled(false);
 
@@ -179,12 +179,12 @@ public class FileDatePanel extends javax.swing.JPanel {
         if (init.useAfter) {
             jModifiedAfterCheck.setSelected(true);
             SpinnerDateModel model = (SpinnerDateModel)jBeforeSpinner.getModel();
-            model.setStart(init.getAfter());
+            model.setValue(init.getAfter());
         }
         if (init.useBefore) {
             jModifiedBeforeCheck.setSelected(true);
             SpinnerDateModel model = (SpinnerDateModel)jAfterSpinner.getModel();
-            model.setStart(init.getBefore());
+            model.setValue(init.getBefore());
         }
     }
     
