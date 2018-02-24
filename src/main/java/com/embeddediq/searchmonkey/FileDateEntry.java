@@ -17,17 +17,54 @@
 package com.embeddediq.searchmonkey;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  *
  * @author cottr
  */
-public class FileDateEntry {
+public final class FileDateEntry {
     LocalDateTime before; // earlier than
     boolean useBefore;
     LocalDateTime after; // later than
     boolean useAfter;
 
+//    public FileDateEntry()
+//    {
+//        this(null, null);
+//    }
+//    
+//    public FileDateEntry(Date before, Date after)
+//    {
+//        setBefore(before);
+//        setAfter(after);
+//    }
+    
+    public void setAfter(Date date)
+    {
+        useAfter = (date != null);
+        if (useAfter)
+        {
+            this.after = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        }
+    }
+    public void setBefore(Date date)
+    {
+        useBefore = (date != null);
+        if (useBefore) {
+            this.before = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        }
+    }
+    public Date getAfter()
+    {
+        return Date.from(after.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    public Date getBefore()
+    {
+        return Date.from(before.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    
     static public int getIndex(long val)
     {
         int idx = 0;
@@ -54,7 +91,19 @@ public class FileDateEntry {
         }
         if (s_before != null && s_after != null)
         {
-            return String.format("Between %s and %s", s_before, s_after);
+            int dval = this.before.compareTo(this.after);
+            if (dval < 0)
+            {
+                return String.format("Between %s and %s", s_before, s_after);
+            } 
+            else if (dval > 0)
+            {
+                return String.format("Not between %s and %s", s_before, s_after);
+            }
+            else
+            {
+                return String.format("Equals %s", s_before);
+            }
         }
         else if (s_before != null)
         {

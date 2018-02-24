@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -189,7 +190,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
             super();
             setOpaque(true);
         }
-
         
         @Override
         public Component getListCellRendererComponent( JList list,
@@ -197,11 +197,11 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
             if (isSelected)
             {
-                this.setBackground((Color)UIManager.getLookAndFeelDefaults().get("ComboBox:\"ComboBox.listRenderer\"[Selected].background"));
-                this.setForeground((Color)UIManager.getLookAndFeelDefaults().get("ComboBox:\"ComboBox.listRenderer\"[Selected].textForeground"));
+                setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].background").getRGB()));
+                setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].textForeground").getRGB()));
             } else {
-                this.setBackground(UIManager.getLookAndFeelDefaults().getColor("ComboBox.background"));
-                this.setForeground(UIManager.getLookAndFeelDefaults().getColor("ComboBox.foreground"));
+                setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\".background").getRGB()));
+                setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox.foreground").getRGB()));
             }
 
             if (value instanceof Icon) {
@@ -218,7 +218,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
                 txt = (value == null) ? "" : value.toString();
             }
 
-            this.setText(txt);
+            setText(txt);
             return this;
             // return super.getListCellRendererComponent(list, txt, index, isSelected, cellHasFocus);
       } 
@@ -1892,8 +1892,8 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
 
         if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
         {
-            //FileDateEntry entry = panel.get();
-            //jCombo.getModel().setSelectedItem(entry.toString());
+            FileDateEntry entry = panel.get();
+            jCombo.getModel().setSelectedItem(entry);
         }
     }
     
@@ -1905,6 +1905,7 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
     private void SelectAccessedDate()
     {
         SelectDate(jAccessedCombo, "Enter accessed date");
+        
     }
 
     private void SelectCreatedDate()

@@ -16,7 +16,6 @@
  */
 package com.embeddediq.searchmonkey;
 
-import java.util.Date;
 import javax.swing.SpinnerDateModel;
 
 /**
@@ -127,17 +126,14 @@ public class FileDatePanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jModifiedAfterCheck)
-                        .addGap(18, 18, 18))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jModifiedBeforeCheck)
-                        .addGap(12, 12, 12)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jModifiedBeforeCheck, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jModifiedAfterCheck, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBeforeSpinner)
+                    .addComponent(jBeforeSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 1537, Short.MAX_VALUE)
                     .addComponent(jAfterSpinner))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -178,35 +174,37 @@ public class FileDatePanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jBeforeActionPerformed
 
-    public String getString()
+    public void set(FileDateEntry init)
     {
-        String before = null;
-        if (jModifiedBeforeCheck.isSelected())
-        {
-            Date d = ((SpinnerDateModel)jBeforeSpinner.getModel()).getDate();
-            before = d.toString();
+        if (init.useAfter) {
+            jModifiedAfterCheck.setSelected(true);
+            SpinnerDateModel model = (SpinnerDateModel)jBeforeSpinner.getModel();
+            model.setStart(init.getAfter());
         }
-        String after =  null;
-        if (jModifiedAfterCheck.isSelected())
-        {
-            Date d = ((SpinnerDateModel)jAfterSpinner.getModel()).getDate();
-            after = d.toString();
+        if (init.useBefore) {
+            jModifiedBeforeCheck.setSelected(true);
+            SpinnerDateModel model = (SpinnerDateModel)jAfterSpinner.getModel();
+            model.setStart(init.getBefore());
         }
-        if (before != null && after != null)
-        {
-            return String.format("Between %s and %s", before, after);
-        }
-        else if (before != null)
-        {
-            return String.format("Before %s", before);
-            
-        } else if (after != null)
-        {
-            return String.format("After %s", after);
-        }
-        return "On any date";
     }
     
+    public FileDateEntry get()
+    {
+        FileDateEntry init = new FileDateEntry();
+        if (jModifiedAfterCheck.isSelected()) {
+            init.useAfter = true;
+            SpinnerDateModel model = (SpinnerDateModel)jAfterSpinner.getModel();
+            init.setAfter(model.getDate());
+        }
+        if (jModifiedBeforeCheck.isSelected()) {
+            init.useBefore = true;
+            SpinnerDateModel model = (SpinnerDateModel)jBeforeSpinner.getModel();
+            init.setBefore(model.getDate());
+        }
+
+        return init;
+    }
+       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jAfter;
     private javax.swing.JSpinner jAfterSpinner;
