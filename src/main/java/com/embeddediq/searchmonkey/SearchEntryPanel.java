@@ -5,22 +5,16 @@
  */
 package com.embeddediq.searchmonkey;
 
-import com.embeddediq.searchmonkey.RegexWizard.RegexBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
@@ -29,13 +23,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-import java.util.regex.Pattern;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -44,25 +35,14 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
-import javax.swing.ListCellRenderer;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListDataListener;
-import javax.swing.plaf.metal.MetalFileChooserUI;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
 
 
@@ -73,11 +53,10 @@ import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
  *
  * @author cottr
  */
-public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListener {
+public class SearchEntryPanel extends javax.swing.JPanel {
 
     String lastItem = null;
     JSpinner popup_link;
-    PopupCalendar cal;
     /**
      * Creates new form SearchEntryPanel
      */
@@ -86,15 +65,12 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         
         initComponents();
         
-        cal = new PopupCalendar();
-        cal.getCalendar().addChangeListener(this);
-
-        jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
-        jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
-        jAfter1.addMouseListener(new MyMouseAdapter(jAfter1, jAfterSpinner1));
-        jBefore1.addMouseListener(new MyMouseAdapter(jBefore1, jBeforeSpinner1));
-        jAfter2.addMouseListener(new MyMouseAdapter(jAfter2, jAfterSpinner2));
-        jBefore2.addMouseListener(new MyMouseAdapter(jBefore2, jBeforeSpinner2));
+//        jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
+//        jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
+//        jAfter1.addMouseListener(new MyMouseAdapter(jAfter1, jAfterSpinner1));
+//        jBefore1.addMouseListener(new MyMouseAdapter(jBefore1, jBeforeSpinner1));
+//        jAfter2.addMouseListener(new MyMouseAdapter(jAfter2, jAfterSpinner2));
+//        jBefore2.addMouseListener(new MyMouseAdapter(jBefore2, jBeforeSpinner2));
         
         jPanel3.setVisible(false); // hide the regex view
         jPanel6.setVisible(false); // hide the context word search
@@ -284,56 +260,6 @@ public class SearchEntryPanel extends javax.swing.JPanel implements ChangeListen
         });
     }
     
-    public class PopupCalendar extends JPopupMenu {
-        CalendarPopup panel;
-        public PopupCalendar (){
-            panel = new CalendarPopup();
-            
-            this.add(panel);
-            this.pack();
-        }
-        
-        public CalendarPopup getCalendar()
-        {
-            return panel;
-        }
-        
-        private JSpinner popup_link;
-        public void show(JButton jButton, JSpinner link)
-        {
-            popup_link = link;
-            panel.setDate((Date)link.getValue());
-            this.show(jButton, 0, jButton.getHeight());
-        }
-        public void updateDate()
-        {
-            if (popup_link == null) return;
-            popup_link.setValue(panel.getDate());
-        }
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent ce) {
-        cal.updateDate();
-    }
-    
-    public class MyMouseAdapter extends MouseAdapter {
-        JButton jButton;
-        JSpinner link;
-        public MyMouseAdapter(JButton jButton, JSpinner link)
-        {
-           //this.cal = cal;
-            this.jButton = jButton;
-            this.link = link;
-        }
-        
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-            cal.show(jButton, link);
-        }
-    }
-   
     int maxCombo = 10;
     private String getSelectedItem(JComboBox jCombo)
     {

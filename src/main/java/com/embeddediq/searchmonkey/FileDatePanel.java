@@ -16,19 +16,74 @@
  */
 package com.embeddediq.searchmonkey;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JButton;
+import javax.swing.JPopupMenu;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author cottr
  */
-public class FileDatePanel extends javax.swing.JPanel {
+public class FileDatePanel extends javax.swing.JPanel implements ChangeListener {
+
+    PopupCalendar cal;
 
     /**
      * Creates new form FileDatePanel
      */
     public FileDatePanel() {
         initComponents();
+        this.jBeforeSpinner.setValue(getDate(Calendar.YEAR, 0));
+        this.jAfterSpinner.setValue(getDate(Calendar.YEAR, -1));
+
+        cal = new PopupCalendar();
+        cal.getCalendar().addChangeListener(this);
+        
+        // Put a right-click menu on these
+        this.jAfter.setComponentPopupMenu(cal);
+        this.jBefore.setComponentPopupMenu(cal);
+        this.jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
+        this.jPanel1.setComponentPopupMenu(cal);
+        
+        jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
+        jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
+        
+        // this
+    }
+    
+    public class MyMouseAdapter extends MouseAdapter {
+        JButton jButton;
+        JSpinner link;
+        public MyMouseAdapter(JButton jButton, JSpinner link)
+        {
+           //this.cal = cal;
+            this.jButton = jButton;
+            this.link = link;
+        }
+        
+        @Override
+        public void mousePressed(MouseEvent e)
+        {
+            cal.show(jButton, link);
+        }
+    }
+    
+    private Date getDate(int interval, int amount)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.add(interval, amount);
+        return  cal.getTime();
     }
 
     /**
@@ -40,6 +95,14 @@ public class FileDatePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jToolBar5 = new javax.swing.JToolBar();
@@ -51,10 +114,70 @@ public class FileDatePanel extends javax.swing.JPanel {
         jModifiedBeforeCheck = new javax.swing.JCheckBox();
         jModifiedAfterCheck = new javax.swing.JCheckBox();
 
+        jPopupMenu1.setInheritsPopupMenu(true);
+
+        jMenuItem1.setText("Set today");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Set yesterday");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("Set last week");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem3);
+
+        jMenuItem4.setText("Set last month");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem4);
+
+        jMenuItem5.setText("Set last quarter");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem5);
+
+        jMenuItem6.setText("Set last year");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem6);
+
+        jMenuItem7.setText("Set last decade");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem7);
+
         setLayout(new java.awt.BorderLayout());
 
         jLabel1.setText("<html><p>Setting these date constraints can help to increase the speed of searching because Searchmonkey can simply skip the very old or very new files.</p><br/><p>If one option is checked, then the other constraint will be set to: <em>don't care</em>. You can specify a range, for example <em>between 1st March and 31st March 2018</em>. However, if you want the opposite, then this too is possible, for example <em>before 1st March OR after 31st March 2018</em>. Or you can just use one constraint, for example <em>before 31st March</em></p></html>");
         add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setComponentPopupMenu(jPopupMenu1);
 
         jToolBar5.setFloatable(false);
         jToolBar5.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -98,10 +221,12 @@ public class FileDatePanel extends javax.swing.JPanel {
 
         jAfterSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MONTH));
         jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
+        jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
         jAfterSpinner.setEnabled(false);
 
         jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MONTH));
         jBeforeSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner.toolTipText")); // NOI18N
+        jBeforeSpinner.setComponentPopupMenu(jPopupMenu1);
         jBeforeSpinner.setEnabled(false);
 
         jModifiedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.text")); // NOI18N
@@ -167,12 +292,73 @@ public class FileDatePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jModifiedAfterCheckItemStateChanged
 
     private void jAfterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAfterActionPerformed
-        // TODO add your handling code here:
+        cal.show(jAfter, jAfterSpinner);
     }//GEN-LAST:event_jAfterActionPerformed
 
     private void jBeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBeforeActionPerformed
-        // TODO add your handling code here:
+        cal.show(jBefore, jBeforeSpinner);
     }//GEN-LAST:event_jBeforeActionPerformed
+
+    @Override
+    public void stateChanged(ChangeEvent ce) {
+        cal.updateDate();
+    }
+    
+    public class PopupCalendar extends JPopupMenu {
+        CalendarPanel panel;
+        public PopupCalendar (){
+            panel = new CalendarPanel();
+            
+            this.add(panel);
+            this.pack();
+        }
+        
+        public CalendarPanel getCalendar()
+        {
+            return panel;
+        }
+        
+        private JSpinner popup_link;
+        public void show(JButton jButton, JSpinner link)
+        {
+            popup_link = link;
+            panel.setDate((Date)link.getValue());
+            this.show(jButton, 0, jButton.getHeight());
+        }
+        public void updateDate()
+        {
+            if (popup_link == null) return;
+            popup_link.setValue(panel.getDate());
+        }
+    }
+    
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, 0)); // Today
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, -1)); // Yesterday
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.DAY_OF_MONTH, -7)); // Last week
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.MONTH, -1)); // Last month
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.MONTH, -4)); // Last quarter
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.YEAR, -1)); // Last year
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        ((JSpinner)evt.getSource()).setValue(getDate(Calendar.YEAR, -10)); // Last decade
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     public void set(FileDateEntry init)
     {
@@ -211,9 +397,17 @@ public class FileDatePanel extends javax.swing.JPanel {
     private javax.swing.JButton jBefore;
     private javax.swing.JSpinner jBeforeSpinner;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JCheckBox jModifiedAfterCheck;
     private javax.swing.JCheckBox jModifiedBeforeCheck;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JToolBar jToolBar5;
     // End of variables declaration//GEN-END:variables
