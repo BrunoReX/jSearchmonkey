@@ -92,13 +92,13 @@ public final class FileDateEntry {
         if (s_before != null && s_after != null)
         {
             int dval = this.before.compareTo(this.after);
-            if (dval < 0)
+            if (dval > 0)
             {
-                return String.format("Between %s and %s", s_before, s_after);
+                return String.format("Between %s and %s", s_after, s_before);
             } 
-            else if (dval > 0)
+            else if (dval < 0)
             {
-                return String.format("Not between %s and %s", s_before, s_after);
+                return String.format("Not between %s and %s", s_after, s_before);
             }
             else
             {

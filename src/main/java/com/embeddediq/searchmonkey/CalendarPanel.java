@@ -16,8 +16,10 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -58,10 +60,12 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         
         jCalendar.addMouseMotionListener(new MyMouseAdapter());   
-        jCalendar.setComponentPopupMenu(this.jPopupMenu1);
+        jCalendar.setComponentPopupMenu(jPopupMenu1);
     }
-    private int itsRow = -1;
-    private int itsColumn = -1;
+    
+    // Detect which row and column the mouse is currently hovered over
+    private int hoverRow = -1;
+    private int hoverColumn = -1;
     public class MyMouseAdapter extends MouseMotionAdapter //extends MouseAdapter
     {
 
@@ -69,8 +73,8 @@ public class CalendarPanel extends javax.swing.JPanel {
         public void mouseMoved(MouseEvent e)
         {
             JTable aTable =  (JTable)e.getSource();
-            itsRow = aTable.rowAtPoint(e.getPoint());
-            itsColumn = aTable.columnAtPoint(e.getPoint());
+            hoverRow = aTable.rowAtPoint(e.getPoint());
+            hoverColumn = aTable.columnAtPoint(e.getPoint());
             aTable.repaint();
         }
     }
@@ -85,27 +89,37 @@ public class CalendarPanel extends javax.swing.JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
             //Cells are by default rendered as a JLabel.
-            JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+            //JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
             Calendar now = Calendar.getInstance();
             Calendar c = (Calendar)now.clone();
             c.setTime((Date)value);
             
-            l.setText(Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+            this.setText(Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
             //Get the status for the current row.
             if (c.get(Calendar.MONTH) != monthView.get(Calendar.MONTH)) {
-                l.setForeground(Color.GRAY);
+                this.setForeground(Color.GRAY);
             } else {
-                l.setForeground(Color.BLACK);
+                this.setForeground(Color.BLACK);
             }
             if ((c.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR)) &&
                     (c.get(Calendar.YEAR) == now.get(Calendar.YEAR))) {
-                l.setBackground(Color.GREEN);
+                this.setBackground(Color.GREEN);
             } else {
-                l.setBackground(Color.WHITE);
+                this.setBackground(Color.WHITE);
             }
             
-            if (row == itsRow && col == itsColumn)
+            Border border;
+            if (isSelected)
+            {
+                border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.RED);
+            }
+            else {
+                border = BorderFactory.createEmptyBorder(1, 1, 1, 1);
+            }
+            this.setBorder(border);
+            
+            if (row == hoverRow && col == hoverColumn)
             {
                 // Invert colours
                 Color tmp = this.getBackground();
@@ -114,7 +128,7 @@ public class CalendarPanel extends javax.swing.JPanel {
             }
 
             //Return the JLabel which renders the cell.
-            return l;
+            return this;
 
         }
     }
@@ -124,6 +138,7 @@ public class CalendarPanel extends javax.swing.JPanel {
     {
         // this.date = date;
         calendar.setTime(date);
+        this.date = date;
         UpdateCalendar();
         //int count = calendar - baseVal;
         //jTable1.getColumnModel().getSelectionModel().addSelectionInterval(, WIDTH);
@@ -156,18 +171,25 @@ public class CalendarPanel extends javax.swing.JPanel {
         Calendar my_copy = (Calendar) baseCal.clone();
         int col = jCalendar.getSelectedColumn();
         int row = jCalendar.getSelectedRow();
-        my_copy.add(Calendar.DAY_OF_MONTH, col + (row * 7));
-        this.date = my_copy.getTime();
-        
-        // Implement a change listener
-        for(ChangeListener listener: listeners){
-            listener.stateChanged(new ChangeEvent(this));
-        }        
+        if (col != -1 && row != -1)
+        {
+            my_copy.add(Calendar.DAY_OF_MONTH, col + (row * 7));
+            this.date = my_copy.getTime();
+            // Implement a change listener
+            for(ChangeListener listener: listeners){
+                listener.stateChanged(new ChangeEvent(this));
+            }        
+        }
     }
     
     private Calendar monthView;
     private void UpdateCalendar()
     {
+        // Always clear the selection first
+        jCalendar.clearSelection();
+        jCalendar.getSelectionModel().clearSelection();
+        // jCalendar.changeSelection(-1, -1, false, false);
+
         monthView = (Calendar)calendar.clone();
         int fd = monthView.getFirstDayOfWeek();
         
@@ -220,8 +242,6 @@ public class CalendarPanel extends javax.swing.JPanel {
             }    
         }
         
-        // Always clear the selection first
-        jCalendar.clearSelection();
 
         // Set all of the days from the calendar
         monthView.set(Calendar.DAY_OF_MONTH, 1);
@@ -241,7 +261,8 @@ public class CalendarPanel extends javax.swing.JPanel {
                 // TODO - change the cell values if from last month
                 int val = tmp.get(Calendar.DAY_OF_MONTH);
                 jCalendar.getModel().setValueAt(tmp.getTime(), row, col);
-                if (tmp.equals(calendar))
+                if (date != null && date.equals(tmp.getTime()))
+                // if (tmp.equals(calendar))
                 {
                     jCalendar.changeSelection(row, col, false, false);
                 }
@@ -388,6 +409,8 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jCalendar.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jCalendar.setAutoscrolls(false);
+        jCalendar.setColumnSelectionAllowed(true);
+        jCalendar.setComponentPopupMenu(jPopupMenu1);
         jCalendar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jCalendar.setFillsViewportHeight(true);
         jCalendar.setIntercellSpacing(new java.awt.Dimension(0, 0));
@@ -490,27 +513,31 @@ public class CalendarPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPrevActionPerformed
+        this.jCalendar.clearSelection();
         calendar.add(Calendar.MONTH, -1);
         UpdateCalendar();
-        updateDate();
+        //updateDate();
     }//GEN-LAST:event_jPrevActionPerformed
 
     private void jNextYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNextYearActionPerformed
+        this.jCalendar.clearSelection();
         calendar.add(Calendar.YEAR, 1);
         UpdateCalendar();
-        updateDate();
+        //updateDate();
     }//GEN-LAST:event_jNextYearActionPerformed
 
     private void jNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNextActionPerformed
+        this.jCalendar.clearSelection();
         calendar.add(Calendar.MONTH, 1);
         UpdateCalendar();
-        updateDate();
+        //updateDate();
     }//GEN-LAST:event_jNextActionPerformed
 
     private void jPrevYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPrevYearActionPerformed
+        this.jCalendar.clearSelection();
         calendar.add(Calendar.YEAR, -1);
         UpdateCalendar();
-        updateDate();
+        //updateDate();
     }//GEN-LAST:event_jPrevYearActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

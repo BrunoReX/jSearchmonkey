@@ -201,7 +201,6 @@
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jBefore.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
-                <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="hideActionText" type="boolean" value="true"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>

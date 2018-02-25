@@ -51,15 +51,15 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         //this.jAfter.setComponentPopupMenu(cal);
         //this.jBefore.setComponentPopupMenu(cal);
         //this.jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
-        this.jAfterSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
+        //this.jAfterSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
         //this.jAfterSpinner.setInheritsPopupMenu(true);
         //this.jBeforeSpinner.setComponentPopupMenu(jPopupMenu1);
-        this.jBeforeSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
+        //this.jBeforeSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
         //this.jBeforeSpinner.setInheritsPopupMenu(true);
         //this.jPanel1.setComponentPopupMenu(jPopupMenu1);
         
-        jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
-        jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
+        //jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
+        //jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
         
         // this
     }
@@ -212,7 +212,6 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
 
         jBefore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
         jBefore.setToolTipText(bundle.getString("SearchEntryPanel.jBefore.toolTipText")); // NOI18N
-        jBefore.setBorderPainted(false);
         jBefore.setFocusable(false);
         jBefore.setHideActionText(true);
         jBefore.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -298,10 +297,12 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
     }//GEN-LAST:event_jModifiedAfterCheckItemStateChanged
 
     private void jAfterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAfterActionPerformed
+        if (!jModifiedAfterCheck.isSelected()) jModifiedAfterCheck.setSelected(true);
         cal.show(jAfter, jAfterSpinner);
     }//GEN-LAST:event_jAfterActionPerformed
 
     private void jBeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBeforeActionPerformed
+        if (!jModifiedBeforeCheck.isSelected()) jModifiedBeforeCheck.setSelected(true);
         cal.show(jBefore, jBeforeSpinner);
     }//GEN-LAST:event_jBeforeActionPerformed
 
@@ -335,6 +336,15 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         {
             if (popup_link == null) return;
             popup_link.setValue(panel.getDate());
+            if (!popup_link.isEnabled())
+            {
+                if (popup_link.equals(jAfterSpinner))
+                {
+                    jAfter.setSelected(true);
+                } else {
+                    jBefore.setSelected(true);                    
+                }
+            }
         }
     }
     
