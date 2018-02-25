@@ -138,7 +138,7 @@ public class FileTypePanel extends javax.swing.JPanel {
         this.jLessThanFileSizeScaler.setEnabled(sel);
     }//GEN-LAST:event_jLessThanCheckItemStateChanged
 
-    public void set(FileSizeEntry init)
+    public void set(FileTypeEntry init)
     {
         if (init.useMinSize) {
             int idx = FileSizeEntry.getIndex(init.minSize);
@@ -156,9 +156,9 @@ public class FileTypePanel extends javax.swing.JPanel {
         }
     }
     
-    public FileSizeEntry get()
+    public FileTypeEntry get()
     {
-        FileSizeEntry init = new FileSizeEntry();
+        FileTypeEntry init = new FileTypeEntry();
         if (jMoreThanCheck.isSelected()) {
             init.useMinSize = true;
             init.minSize = (long)((double)jMoreThanSpinner.getValue() * Math.pow(1024, jMoreThanFileSizeScaler.getSelectedIndex()));

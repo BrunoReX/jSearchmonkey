@@ -986,10 +986,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 246, Short.MAX_VALUE)
                     .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 262, Short.MAX_VALUE)
-                    .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 262, Short.MAX_VALUE))
+                    .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1471,8 +1471,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 if (panel instanceof FileDatePanel)
                 {
                     ((FileDatePanel)panel).set((FileDateEntry)data);
-                } else { // if (panel instanceof FileSizePanel) {
+                } else if (panel instanceof FileSizePanel) {
                     ((FileSizePanel)panel).set((FileSizeEntry)data);
+                } else { // if (panel instanceof FileTypePanel) {
+                    ((FileTypePanel)panel).set((FileTypeEntry)data);
                 }
 
                 frame.setMessage(panel);
