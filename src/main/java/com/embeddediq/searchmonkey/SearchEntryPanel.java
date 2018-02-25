@@ -638,8 +638,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Restore2("LookIn", jLookIn, new String[] {});
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
-        Restore2("FileTypeCombo", jFilesizeCombo, new FileSizeEntry[] {});
-        Restore2("FileSizeCombo", jFilesizeCombo11, new FileSizeEntry[] {});
+        Restore2("FileTypeCombo", jFileTypeCombo, new FileSizeEntry[] {});
+        Restore2("FileSizeCombo", jFilesizeCombo, new FileSizeEntry[] {});
 
         Restore2("FileModifiedCombo", jModifiedCombo, new FileDateEntry[] {}); // Empty list
         Restore2("FileCreatedCombo", jCreatedCombo, new FileDateEntry[] {}); // Empty list
