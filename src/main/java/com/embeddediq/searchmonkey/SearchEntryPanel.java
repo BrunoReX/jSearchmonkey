@@ -6,6 +6,7 @@
 package com.embeddediq.searchmonkey;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
 import java.awt.Component;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,9 +69,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jPanel3.setVisible(false); // hide the regex view
         jPanel6.setVisible(false); // hide the context word search
 
-        // Restore the settings
-        Restore();
-
         // Check for OS dependent settings:-
         if (IS_OS_WINDOWS)
         {
@@ -91,40 +90,25 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             String name = jLookIn.getName();
             SelectFileSize();
         });
-//        AddComboHandler(jModifiedCombo, "<<Others>>", () -> {
-//            jModifiedCombo.getModel().setSelectedItem(jModifiedCombo.getItemAt(0));
-//            // TODO - allow the item name to select which dialog is shown
-//            String name = jModifiedCombo.getName();
-//            // SelectFileSize();
-//            SelectModifiedDate();
-//        });
-//        
-//        AddComboHandler(jAccessedCombo, "<<Others>>", () -> {
-//            jAccessedCombo.getModel().setSelectedItem(jAccessedCombo.getItemAt(0));
-//            // TODO - allow the item name to select which dialog is shown
-//            String name = jAccessedCombo.getName();
-////            SelectModifiedDate();
-//            SelectAccessedDate();
-//        });
+
+        // Creating a custom class for the JComboBox
+        jCreatedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jCreatedCombo.setRenderer(new SeparatorComboBoxRenderer());
+        SelectDate sd3 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date");
+        jCreatedCombo.addActionListener(new SeparatorComboBoxListener(jCreatedCombo, sd3));
+        // Creating a custom class for the JComboBox
+        jModifiedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jModifiedCombo.setRenderer(new SeparatorComboBoxRenderer());
+        SelectDate sd1 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date");
+        jModifiedCombo.addActionListener(new SeparatorComboBoxListener(jModifiedCombo, sd1));
         // Creating a custom class for the JComboBox
         jAccessedCombo.setModel(new SeparatorComboBoxModel("Other"));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
         SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date");
         jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
                 
-//        ,
-//                () -> {
-//            SelectAccessedDate();
-//        }));
-        
-//        AddComboHandler(jCreatedCombo, "<<Others>>", () -> {
-//            jCreatedCombo.getModel().setSelectedItem(jCreatedCombo.getItemAt(0));
-//            // TODO - allow the item name to select which dialog is shown
-//            String name = jCreatedCombo.getName();
-////            SelectModifiedDate();
-//            SelectCreatedDate();
-//        });
-        
+        // Restore the settings
+        Restore();
      
        
         // TODO - future stuff
@@ -141,16 +125,96 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     class SeparatorComboBoxModel extends DefaultComboBoxModel
     {
         SelectDate callback;
-        //Color[] cols;
-        // Create a basic combobox for the size and date seelction
+
         SeparatorComboBoxModel(String button)
         {
-            //cols = oldColors;
             super(new Object[] {
                 new FileDateEntry(),
                 new JSeparator(JSeparator.HORIZONTAL),
                 new JButton(button)});
         }
+        
+        // Replace all entries with this new list
+        public void setEntries(List<FileDateEntry> items)
+        {
+            int count = super.getSize();
+            if (count > 3)
+            {
+                for (int i=count-3; i>0; i--)
+                {
+                    super.removeElementAt(i);
+                }
+            }
+            for (int i = items.size(); --i >= 0;)
+            {
+                // Skip the first entry
+                super.insertElementAt(items.get(i), 1);
+            }
+        }
+        
+        public List<FileDateEntry> getEntries()
+        {
+            int count = super.getSize();
+            if (count <= 3) return new ArrayList<>(); // Empty list
+            
+            List<FileDateEntry> items = new ArrayList<>(count - 3);
+            for (int i=1; i<count-2; i++) {
+                items.add((FileDateEntry)super.getElementAt(i));
+            }
+            return items;
+        }
+
+        // Remove entries that are more than limit
+        // Excluding the first entry (Don't care)
+        // Excluding the last two entries (Button + separator)
+        public void limitEntries(int limit)
+        {
+            // Ignore first and last two entries
+            int count = super.getSize();
+            if (count > limit + 3)
+            {
+                for (int i=(count - 3); i>limit; i--)
+                {
+                    super.removeElementAt(i);
+                }
+            }
+        }
+        
+        // Remove entries that are more than limit
+        // Excluding the first entry (Don't care)
+        // Excluding the last two entries (Button + separator)
+        public void addOrUpdateEntry(Object val)
+        {
+            if (!(val instanceof FileDateEntry)) return;
+            
+            int idx = super.getIndexOf(val);
+            if (idx == 0) return; // Ignore the first entry
+            if (idx != -1)
+            {
+                super.removeElementAt(idx);
+            }
+            // Skip first entry
+            super.insertElementAt(val, 1);
+        }
+
+//        @Override
+//        public Object getSelectedItem()
+//        {
+//            Object item = super.getSelectedItem();
+//            if (item == null) return null; // Nothing selected
+//            
+//            if (item instanceof FileDateEntry && !item.equals(new FileDateEntry())) // Don't care entry
+//            {
+//                int idx = super.getIndexOf(item);
+//                super.setSelectedIndex(-1); // Deselect all
+//                if (idx != -1)
+//                {
+//                    model.removeElementAt(idx);
+//                }
+//                
+//            }
+//            return item;
+//        }
     }
     
     class SeparatorComboBoxRenderer extends DefaultListCellRenderer // // JLabel implements ListCellRenderer // BasicComboBoxRenderer
@@ -259,6 +323,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             DefaultComboBoxModel model = (DefaultComboBoxModel)jCombo.getModel();
             int idx = model.getIndexOf(val);
             jCombo.setSelectedIndex(-1); // Deselect all
+            
             if (idx != -1)
             {
                 model.removeElementAt(idx);
@@ -273,6 +338,24 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             {
                 jCombo.removeItemAt(idx - 1);
             }
+            jCombo.setSelectedItem(val); // Reselect item
+        }
+        return val;
+    }
+
+    private Object getSelectedItem2(JComboBox jCombo)
+    {
+        
+        //String val = (String)jCombo.getSelectedItem();
+        Object val = jCombo.getSelectedItem();
+        if (val != null)
+        {
+            SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
+
+            // Update the combobox or refresh the ordering
+            jCombo.setSelectedIndex(-1); // Deselect all
+            model.addOrUpdateEntry(val);
+            model.limitEntries(maxCombo);
             jCombo.setSelectedItem(val); // Reselect item
         }
         return val;
@@ -363,48 +446,63 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         }
         
-        // TODO - switch config to using FileSizeEntry directly
-        FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
-        if (fsize.useMinSize)
-        {
-            req.greaterThan = fsize.minSize;
-        }
-        if (fsize.useMaxSize)
-        {
-            req.lessThan = fsize.maxSize;
-        }
-        // If max size is not set, then use the built in override
-        // TODO - remove this override..
-        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
-            req.lessThan = req.maxFileSize;
-        }
+//        // TODO - switch config to using FileSizeEntry directly
+//        Object fsize = getSelectedItem(jFilesizeCombo);
+//        // FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
+//        if (fsize.useMinSize)
+//        {
+//            req.greaterThan = fsize.minSize;
+//        }
+//        if (fsize.useMaxSize)
+//        {
+//            req.lessThan = fsize.maxSize;
+//        }
+//        // If max size is not set, then use the built in override
+//        // TODO - remove this override..
+//        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
+//            req.lessThan = req.maxFileSize;
+//        }
         
-        FileDateEntry modified = (FileDateEntry)this.jModifiedCombo.getSelectedItem();
-        if (modified.useAfter)
+        Object modified = getSelectedItem2(jModifiedCombo);
+        if (modified != null)
         {
-            req.modifiedAfter = FileTime.from(modified.after.toInstant(ZoneOffset.UTC));
+            FileDateEntry entry = (FileDateEntry)modified;
+            if (entry.useAfter)
+            {
+                req.accessedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
+            }
+            if (entry.useBefore)
+            {
+                req.accessedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
+            }
         }
-        if (modified.useBefore)
+
+        Object accessed = getSelectedItem2(jAccessedCombo);
+        if (accessed != null)
         {
-            req.modifiedBefore = FileTime.from(modified.before.toInstant(ZoneOffset.UTC));
+            FileDateEntry entry = (FileDateEntry)accessed;
+            if (entry.useAfter)
+            {
+                req.accessedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
+            }
+            if (entry.useBefore)
+            {
+                req.accessedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
+            }
         }
-        FileDateEntry accessed = (FileDateEntry)this.jAccessedCombo.getSelectedItem();
-        if (accessed.useAfter)
+
+        Object created = getSelectedItem2(jCreatedCombo);
+        if (created != null)
         {
-            req.accessedAfter = FileTime.from(accessed.after.toInstant(ZoneOffset.UTC));
-        }
-        if (accessed.useBefore)
-        {
-            req.accessedBefore = FileTime.from(accessed.before.toInstant(ZoneOffset.UTC));
-        }
-        FileDateEntry created = (FileDateEntry)this.jCreatedCombo.getSelectedItem();
-        if (created.useAfter)
-        {
-            req.createdAfter = FileTime.from(created.after.toInstant(ZoneOffset.UTC));
-        }
-        if (created.useBefore)
-        {
-            req.createdBefore = FileTime.from(created.before.toInstant(ZoneOffset.UTC));
+            FileDateEntry entry = (FileDateEntry)created;
+            if (entry.useAfter)
+            {
+                req.accessedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
+            }
+            if (entry.useBefore)
+            {
+                req.accessedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
+            }
         }
 
         return req;
@@ -427,16 +525,21 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private void Save2(String name, JComboBox jCombo) throws SecurityException
     {
         Gson g = new Gson();
-        List<String> items = new ArrayList<>();
-        for (int i=0; i<jCombo.getItemCount(); i++)
+        SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
+        
+        Object item = model.getSelectedItem();
+        if (model.getIndexOf(item) == -1) // If item is not in list, then add
         {
-            String item = (String)jCombo.getItemAt(i);
-            if (item != null && !item.startsWith("<<")) {
-                items.add(item);
-            }
+            model.addOrUpdateEntry(model.getSelectedItem()); // Lock in the current item before saving
+           jCombo.setSelectedItem(item); // And select it
         }
+        List<FileDateEntry> items = model.getEntries();
         String json = g.toJson(items);
         prefs.put(name, json); // Add list of look in folders        
+
+        // Store the index as well
+        int idx = jCombo.getSelectedIndex();
+        prefs.putInt(name + ".idx", idx);
     }
     
     private void Save(String name, JSpinner jSpinner) throws SecurityException
@@ -464,36 +567,33 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         for (int i = items.size(); --i >= 0;)
         {
             jCombo.insertItemAt(items.get(i), 0);
-            // jCombo.addItem(item);
         }
     }
+    
     private void Restore2(String name, JComboBox jCombo, Object def)
     {
         // int count = ;
-        for (int i=(jCombo.getItemCount() - 1); i >= 0; i--)
-        {
-            Object item = jCombo.getItemAt(i);
-            if ((item instanceof JButton) || (item instanceof JSeparator))
-            {
-                // Skip separators or JButtons
-            } else {
-                jCombo.removeItemAt(i);     
-            }
-        }
+        jCombo.setSelectedIndex(-1); // Select none
         Gson g = new Gson();
         String json = prefs.get(name, g.toJson(def));
         // if (cls == FileDateEntry.class)
         {
-            // Type T = cls.getClass().getGenericSuperclass();
-            List<FileDateEntry> items = g.fromJson(json, new TypeToken<ArrayList<FileDateEntry>>() {}.getType());
-            for (int i = items.size(); --i >= 0;)
+            List<FileDateEntry> items;
+            try{
+                items = g.fromJson(json, new TypeToken<ArrayList<FileDateEntry>>() {}.getType());
+            } catch (JsonSyntaxException ex)
             {
-                jCombo.insertItemAt(items.get(i), 0);
-                // jCombo.addItem(item);
+                items = new ArrayList<>();
             }
-            
+
+            SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
+            model.setEntries(items);
         }
+        
+        int idx = prefs.getInt(name + ".idx", 0);
+        jCombo.setSelectedIndex(idx); // Select last item
     }    
+    
     private void Restore(String name, JSpinner jSpinner, Object def) throws SecurityException
     {
         Gson g = new Gson();
@@ -515,9 +615,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs.putBoolean("LookInSubFolders", jSubFolders.isSelected());
 
         Save("FileSizeCombo", jFilesizeCombo);
-        Save("FileModifiedCombo", jModifiedCombo);
-        Save("FileCreatedCombo", jCreatedCombo);
 
+        Save2("FileModifiedCombo", jModifiedCombo);
+        Save2("FileCreatedCombo", jCreatedCombo);
         Save2("FileAccessedCombo", jAccessedCombo);
         
         // Search options
@@ -562,10 +662,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
         Restore("FileSizeCombo", jFilesizeCombo, new String[] {"Don't care", "Others"});
-        Restore("FileModifiedCombo", jModifiedCombo, new String[] {"Don't care", "Others"});
-        Restore("FileCreatedCombo", jCreatedCombo, new String[] {"Don't care", "Others"});
 
-        Restore2("FileAccessedCombo", jAccessedCombo, new Object[] {new FileDateEntry()});
+        Restore2("FileModifiedCombo", jModifiedCombo, new Object[] {}); // Empty list
+        Restore2("FileCreatedCombo", jCreatedCombo, new Object[] {}); // Empty list
+        Restore2("FileAccessedCombo", jAccessedCombo, new Object[] {}); // Empty list
 
         // Search options
         jExpertMode.setSelected(prefs.getBoolean("UsePowerSearch", true));
