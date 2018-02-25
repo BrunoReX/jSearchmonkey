@@ -169,6 +169,9 @@
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jAfter.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jPopupMenu1"/>
+                </Property>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="hideActionText" type="boolean" value="true"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -201,6 +204,9 @@
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jBefore.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jPopupMenu1"/>
+                </Property>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="hideActionText" type="boolean" value="true"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -223,9 +229,6 @@
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jAfterSpinner.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="jPopupMenu1"/>
-            </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
@@ -236,9 +239,6 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jBeforeSpinner.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="jPopupMenu1"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>

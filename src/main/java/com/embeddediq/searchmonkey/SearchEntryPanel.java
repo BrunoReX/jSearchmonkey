@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.ZoneOffset;
@@ -427,6 +428,21 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         String json = g.toJson(items);
         prefs.put(name, json); // Add list of look in folders        
     }
+    private void Save2(String name, JComboBox jCombo) throws SecurityException
+    {
+        Gson g = new Gson();
+        List<String> items = new ArrayList<>();
+        for (int i=0; i<jCombo.getItemCount(); i++)
+        {
+            String item = (String)jCombo.getItemAt(i);
+            if (item != null && !item.startsWith("<<")) {
+                items.add(item);
+            }
+        }
+        String json = g.toJson(items);
+        prefs.put(name, json); // Add list of look in folders        
+    }
+    
     private void Save(String name, JSpinner jSpinner) throws SecurityException
     {
         Gson g = new Gson();
@@ -455,6 +471,33 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             // jCombo.addItem(item);
         }
     }
+    private void Restore2(String name, JComboBox jCombo, Object def)
+    {
+        // int count = ;
+        for (int i=(jCombo.getItemCount() - 1); i >= 0; i--)
+        {
+            Object item = jCombo.getItemAt(i);
+            if ((item instanceof JButton) || (item instanceof JSeparator))
+            {
+                // Skip separators or JButtons
+            } else {
+                jCombo.removeItemAt(i);     
+            }
+        }
+        Gson g = new Gson();
+        String json = prefs.get(name, g.toJson(def));
+        // if (cls == FileDateEntry.class)
+        {
+            // Type T = cls.getClass().getGenericSuperclass();
+            List<FileDateEntry> items = g.fromJson(json, new TypeToken<ArrayList<FileDateEntry>>() {}.getType());
+            for (int i = items.size(); --i >= 0;)
+            {
+                jCombo.insertItemAt(items.get(i), 0);
+                // jCombo.addItem(item);
+            }
+            
+        }
+    }    
     private void Restore(String name, JSpinner jSpinner, Object def) throws SecurityException
     {
         Gson g = new Gson();
@@ -477,8 +520,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         Save("FileSizeCombo", jFilesizeCombo);
         Save("FileModifiedCombo", jModifiedCombo);
-        Save("FileAccessedCombo", jAccessedCombo);
         Save("FileCreatedCombo", jCreatedCombo);
+
+        Save2("FileAccessedCombo", jAccessedCombo);
         
         // Search options
         prefs.putBoolean("UsePowerSeach", jExpertMode.isSelected());
@@ -505,22 +549,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs.putBoolean("IgnoreHiddenFolders", jIgnoreHiddenFolders.isSelected());
         prefs.putBoolean("LimitMaxRecurse", jLimitMaxRecurse.isSelected());
         prefs.putLong("MaxRecurse", (Long)jMaxRecurse.getValue());
-        
-//        // Adanced search settings
-//        prefs.putBoolean("AfterToggle1", jCreatedAfterCheck.isSelected());
-//        Save("AfterSpinner1", jAfterSpinner1);
-//        prefs.putBoolean("BeforeToggle1", jCreatedBeforeCheck.isSelected());
-//        Save("BeforeSpinner1", jBeforeSpinner1);
-//        
-//        prefs.putBoolean("AfterToggle2", jAccessedAfterCheck.isSelected());
-//        Save("AfterSpinner2", jAfterSpinner2);
-//        prefs.putBoolean("BeforeToggle2", jAccessedBeforeCheck.isSelected());
-//        Save("BeforeSpinner2", jBeforeSpinner2);
-        
     }
     private void Restore()
     {
-        Date date = new Date();
         boolean enabled;
 
         // Basic search params
@@ -536,8 +567,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         
         Restore("FileSizeCombo", jFilesizeCombo, new String[] {"Don't care", "Others"});
         Restore("FileModifiedCombo", jModifiedCombo, new String[] {"Don't care", "Others"});
-        Restore("FileAccessedCombo", jAccessedCombo, new String[] {"Don't care", "Others"});
-        Restore("FileCreatedCombo", jCreatedCombo, new Object[] {new FileDateEntry()}); // , new JSeparator(JSeparator.HORIZONTAL), new JButton("Others")});
+        Restore("FileCreatedCombo", jCreatedCombo, new String[] {"Don't care", "Others"});
+
+        Restore2("FileAccessedCombo", jAccessedCombo, new Object[] {new FileDateEntry()});
 
         // Search options
         jExpertMode.setSelected(prefs.getBoolean("UsePowerSearch", true));
