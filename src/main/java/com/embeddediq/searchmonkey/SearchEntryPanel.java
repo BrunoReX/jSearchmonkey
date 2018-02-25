@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -44,6 +45,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
+import org.apache.poi.hpsf.Filetime;
 
 
 // Note to self - here is the NIMBUS Default Look and Feel
@@ -64,13 +66,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs = Preferences.userNodeForPackage(SearchEntry.class);
         
         initComponents();
-        
-//        jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
-//        jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
-//        jAfter1.addMouseListener(new MyMouseAdapter(jAfter1, jAfterSpinner1));
-//        jBefore1.addMouseListener(new MyMouseAdapter(jBefore1, jBeforeSpinner1));
-//        jAfter2.addMouseListener(new MyMouseAdapter(jAfter2, jAfterSpinner2));
-//        jBefore2.addMouseListener(new MyMouseAdapter(jBefore2, jBeforeSpinner2));
         
         jPanel3.setVisible(false); // hide the regex view
         jPanel6.setVisible(false); // hide the context word search
@@ -117,7 +112,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         // Creating a custom class for the JComboBox
         jAccessedCombo.setModel(new SeparatorComboBoxModel("Other"));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Accessed");
+        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date");
         jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
                 
 //        ,
@@ -144,10 +139,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         //this.jButton4.setVisible(false);
         //this.jButton5.setVisible(false);
         //this.jButton9.setVisible(false);
-        this.jFileSizePanel.setVisible(false);
-        this.jModifiedDate.setVisible(false);
-        this.jModifiedPanel1.setVisible(false);
-        this.jModifiedPanel2.setVisible(false);
     }
     
     class SeparatorComboBoxModel extends DefaultComboBoxModel
@@ -375,49 +366,50 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         }
         
-        // Get min/max size
-        if (jLessThanCheck.isSelected()) {
-            double scaler = Math.pow(1024,jFileSizeScaler.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
-            req.lessThan = (long)(scaler * (double)jLessThanSpinner.getValue());
+        // TODO - switch config to using FileSizeEntry directly
+        FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
+        if (fsize.useMinSize)
+        {
+            req.greaterThan = fsize.minSize;
         }
-        if (jMoreThanCheck.isSelected()) {
-            double scaler = Math.pow(1024,jFileSizeScaler1.getSelectedIndex()); // 1024^0 = 1; 1024^1=1K, 1024^2=1M, etc
-            req.greaterThan = (long)(scaler * (double)jGreaterThanSpinner.getValue());
+        if (fsize.useMaxSize)
+        {
+            req.lessThan = fsize.maxSize;
         }
         // If max size is not set, then use the built in override
+        // TODO - remove this override..
         if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
             req.lessThan = req.maxFileSize;
         }
+        
+        FileDateEntry modified = (FileDateEntry)this.jModifiedCombo.getSelectedItem();
+        if (modified.useAfter)
+        {
+            req.modifiedAfter = FileTime.from(modified.after.toInstant(ZoneOffset.UTC));
+        }
+        if (modified.useBefore)
+        {
+            req.modifiedBefore = FileTime.from(modified.before.toInstant(ZoneOffset.UTC));
+        }
+        FileDateEntry accessed = (FileDateEntry)this.jAccessedCombo.getSelectedItem();
+        if (accessed.useAfter)
+        {
+            req.accessedAfter = FileTime.from(accessed.after.toInstant(ZoneOffset.UTC));
+        }
+        if (accessed.useBefore)
+        {
+            req.accessedBefore = FileTime.from(accessed.before.toInstant(ZoneOffset.UTC));
+        }
+        FileDateEntry created = (FileDateEntry)this.jCreatedCombo.getSelectedItem();
+        if (created.useAfter)
+        {
+            req.createdAfter = FileTime.from(created.after.toInstant(ZoneOffset.UTC));
+        }
+        if (created.useBefore)
+        {
+            req.createdBefore = FileTime.from(created.before.toInstant(ZoneOffset.UTC));
+        }
 
-        // Get modifed before/after date
-        if (jModifiedAfterCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jAfterSpinner.getModel()).getDate();
-            req.modifiedAfter = FileTime.from(d.toInstant());
-        }
-        if (jModifiedBeforeCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jBeforeSpinner.getModel()).getDate();
-            req.modifiedBefore = FileTime.from(d.toInstant());
-        }
-
-        // Get created before/after date
-        if (jCreatedAfterCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jAfterSpinner1.getModel()).getDate();
-            req.createdAfter = FileTime.from(d.toInstant());
-        }
-        if (jCreatedBeforeCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jBeforeSpinner1.getModel()).getDate();
-            req.createdBefore = FileTime.from(d.toInstant());
-        }
-
-        // Get accessed before/after date
-        if (jAccessedAfterCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jAfterSpinner2.getModel()).getDate();
-            req.accessedAfter = FileTime.from(d.toInstant());
-        }
-        if (jAccessedBeforeCheck.isSelected()) {
-            Date d = ((SpinnerDateModel)jBeforeSpinner2.getModel()).getDate();
-            req.accessedBefore = FileTime.from(d.toInstant());
-        }
         return req;
     }
         
@@ -456,7 +448,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
         Gson g = new Gson();
         String json = prefs.get(name, g.toJson(def));
-        List<String> items = g.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
+        List<Object> items = g.fromJson(json, new TypeToken<ArrayList<Object>>() {}.getType());
         for (int i = items.size(); --i >= 0;)
         {
             jCombo.insertItemAt(items.get(i), 0);
@@ -482,17 +474,11 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Save("ContainingText", jContainingText1);
         
         prefs.putBoolean("LookInSubFolders", jSubFolders.isSelected());
-        prefs.putInt("LessThanScaler", jFileSizeScaler.getSelectedIndex());
-        prefs.putInt("GreaterThanScaler", jFileSizeScaler1.getSelectedIndex());
-        prefs.putBoolean("GreaterThanToggle", jMoreThanCheck.isSelected());
-        prefs.putDouble("GreaterThan", (Double)jGreaterThanSpinner.getValue());
-        prefs.putBoolean("LessThanToggle", jLessThanCheck.isSelected());
-        prefs.putDouble("LessThan", (Double)jLessThanSpinner.getValue());
-        
-        prefs.putBoolean("AfterToggle", jModifiedAfterCheck.isSelected());
-        Save("AfterSpinner", jAfterSpinner);
-        prefs.putBoolean("BeforeToggle", jModifiedBeforeCheck.isSelected());
-        Save("BeforeSpinner", jBeforeSpinner);
+
+        Save("FileSizeCombo", jFilesizeCombo);
+        Save("FileModifiedCombo", jModifiedCombo);
+        Save("FileAccessedCombo", jAccessedCombo);
+        Save("FileCreatedCombo", jCreatedCombo);
         
         // Search options
         prefs.putBoolean("UsePowerSeach", jExpertMode.isSelected());
@@ -520,16 +506,17 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs.putBoolean("LimitMaxRecurse", jLimitMaxRecurse.isSelected());
         prefs.putLong("MaxRecurse", (Long)jMaxRecurse.getValue());
         
-        // Adanced search settings
-        prefs.putBoolean("AfterToggle1", jCreatedAfterCheck.isSelected());
-        Save("AfterSpinner1", jAfterSpinner1);
-        prefs.putBoolean("BeforeToggle1", jCreatedBeforeCheck.isSelected());
-        Save("BeforeSpinner1", jBeforeSpinner1);
+//        // Adanced search settings
+//        prefs.putBoolean("AfterToggle1", jCreatedAfterCheck.isSelected());
+//        Save("AfterSpinner1", jAfterSpinner1);
+//        prefs.putBoolean("BeforeToggle1", jCreatedBeforeCheck.isSelected());
+//        Save("BeforeSpinner1", jBeforeSpinner1);
+//        
+//        prefs.putBoolean("AfterToggle2", jAccessedAfterCheck.isSelected());
+//        Save("AfterSpinner2", jAfterSpinner2);
+//        prefs.putBoolean("BeforeToggle2", jAccessedBeforeCheck.isSelected());
+//        Save("BeforeSpinner2", jBeforeSpinner2);
         
-        prefs.putBoolean("AfterToggle2", jAccessedAfterCheck.isSelected());
-        Save("AfterSpinner2", jAfterSpinner2);
-        prefs.putBoolean("BeforeToggle2", jAccessedBeforeCheck.isSelected());
-        Save("BeforeSpinner2", jBeforeSpinner2);
     }
     private void Restore()
     {
@@ -547,47 +534,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Restore("LookIn", jLookIn, new String[] {home});
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
-        // File size modifiers
-        jFileSizeScaler.setSelectedIndex(prefs.getInt("LessThanScaler", 1)); // Select KBytes by default
-        jFileSizeScaler1.setSelectedIndex(prefs.getInt("GreaterThanScaler", 1)); // Select KBytes by default
-        enabled = prefs.getBoolean("GreaterThanToggle", false);
-        jMoreThanCheck.setSelected(enabled);
-        jGreaterThanSpinner.setValue(prefs.getDouble("GreaterThan", 0.0));
-        jGreaterThanSpinner.setEnabled(enabled);
-        enabled = prefs.getBoolean("LessThanToggle", false);
-        jLessThanCheck.setSelected(enabled);
-        jLessThanSpinner.setValue(prefs.getDouble("LessThan", 0.0));
-        jLessThanSpinner.setEnabled(enabled);
-        
-        // Last modified date
-        enabled = prefs.getBoolean("AfterToggle", false);
-        jModifiedAfterCheck.setSelected(enabled);
-        Restore("AfterSpinner", jAfterSpinner, date);
-        jAfterSpinner.setEnabled(enabled);
-        enabled = prefs.getBoolean("BeforeToggle", false);
-        jModifiedBeforeCheck.setSelected(enabled);
-        Restore("BeforeSpinner", jBeforeSpinner, date);
-        jBeforeSpinner.setEnabled(enabled);
-        
-        // Created date
-        enabled = prefs.getBoolean("AfterToggle1", false);
-        jCreatedAfterCheck.setSelected(enabled);
-        Restore("AfterSpinner1", jAfterSpinner1, date);
-        jAfterSpinner1.setEnabled(enabled);
-        enabled = prefs.getBoolean("BeforeToggle1", false);
-        jCreatedBeforeCheck.setSelected(prefs.getBoolean("BeforeToggle1", false));
-        Restore("BeforeSpinner1", jBeforeSpinner1, date);
-        jBeforeSpinner1.setEnabled(enabled);
-        
-        // Last accessed date
-        enabled = prefs.getBoolean("AfterToggle2", false);
-        jAccessedAfterCheck.setSelected(enabled);
-        Restore("AfterSpinner2", jAfterSpinner2, date);
-        jAfterSpinner2.setEnabled(enabled);
-        enabled = prefs.getBoolean("BeforeToggle2", false);
-        jAccessedBeforeCheck.setSelected(enabled);
-        Restore("BeforeSpinner2", jBeforeSpinner2, date);
-        jBeforeSpinner2.setEnabled(enabled);
+        Restore("FileSizeCombo", jFilesizeCombo, new String[] {"Don't care", "Others"});
+        Restore("FileModifiedCombo", jModifiedCombo, new String[] {"Don't care", "Others"});
+        Restore("FileAccessedCombo", jAccessedCombo, new String[] {"Don't care", "Others"});
+        Restore("FileCreatedCombo", jCreatedCombo, new Object[] {new FileDateEntry()}); // , new JSeparator(JSeparator.HORIZONTAL), new JButton("Others")});
 
         // Search options
         jExpertMode.setSelected(prefs.getBoolean("UsePowerSearch", true));
@@ -633,40 +583,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         FilenameSearchType = new javax.swing.ButtonGroup();
         ContentSearchType = new javax.swing.ButtonGroup();
         jFileChooser1 = new javax.swing.JFileChooser();
-        jModifiedPanel2 = new javax.swing.JPanel();
-        jAccessedBeforeCheck = new javax.swing.JCheckBox();
-        jAccessedAfterCheck = new javax.swing.JCheckBox();
-        jBeforeSpinner2 = new javax.swing.JSpinner();
-        jToolBar8 = new javax.swing.JToolBar();
-        jBefore2 = new javax.swing.JButton();
-        jAfterSpinner2 = new javax.swing.JSpinner();
-        jToolBar7 = new javax.swing.JToolBar();
-        jAfter2 = new javax.swing.JButton();
-        jModifiedPanel1 = new javax.swing.JPanel();
-        jCreatedBeforeCheck = new javax.swing.JCheckBox();
-        jBeforeSpinner1 = new javax.swing.JSpinner();
-        jToolBar9 = new javax.swing.JToolBar();
-        jBefore1 = new javax.swing.JButton();
-        jCreatedAfterCheck = new javax.swing.JCheckBox();
-        jAfterSpinner1 = new javax.swing.JSpinner();
-        jToolBar6 = new javax.swing.JToolBar();
-        jAfter1 = new javax.swing.JButton();
-        jFileSizePanel = new javax.swing.JPanel();
-        jMoreThanCheck = new javax.swing.JCheckBox();
-        jFileSizeScaler = new javax.swing.JComboBox<>();
-        jLessThanCheck = new javax.swing.JCheckBox();
-        jLessThanSpinner = new javax.swing.JSpinner();
-        jGreaterThanSpinner = new javax.swing.JSpinner();
-        jFileSizeScaler1 = new javax.swing.JComboBox<>();
-        jModifiedDate = new javax.swing.JPanel();
-        jBeforeSpinner = new javax.swing.JSpinner();
-        jToolBar4 = new javax.swing.JToolBar();
-        jBefore = new javax.swing.JButton();
-        jModifiedBeforeCheck = new javax.swing.JCheckBox();
-        jAfterSpinner = new javax.swing.JSpinner();
-        jToolBar5 = new javax.swing.JToolBar();
-        jAfter = new javax.swing.JButton();
-        jModifiedAfterCheck = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jSearch = new javax.swing.JPanel();
@@ -740,352 +656,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jFileChooser1.setDialogTitle(bundle.getString("SearchEntryPanel.jFileChooser1.dialogTitle")); // NOI18N
         jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser1.setToolTipText(bundle.getString("SearchEntryPanel.jFileChooser1.toolTipText")); // NOI18N
-
-        jModifiedPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jModifiedPanel2.border.title"))); // NOI18N
-
-        jAccessedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jAccessedBeforeCheck.text")); // NOI18N
-        jAccessedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jAccessedBeforeCheck.toolTipText")); // NOI18N
-        jAccessedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jAccessedBeforeCheckItemStateChanged(evt);
-            }
-        });
-
-        jAccessedAfterCheck.setText(bundle.getString("SearchEntryPanel.jAccessedAfterCheck.text")); // NOI18N
-        jAccessedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jAccessedAfterCheck.toolTipText")); // NOI18N
-        jAccessedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jAccessedAfterCheckItemStateChanged(evt);
-            }
-        });
-
-        jBeforeSpinner2.setModel(new javax.swing.SpinnerDateModel());
-        jBeforeSpinner2.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner2.toolTipText")); // NOI18N
-        jBeforeSpinner2.setEnabled(false);
-
-        jToolBar8.setFloatable(false);
-        jToolBar8.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar8.setRollover(true);
-        jToolBar8.setBorderPainted(false);
-
-        jBefore2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jBefore2.setToolTipText(bundle.getString("SearchEntryPanel.jBefore2.toolTipText")); // NOI18N
-        jBefore2.setFocusable(false);
-        jBefore2.setHideActionText(true);
-        jBefore2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jBefore2.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jBefore2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar8.add(jBefore2);
-
-        jAfterSpinner2.setModel(new javax.swing.SpinnerDateModel());
-        jAfterSpinner2.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner2.toolTipText")); // NOI18N
-        jAfterSpinner2.setEnabled(false);
-
-        jToolBar7.setFloatable(false);
-        jToolBar7.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar7.setRollover(true);
-        jToolBar7.setBorderPainted(false);
-
-        jAfter2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jAfter2.setToolTipText(bundle.getString("SearchEntryPanel.jAfter2.toolTipText")); // NOI18N
-        jAfter2.setFocusable(false);
-        jAfter2.setHideActionText(true);
-        jAfter2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jAfter2.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jAfter2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar7.add(jAfter2);
-
-        javax.swing.GroupLayout jModifiedPanel2Layout = new javax.swing.GroupLayout(jModifiedPanel2);
-        jModifiedPanel2.setLayout(jModifiedPanel2Layout);
-        jModifiedPanel2Layout.setHorizontalGroup(
-            jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jAccessedBeforeCheck)
-                    .addComponent(jAccessedAfterCheck)
-                    .addGroup(jModifiedPanel2Layout.createSequentialGroup()
-                        .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBeforeSpinner2)
-                            .addComponent(jAfterSpinner2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jModifiedPanel2Layout.setVerticalGroup(
-            jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jModifiedPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jModifiedPanel2Layout.createSequentialGroup()
-                        .addComponent(jAccessedBeforeCheck)
-                        .addGap(0, 0, 0)
-                        .addComponent(jBeforeSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jToolBar8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jAccessedAfterCheck)
-                .addGap(0, 0, 0)
-                .addGroup(jModifiedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jAfterSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        jModifiedPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jModifiedPanel1.border.title"))); // NOI18N
-
-        jCreatedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jCreatedBeforeCheck.text")); // NOI18N
-        jCreatedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jCreatedBeforeCheck.toolTipText")); // NOI18N
-        jCreatedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jCreatedBeforeCheckItemStateChanged(evt);
-            }
-        });
-
-        jBeforeSpinner1.setModel(new javax.swing.SpinnerDateModel());
-        jBeforeSpinner1.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner1.toolTipText")); // NOI18N
-        jBeforeSpinner1.setEnabled(false);
-
-        jToolBar9.setFloatable(false);
-        jToolBar9.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar9.setRollover(true);
-        jToolBar9.setBorderPainted(false);
-
-        jBefore1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jBefore1.setToolTipText(bundle.getString("SearchEntryPanel.jBefore1.toolTipText")); // NOI18N
-        jBefore1.setFocusable(false);
-        jBefore1.setHideActionText(true);
-        jBefore1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jBefore1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jBefore1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar9.add(jBefore1);
-
-        jCreatedAfterCheck.setText(bundle.getString("SearchEntryPanel.jCreatedAfterCheck.text")); // NOI18N
-        jCreatedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jCreatedAfterCheck.toolTipText")); // NOI18N
-        jCreatedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jCreatedAfterCheckItemStateChanged(evt);
-            }
-        });
-
-        jAfterSpinner1.setModel(new javax.swing.SpinnerDateModel());
-        jAfterSpinner1.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner1.toolTipText")); // NOI18N
-        jAfterSpinner1.setEnabled(false);
-
-        jToolBar6.setFloatable(false);
-        jToolBar6.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar6.setRollover(true);
-        jToolBar6.setBorderPainted(false);
-
-        jAfter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jAfter1.setToolTipText(bundle.getString("SearchEntryPanel.jAfter1.toolTipText")); // NOI18N
-        jAfter1.setFocusable(false);
-        jAfter1.setHideActionText(true);
-        jAfter1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jAfter1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jAfter1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar6.add(jAfter1);
-
-        javax.swing.GroupLayout jModifiedPanel1Layout = new javax.swing.GroupLayout(jModifiedPanel1);
-        jModifiedPanel1.setLayout(jModifiedPanel1Layout);
-        jModifiedPanel1Layout.setHorizontalGroup(
-            jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCreatedBeforeCheck)
-                    .addComponent(jBeforeSpinner1)
-                    .addComponent(jCreatedAfterCheck)
-                    .addComponent(jAfterSpinner1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jModifiedPanel1Layout.setVerticalGroup(
-            jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jModifiedPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jModifiedPanel1Layout.createSequentialGroup()
-                        .addComponent(jCreatedBeforeCheck)
-                        .addGap(0, 0, 0)
-                        .addComponent(jBeforeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jToolBar9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jModifiedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jModifiedPanel1Layout.createSequentialGroup()
-                        .addComponent(jCreatedAfterCheck)
-                        .addGap(0, 0, 0)
-                        .addComponent(jAfterSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jToolBar6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        jFileSizePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jFileSizePanel.border.title"))); // NOI18N
-
-        jMoreThanCheck.setText(bundle.getString("SearchEntryPanel.jMoreThanCheck.text")); // NOI18N
-        jMoreThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jMoreThanCheck.toolTipText")); // NOI18N
-        jMoreThanCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jMoreThanCheckItemStateChanged(evt);
-            }
-        });
-
-        jFileSizeScaler.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
-        jFileSizeScaler.setSelectedIndex(1);
-        jFileSizeScaler.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler.toolTipText")); // NOI18N
-        jFileSizeScaler.setEnabled(false);
-
-        jLessThanCheck.setText(bundle.getString("SearchEntryPanel.jLessThanCheck.text")); // NOI18N
-        jLessThanCheck.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanCheck.toolTipText")); // NOI18N
-        jLessThanCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jLessThanCheckItemStateChanged(evt);
-            }
-        });
-
-        jLessThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
-        jLessThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanSpinner.toolTipText")); // NOI18N
-        jLessThanSpinner.setEnabled(false);
-
-        jGreaterThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
-        jGreaterThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jGreaterThanSpinner.toolTipText")); // NOI18N
-        jGreaterThanSpinner.setEnabled(false);
-
-        jFileSizeScaler1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bytes", "KBytes", "MBytes", "GBytes", "TBytes" }));
-        jFileSizeScaler1.setSelectedIndex(1);
-        jFileSizeScaler1.setToolTipText(bundle.getString("SearchEntryPanel.jFileSizeScaler1.toolTipText")); // NOI18N
-        jFileSizeScaler1.setEnabled(false);
-
-        javax.swing.GroupLayout jFileSizePanelLayout = new javax.swing.GroupLayout(jFileSizePanel);
-        jFileSizePanel.setLayout(jFileSizePanelLayout);
-        jFileSizePanelLayout.setHorizontalGroup(
-            jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLessThanCheck)
-                    .addComponent(jLessThanSpinner)
-                    .addComponent(jMoreThanCheck)
-                    .addComponent(jGreaterThanSpinner))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jFileSizePanelLayout.setVerticalGroup(
-            jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFileSizePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLessThanCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFileSizeScaler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLessThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jMoreThanCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jFileSizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jGreaterThanSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFileSizeScaler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        jModifiedDate.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jModifiedDate.border.title"))); // NOI18N
-
-        jBeforeSpinner.setModel(new javax.swing.SpinnerDateModel());
-        jBeforeSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jBeforeSpinner.toolTipText")); // NOI18N
-        jBeforeSpinner.setEnabled(false);
-
-        jToolBar4.setFloatable(false);
-        jToolBar4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar4.setRollover(true);
-        jToolBar4.setBorderPainted(false);
-
-        jBefore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jBefore.setToolTipText(bundle.getString("SearchEntryPanel.jBefore.toolTipText")); // NOI18N
-        jBefore.setBorderPainted(false);
-        jBefore.setFocusable(false);
-        jBefore.setHideActionText(true);
-        jBefore.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jBefore.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jBefore.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar4.add(jBefore);
-
-        jModifiedBeforeCheck.setText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.text")); // NOI18N
-        jModifiedBeforeCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedBeforeCheck.toolTipText")); // NOI18N
-        jModifiedBeforeCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jModifiedBeforeCheckItemStateChanged(evt);
-            }
-        });
-
-        jAfterSpinner.setModel(new javax.swing.SpinnerDateModel());
-        jAfterSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jAfterSpinner.toolTipText")); // NOI18N
-        jAfterSpinner.setEnabled(false);
-
-        jToolBar5.setFloatable(false);
-        jToolBar5.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar5.setRollover(true);
-        jToolBar5.setBorderPainted(false);
-
-        jAfter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        jAfter.setToolTipText(bundle.getString("SearchEntryPanel.jAfter.toolTipText")); // NOI18N
-        jAfter.setFocusable(false);
-        jAfter.setHideActionText(true);
-        jAfter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jAfter.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jAfter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar5.add(jAfter);
-
-        jModifiedAfterCheck.setText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.text")); // NOI18N
-        jModifiedAfterCheck.setToolTipText(bundle.getString("SearchEntryPanel.jModifiedAfterCheck.toolTipText")); // NOI18N
-        jModifiedAfterCheck.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jModifiedAfterCheckItemStateChanged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jModifiedDateLayout = new javax.swing.GroupLayout(jModifiedDate);
-        jModifiedDate.setLayout(jModifiedDateLayout);
-        jModifiedDateLayout.setHorizontalGroup(
-            jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedDateLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jModifiedBeforeCheck)
-                    .addComponent(jModifiedAfterCheck)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jModifiedDateLayout.createSequentialGroup()
-                        .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jAfterSpinner, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBeforeSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jModifiedDateLayout.setVerticalGroup(
-            jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jModifiedDateLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jModifiedBeforeCheck)
-                .addGap(0, 0, 0)
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBeforeSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jModifiedAfterCheck)
-                .addGap(0, 0, 0)
-                .addGroup(jModifiedDateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jAfterSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         setLayout(new java.awt.BorderLayout());
 
@@ -1925,43 +1495,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jContainingText.setEnabled(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ItemStateChanged
 
-    private void jModifiedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedAfterCheckItemStateChanged
-        this.jAfterSpinner.setEnabled(jModifiedAfterCheck.isSelected());
-    }//GEN-LAST:event_jModifiedAfterCheckItemStateChanged
-
-    private void jModifiedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jModifiedBeforeCheckItemStateChanged
-        this.jBeforeSpinner.setEnabled(jModifiedBeforeCheck.isSelected());
-    }//GEN-LAST:event_jModifiedBeforeCheckItemStateChanged
-
-    private void jLessThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLessThanCheckItemStateChanged
-        boolean sel = jLessThanCheck.isSelected();
-        this.jLessThanSpinner.setEnabled(sel);
-        this.jFileSizeScaler.setEnabled(sel);
-    }//GEN-LAST:event_jLessThanCheckItemStateChanged
-
-    private void jMoreThanCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jMoreThanCheckItemStateChanged
-        boolean sel = jMoreThanCheck.isSelected();
-        this.jGreaterThanSpinner.setEnabled(sel);
-        this.jFileSizeScaler1.setEnabled(sel);
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMoreThanCheckItemStateChanged
-
-    private void jCreatedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCreatedBeforeCheckItemStateChanged
-        this.jBeforeSpinner1.setEnabled(jCreatedBeforeCheck.isSelected());
-    }//GEN-LAST:event_jCreatedBeforeCheckItemStateChanged
-
-    private void jCreatedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCreatedAfterCheckItemStateChanged
-        this.jAfterSpinner1.setEnabled(jCreatedAfterCheck.isSelected());
-    }//GEN-LAST:event_jCreatedAfterCheckItemStateChanged
-
-    private void jAccessedBeforeCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jAccessedBeforeCheckItemStateChanged
-        this.jBeforeSpinner2.setEnabled(jAccessedBeforeCheck.isSelected());
-    }//GEN-LAST:event_jAccessedBeforeCheckItemStateChanged
-
-    private void jAccessedAfterCheckItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jAccessedAfterCheckItemStateChanged
-        this.jAfterSpinner2.setEnabled(jAccessedAfterCheck.isSelected());
-    }//GEN-LAST:event_jAccessedAfterCheckItemStateChanged
-
     private void jRestoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRestoreAllActionPerformed
         int res = JOptionPane.showConfirmDialog(this, "Press OK to clear all configuration settings", "Restore all defaults?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (res != JOptionPane.OK_OPTION) return; //Cancel
@@ -2018,29 +1551,13 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.ButtonGroup ContentSearchType;
     private javax.swing.ButtonGroup FilenameSearchType;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JCheckBox jAccessedAfterCheck;
-    private javax.swing.JCheckBox jAccessedBeforeCheck;
     private javax.swing.JComboBox<String> jAccessedCombo;
-    private javax.swing.JButton jAfter;
-    private javax.swing.JButton jAfter1;
-    private javax.swing.JButton jAfter2;
-    private javax.swing.JSpinner jAfterSpinner;
-    private javax.swing.JSpinner jAfterSpinner1;
-    private javax.swing.JSpinner jAfterSpinner2;
     private javax.swing.JPanel jBasicSearch;
-    private javax.swing.JButton jBefore;
-    private javax.swing.JButton jBefore1;
-    private javax.swing.JButton jBefore2;
-    private javax.swing.JSpinner jBeforeSpinner;
-    private javax.swing.JSpinner jBeforeSpinner1;
-    private javax.swing.JSpinner jBeforeSpinner2;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jContainingText;
     private javax.swing.JComboBox<String> jContainingText1;
-    private javax.swing.JCheckBox jCreatedAfterCheck;
-    private javax.swing.JCheckBox jCreatedBeforeCheck;
     private javax.swing.JComboBox<String> jCreatedCombo;
     private javax.swing.JCheckBox jDisable3rdParty;
     private javax.swing.JCheckBox jDisableUnicodeDetection;
@@ -2049,12 +1566,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JComboBox<String> jFileName;
     private javax.swing.JComboBox<String> jFileName1;
-    private javax.swing.JPanel jFileSizePanel;
-    private javax.swing.JComboBox<String> jFileSizeScaler;
-    private javax.swing.JComboBox<String> jFileSizeScaler1;
     private javax.swing.JSpinner jFileTimeout;
     private javax.swing.JComboBox<String> jFilesizeCombo;
-    private javax.swing.JSpinner jGreaterThanSpinner;
     private javax.swing.JCheckBox jIgnoreContentCase;
     private javax.swing.JCheckBox jIgnoreFilenameCase;
     private javax.swing.JCheckBox jIgnoreFolderCase;
@@ -2069,8 +1582,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JCheckBox jLessThanCheck;
-    private javax.swing.JSpinner jLessThanSpinner;
     private javax.swing.JCheckBox jLimitMaxFileSize;
     private javax.swing.JCheckBox jLimitMaxHits;
     private javax.swing.JCheckBox jLimitMaxRecurse;
@@ -2079,13 +1590,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jMaxFileSize;
     private javax.swing.JSpinner jMaxHits;
     private javax.swing.JSpinner jMaxRecurse;
-    private javax.swing.JCheckBox jModifiedAfterCheck;
-    private javax.swing.JCheckBox jModifiedBeforeCheck;
     private javax.swing.JComboBox<String> jModifiedCombo;
-    private javax.swing.JPanel jModifiedDate;
-    private javax.swing.JPanel jModifiedPanel1;
-    private javax.swing.JPanel jModifiedPanel2;
-    private javax.swing.JCheckBox jMoreThanCheck;
     private javax.swing.JPanel jOptions;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel14;
@@ -2108,12 +1613,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox jStrictFilenameSearch;
     private javax.swing.JCheckBox jSubFolders;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JToolBar jToolBar4;
-    private javax.swing.JToolBar jToolBar5;
-    private javax.swing.JToolBar jToolBar6;
-    private javax.swing.JToolBar jToolBar7;
-    private javax.swing.JToolBar jToolBar8;
-    private javax.swing.JToolBar jToolBar9;
     private javax.swing.JRadioButton jUseContentRegex;
     private javax.swing.JRadioButton jUseContentSearch;
     private javax.swing.JRadioButton jUseFileGlobs;

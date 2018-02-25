@@ -16,6 +16,8 @@
  */
 package com.embeddediq.searchmonkey;
 
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,10 +26,14 @@ import java.util.Date;
  *
  * @author cottr
  */
-public final class FileDateEntry {
+public final class FileDateEntry implements Serializable {
+    @SerializedName("before")
     LocalDateTime before; // earlier than
+    @SerializedName("useBefore")
     boolean useBefore;
+    @SerializedName("after")
     LocalDateTime after; // later than
+    @SerializedName("useAfter")
     boolean useAfter;
 
     public void setAfter(Date date)

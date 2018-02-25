@@ -46,22 +46,6 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
 
         cal = new PopupCalendar();
         cal.getCalendar().addChangeListener(this);
-        
-        // Put a right-click menu on these
-        //this.jAfter.setComponentPopupMenu(cal);
-        //this.jBefore.setComponentPopupMenu(cal);
-        //this.jAfterSpinner.setComponentPopupMenu(jPopupMenu1);
-        //this.jAfterSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
-        //this.jAfterSpinner.setInheritsPopupMenu(true);
-        //this.jBeforeSpinner.setComponentPopupMenu(jPopupMenu1);
-        //this.jBeforeSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
-        //this.jBeforeSpinner.setInheritsPopupMenu(true);
-        //this.jPanel1.setComponentPopupMenu(jPopupMenu1);
-        
-        //jAfter.addMouseListener(new MyMouseAdapter(jAfter, jAfterSpinner));
-        //jBefore.addMouseListener(new MyMouseAdapter(jBefore, jBeforeSpinner));
-        
-        // this
     }
     
     public class MyMouseAdapter extends MouseAdapter {

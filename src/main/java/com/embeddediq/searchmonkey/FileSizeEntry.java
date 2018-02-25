@@ -16,14 +16,21 @@
  */
 package com.embeddediq.searchmonkey;
 
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
+
 /**
  *
  * @author cottr
  */
-public class FileSizeEntry {
+public class FileSizeEntry implements Serializable {
+    @SerializedName("minSize")
     long minSize; // Greater than
+    @SerializedName("useMinSize")
     boolean useMinSize;
+    @SerializedName("maxSize")
     long maxSize; // Less than
+    @SerializedName("useMaxSize")
     boolean useMaxSize;
 
     static public int getIndex(long val)
