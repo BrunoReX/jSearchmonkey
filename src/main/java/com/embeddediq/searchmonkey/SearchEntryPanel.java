@@ -769,20 +769,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jLookIn.setEditable(true);
         jLookIn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jLookIn.setToolTipText(bundle.getString("SearchEntryPanel.jLookIn.toolTipText")); // NOI18N
-        jLookIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jLookInActionPerformed(evt);
-            }
-        });
 
         jSubFolders.setSelected(true);
         jSubFolders.setText(bundle.getString("SearchEntryPanel.jSubFolders.text")); // NOI18N
         jSubFolders.setToolTipText(bundle.getString("SearchEntryPanel.jSubFolders.toolTipText")); // NOI18N
-        jSubFolders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSubFoldersActionPerformed(evt);
-            }
-        });
 
         jFileName.setEditable(true);
         jFileName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -955,37 +945,18 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
         jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
-        jFilesizeCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFilesizeComboActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText(bundle.getString("SearchEntryPanel.jLabel5.text")); // NOI18N
 
         jModifiedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jModifiedCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jModifiedComboActionPerformed(evt);
-            }
-        });
 
         jCreatedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jCreatedCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCreatedComboActionPerformed(evt);
-            }
-        });
 
         jLabel6.setText(bundle.getString("SearchEntryPanel.jLabel6.text")); // NOI18N
 
         jLabel7.setText(bundle.getString("SearchEntryPanel.jLabel7.text")); // NOI18N
 
-        jAccessedCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jAccessedComboActionPerformed(evt);
-            }
-        });
+        jAccessedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1519,10 +1490,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
     }
 
-    private void jLookInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLookInActionPerformed
-
-    }//GEN-LAST:event_jLookInActionPerformed
-
     private void jUseFileRegexStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jUseFileRegexStateChanged
         boolean sel = jUseFileRegex.isSelected();
         jPanel3.setVisible(sel);
@@ -1573,27 +1540,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private void jEnableFileTimeoutItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jEnableFileTimeoutItemStateChanged
         jFileTimeout.setEnabled(jEnableFileTimeout.isSelected());
     }//GEN-LAST:event_jEnableFileTimeoutItemStateChanged
-
-    private void jSubFoldersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSubFoldersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jSubFoldersActionPerformed
-
-    private void jFilesizeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFilesizeComboActionPerformed
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFilesizeComboActionPerformed
-
-    private void jModifiedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jModifiedComboActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jModifiedComboActionPerformed
-
-    private void jCreatedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatedComboActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCreatedComboActionPerformed
-
-    private void jAccessedComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAccessedComboActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jAccessedComboActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
