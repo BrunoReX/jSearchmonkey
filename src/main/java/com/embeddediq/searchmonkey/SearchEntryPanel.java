@@ -44,6 +44,7 @@ import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.ws.rs.NotSupportedException;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
 
 
@@ -77,39 +78,37 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
         
         // Add a browse button to the jCombobox
-        AddComboHandler(jLookIn, "<<BROWSE>>", () -> {
-            jLookIn.getModel().setSelectedItem(jLookIn.getItemAt(0));
-            // TODO - allow the item name to select which dialog is shown
-            String name = jLookIn.getName();
-            SelectLookInFolder();
-        });
-
-//        AddComboHandler(jFilesizeCombo, "<<Others>>", () -> {
+//        AddComboHandler(jLookIn, "<<BROWSE>>", () -> {
 //            jLookIn.getModel().setSelectedItem(jLookIn.getItemAt(0));
 //            // TODO - allow the item name to select which dialog is shown
 //            String name = jLookIn.getName();
-//            SelectFileSize();
+//            SelectLookInFolder();
 //        });
+        jLookIn.setModel(new SeparatorComboBoxModel(System.getProperty("user.home"), "Browse"));
+        jLookIn.setRenderer(new SeparatorComboBoxRenderer());
+        AdvancedDialog sd_folder = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jLookIn, "Enter file size");
+        jLookIn.addActionListener(new SeparatorComboBoxListener(jLookIn, sd_folder));
+
         // Creating a custom class for the JComboBox
         jFilesizeCombo.setModel(new SeparatorComboBoxModel(new FileSizeEntry(), "Other"));
         jFilesizeCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd_not_time = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
+        AdvancedDialog sd_not_time = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
         jFilesizeCombo.addActionListener(new SeparatorComboBoxListener(jFilesizeCombo, sd_not_time));
         
         // Creating a custom class for the JComboBox
         jCreatedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jCreatedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd3 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date", new FileDatePanel());
+        AdvancedDialog sd3 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date", new FileDatePanel());
         jCreatedCombo.addActionListener(new SeparatorComboBoxListener(jCreatedCombo, sd3));
         // Creating a custom class for the JComboBox
         jModifiedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jModifiedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd1 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date", new FileDatePanel());
+        AdvancedDialog sd1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date", new FileDatePanel());
         jModifiedCombo.addActionListener(new SeparatorComboBoxListener(jModifiedCombo, sd1));
         // Creating a custom class for the JComboBox
         jAccessedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date", new FileDatePanel());
+        AdvancedDialog sd = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date", new FileDatePanel());
         jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
                 
         // Restore the settings
@@ -129,23 +128,32 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     
     class SeparatorComboBoxModel extends DefaultComboBoxModel
     {
-        SelectDate callback;
+        //private AdvancedDialog callback;
+        private final int firstEntry;
 
-        SeparatorComboBoxModel(Object donotcare, String button)
+        SeparatorComboBoxModel(Object fixedEntry, String button)
         {
             super(new Object[] {
-                donotcare,
                 new JSeparator(JSeparator.HORIZONTAL),
                 new JButton(button)});
+            if (fixedEntry != null) {
+                super.insertElementAt(fixedEntry, 0);
+            }
+            firstEntry = (fixedEntry != null) ? 1 : 0;
+        }
+
+        SeparatorComboBoxModel(String button)
+        {
+            this(null, button);
         }
         
         // Replace all entries with this new list
         public void setEntries(List<Object> items)
         {
             int count = super.getSize();
-            if (count > 3)
+            if (count > (2 + firstEntry))
             {
-                for (int i=count-3; i>0; i--)
+                for (int i=count-3; i>=firstEntry; i--)
                 {
                     super.removeElementAt(i);
                 }
@@ -153,17 +161,17 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             for (int i = items.size(); --i >= 0;)
             {
                 // Skip the first entry
-                super.insertElementAt(items.get(i), 1);
+                super.insertElementAt(items.get(i), firstEntry);
             }
         }
         
         public List<Object> getEntries()
         {
             int count = super.getSize();
-            if (count <= 3) return new ArrayList<>(); // Empty list
+            if (count <= (2 + firstEntry)) return new ArrayList<>(); // Empty list
             
-            List<Object> items = new ArrayList<>(count - 3);
-            for (int i=1; i<count-2; i++) {
+            List<Object> items = new ArrayList<>(count - 2 - firstEntry);
+            for (int i=firstEntry; i<count-2; i++) {
                 items.add(super.getElementAt(i));
             }
             return items;
@@ -176,9 +184,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         {
             // Ignore first and last two entries
             int count = super.getSize();
-            if (count > limit + 3)
+            if (count > (limit + 2 + firstEntry))
             {
-                for (int i=(count - 3); i>limit; i--)
+                for (int i=(count - 3); i>=(firstEntry + limit); i--)
                 {
                     super.removeElementAt(i);
                 }
@@ -193,13 +201,13 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             // if (!(val instanceof FileDateEntry) && !(val instanceof FileSizeEntry)) return;
             
             int idx = super.getIndexOf(val);
-            if (idx == 0) return; // Ignore the first entry
+            if ((idx >= 0) && (idx < firstEntry)) return; // Ignore the first entry
             if (idx != -1)
             {
                 super.removeElementAt(idx);
             }
             // Skip first entry
-            super.insertElementAt(val, 1);
+            super.insertElementAt(val, firstEntry);
         }
 
 //        @Override
@@ -266,10 +274,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Object oldItem;
         Object oldValue;
         // Runnable callback;
-        SelectDate callback;
+        AdvancedDialog callback;
 
-        SeparatorComboBoxListener(JComboBox combobox, SelectDate callback) { // Frame parent, JComboBox combobox, String msg) {
-            //callback = new SelectDate(parent, combobox, msg);
+        SeparatorComboBoxListener(JComboBox combobox, AdvancedDialog callback) { // Frame parent, JComboBox combobox, String msg) {
+            //callback = new AdvancedDialog(parent, combobox, msg);
             this.combobox = combobox;
             this.callback = callback;
             combobox.setSelectedIndex(0);
@@ -301,21 +309,22 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
     }
     
-    private void AddComboHandler(JComboBox item, String browse, Runnable callback)
-    {
-        // Add a browse button to the jCombobox
-        // final String browse = txt; // "<<BROWSE>>";
-        item.addItem( browse );
-        item.addItemListener((ItemEvent e) -> {
-            if ( e.getStateChange() == ItemEvent.SELECTED)
-            {
-                if (browse.equals( e.getItem())) {
-                    // Get last selected..
-                    SwingUtilities.invokeLater(callback);
-                }
-            }
-        });
-    }
+    
+//    private void AddComboHandler(JComboBox item, String browse, Runnable callback)
+//    {
+//        // Add a browse button to the jCombobox
+//        // final String browse = txt; // "<<BROWSE>>";
+//        item.addItem( browse );
+//        item.addItemListener((ItemEvent e) -> {
+//            if ( e.getStateChange() == ItemEvent.SELECTED)
+//            {
+//                if (browse.equals( e.getItem())) {
+//                    // Get last selected..
+//                    SwingUtilities.invokeLater(callback);
+//                }
+//            }
+//        });
+//    }
     
     int maxCombo = 10;
     private String getSelectedItem(JComboBox jCombo)
@@ -412,10 +421,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         // Get look in folder
         req.lookIn = new ArrayList<>();
-        Object folder = getSelectedItem(jLookIn);
-        if (folder.getClass().equals(String.class))
+        Object folder = getSelectedItem2(jLookIn);
+        if (folder instanceof String) // .getClass().equals(File.class))
         {
-            strItem = (String)folder;
+            strItem = (String)((String) folder);
             req.lookIn.add(Paths.get(strItem));
         }
         else if (folder.getClass().equals(List.class))
@@ -590,8 +599,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             try{
                 if (def instanceof FileDateEntry[]) {
                     items = g.fromJson(json, new TypeToken<ArrayList<FileDateEntry>>() {}.getType());
-                } else {
+                } else if (def instanceof FileSizeEntry[]) {
                     items = g.fromJson(json, new TypeToken<ArrayList<FileSizeEntry>>() {}.getType());
+                } else { //if (def instanceof String[]) {
+                    items = g.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
                 }
             } catch (JsonSyntaxException ex)
             {
@@ -616,7 +627,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
     public void Save() throws SecurityException
     {
-        Save("LookIn", jLookIn);
+        Save2("LookIn", jLookIn);
         Save("FileName", jFileName);
         Save("FileNameRegex", jFileName1);
         prefs.putBoolean("ContainingRegexTextToggle", jCheckBox2.isSelected());
@@ -663,14 +674,13 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         boolean enabled;
 
         // Basic search params
-        String home = System.getProperty("user.home");
         Restore("FileName", jFileName, new String[] {"*.txt", "*.[c|h]"});
         Restore("FileNameRegex", jFileName1, new String[] {".*txt", ".*[c|h]"});
         jCheckBox2.setSelected(prefs.getBoolean("ContainingRegexTextToggle", false));
         Restore("ContainingRegexText", jContainingText, new String[] {});
         jCheckBox3.setSelected(prefs.getBoolean("ContainingTextToggle", false));
         Restore("ContainingText", jContainingText1, new String[] {});
-        Restore("LookIn", jLookIn, new String[] {home});
+        Restore2("LookIn", jLookIn, new String[] {});
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
         Restore2("FileSizeCombo", jFilesizeCombo, new FileSizeEntry[] {});
@@ -1491,16 +1501,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         //Stop();
     }//GEN-LAST:event_jStopButtonActionPerformed
 
-    private void SelectLookInFolder()
-    {
-        jFileChooser1.setApproveButtonText("OK");
-        int ret = jFileChooser1.showOpenDialog(this);
-        if (ret == JFileChooser.APPROVE_OPTION)
-        {
-            File fname = jFileChooser1.getSelectedFile();
-            jLookIn.getModel().setSelectedItem(fname.getPath());
-        }
-    }
 //    private void SelectFileSize()
 //    {
 //        JOptionPane frame = new JOptionPane("Enter file size", JOptionPane.PLAIN_MESSAGE);
@@ -1523,8 +1523,18 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 //            jFilesizeCombo.getModel().setSelectedItem(entry.toString());
 //        }
 //    }
+//    private void SelectLookInFolder()
+//    {
+//        jFileChooser1.setApproveButtonText("OK");
+//        int ret = jFileChooser1.showOpenDialog(this);
+//        if (ret == JFileChooser.APPROVE_OPTION)
+//        {
+//            File fname = jFileChooser1.getSelectedFile();
+//            jLookIn.getModel().setSelectedItem(fname.getPath());
+//        }
+//    }
     
-    class SelectDate implements Runnable {
+    class AdvancedDialog implements Runnable {
         // this.JPanel
         private final JPanel panel;
         private Object data;
@@ -1532,12 +1542,17 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         private final JComboBox jCombo;
         private final Frame parent;
 
-        public SelectDate(Frame parent, JComboBox jCombo, String msg, JPanel panel)
+        public AdvancedDialog(Frame parent, JComboBox jCombo, String msg, JPanel panel)
         {
             this.parent = parent; //(Frame)SwingUtilities.getWindowAncestor(this)
             this.jCombo = jCombo;
             this.msg = msg;
             this.panel = panel;
+        }
+        
+        public AdvancedDialog(Frame parent, JComboBox jCombo, String msg)
+        {
+            this(parent, jCombo, msg, null);
         }
         
         public void setData(Object _data)
@@ -1548,39 +1563,51 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         
         @Override
         public void run() {
-            JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
-            //FileDatePanel panel = new FileDatePanel();
-            if (panel instanceof FileDatePanel)
+            if (panel != null)
             {
-                ((FileDatePanel)panel).set((FileDateEntry)data);
-            } else { // if (panel instanceof FileSizePanel) {
-                ((FileSizePanel)panel).set((FileSizeEntry)data);
-            }
-            //panel.setInheritsPopupMenu(true);
-            //frame.setInheritsPopupMenu(true);
-
-            frame.setMessage(panel);
-            frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-            frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
-            frame.setMinimumSize(new Dimension(0, 0));
-            frame.setPreferredSize(new Dimension(450, 300));
-            JDialog dlg = frame.createDialog(parent, msg);
-            //dlg.setContentPane(frame);
-            dlg.pack();
-            dlg.setVisible(true);
-            Object ret = frame.getValue();
-
-            if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
-            {
-                Object entry;
+                JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
+                //FileDatePanel panel = new FileDatePanel();
                 if (panel instanceof FileDatePanel)
                 {
-                    entry = ((FileDatePanel)panel).get();
+                    ((FileDatePanel)panel).set((FileDateEntry)data);
                 } else { // if (panel instanceof FileSizePanel) {
-                    entry = ((FileSizePanel)panel).get();
-                    // ((FileSizePanel)panel).set((FileSizeEntry)data);
+                    ((FileSizePanel)panel).set((FileSizeEntry)data);
                 }
-                jCombo.getModel().setSelectedItem(entry);
+                //panel.setInheritsPopupMenu(true);
+                //frame.setInheritsPopupMenu(true);
+
+                frame.setMessage(panel);
+                frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+                frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
+                frame.setMinimumSize(new Dimension(0, 0));
+                frame.setPreferredSize(new Dimension(450, 300));
+                JDialog dlg = frame.createDialog(parent, msg);
+                //dlg.setContentPane(frame);
+                dlg.pack();
+                dlg.setVisible(true);
+                Object ret = frame.getValue();
+
+                if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
+                {
+                    Object entry;
+                    if (panel instanceof FileDatePanel)
+                    {
+                        entry = ((FileDatePanel)panel).get();
+                    } else { // if (panel instanceof FileSizePanel) {
+                        entry = ((FileSizePanel)panel).get();
+                        // ((FileSizePanel)panel).set((FileSizeEntry)data);
+                    }
+                    jCombo.getModel().setSelectedItem(entry);
+                }
+            } else {
+                jFileChooser1.setApproveButtonText("OK");
+                jFileChooser1.setSelectedFile(new File((String)data));
+                int ret = jFileChooser1.showOpenDialog(parent);
+                if (ret == JFileChooser.APPROVE_OPTION)
+                {
+                    File fname = jFileChooser1.getSelectedFile();
+                    jLookIn.getModel().setSelectedItem(fname.getPath());
+                }
             }
         }
     }
