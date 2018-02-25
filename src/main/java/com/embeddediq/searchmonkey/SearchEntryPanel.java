@@ -714,7 +714,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jStartButton = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
         jStopButton = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jOptions = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -1058,9 +1057,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jPanel5.add(jStopButton);
 
         jSearch.add(jPanel5);
-
-        jComboBox1.setEditable(true);
-        jSearch.add(jComboBox1);
 
         jScrollPane1.setViewportView(jSearch);
 
@@ -1607,7 +1603,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jBasicSearch;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jContainingText;
     private javax.swing.JComboBox<String> jContainingText1;
     private javax.swing.JComboBox<String> jCreatedCombo;
