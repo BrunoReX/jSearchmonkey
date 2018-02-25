@@ -17,12 +17,9 @@
 package com.embeddediq.searchmonkey;
 
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -51,23 +48,6 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         this.jAfterSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
         this.jBeforeSpinner.getEditor().setComponentPopupMenu(jPopupMenu1);
     }
-    
-//    public class MyMouseAdapter extends MouseAdapter {
-//        JButton jButton;
-//        JSpinner link;
-//        public MyMouseAdapter(JButton jButton, JSpinner link)
-//        {
-//           //this.popupCalendar = popupCalendar;
-//            this.jButton = jButton;
-//            this.link = link;
-//        }
-//        
-//        @Override
-//        public void mousePressed(MouseEvent e)
-//        {
-//            popupCalendar.show(jButton, link);
-//        }
-//    }
     
     private Date getDate(int interval, int amount)
     {
@@ -320,6 +300,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
             panel.setDate((Date)link.getValue());
             this.show(jButton, 0, jButton.getHeight());
         }
+        
         public void updateDate()
         {
             if (popup_link == null) return;

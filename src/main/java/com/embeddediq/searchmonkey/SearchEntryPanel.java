@@ -16,13 +16,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,11 +40,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
-import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
-import org.apache.poi.hpsf.Filetime;
 
 
 // Note to self - here is the NIMBUS Default Look and Feel
