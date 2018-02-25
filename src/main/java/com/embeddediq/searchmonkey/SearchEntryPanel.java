@@ -88,11 +88,16 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jLookIn.addActionListener(new SeparatorComboBoxListener(jLookIn, sd_folder));
 
         // Creating a custom class for the JComboBox
+        jFileTypeCombo.setModel(new SeparatorComboBoxModel(new FileTypeEntry(), "Other"));
+        jFileTypeCombo.setRenderer(new SeparatorComboBoxRenderer());
+        AdvancedDialog sd_not_time = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFileTypeCombo, "Enter file type", new FileTypePanel());
+        jFileTypeCombo.addActionListener(new SeparatorComboBoxListener(jFileTypeCombo, sd_not_time));
+        
         jFilesizeCombo.setModel(new SeparatorComboBoxModel(new FileSizeEntry(), "Other"));
         jFilesizeCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd_not_time = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
-        jFilesizeCombo.addActionListener(new SeparatorComboBoxListener(jFilesizeCombo, sd_not_time));
-        
+        AdvancedDialog sd_not_time1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
+        jFilesizeCombo.addActionListener(new SeparatorComboBoxListener(jFilesizeCombo, sd_not_time1));
+
         // Creating a custom class for the JComboBox
         jCreatedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jCreatedCombo.setRenderer(new SeparatorComboBoxRenderer());
@@ -586,6 +591,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         
         prefs.putBoolean("LookInSubFolders", jSubFolders.isSelected());
 
+        Save2("FileTypeCombo", jFileTypeCombo);
         Save2("FileSizeCombo", jFilesizeCombo);
 
         Save2("FileModifiedCombo", jModifiedCombo);
@@ -632,7 +638,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Restore2("LookIn", jLookIn, new String[] {});
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
-        Restore2("FileSizeCombo", jFilesizeCombo, new FileSizeEntry[] {});
+        Restore2("FileTypeCombo", jFilesizeCombo, new FileSizeEntry[] {});
+        Restore2("FileSizeCombo", jFilesizeCombo11, new FileSizeEntry[] {});
 
         Restore2("FileModifiedCombo", jModifiedCombo, new FileDateEntry[] {}); // Empty list
         Restore2("FileCreatedCombo", jCreatedCombo, new FileDateEntry[] {}); // Empty list
@@ -703,13 +710,15 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jCheckBox3 = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jFilesizeCombo = new javax.swing.JComboBox<>();
+        jFileTypeCombo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jModifiedCombo = new javax.swing.JComboBox<>();
         jCreatedCombo = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jAccessedCombo = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jFilesizeCombo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jStartButton = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
@@ -944,7 +953,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
-        jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
+        jFileTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
 
         jLabel5.setText(bundle.getString("SearchEntryPanel.jLabel5.text")); // NOI18N
 
@@ -958,6 +967,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         jAccessedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
 
+        jLabel9.setText(bundle.getString("SearchEntryPanel.jLabel9.text")); // NOI18N
+
+        jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -968,12 +981,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     .addComponent(jLabel7)
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 262, Short.MAX_VALUE)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 262, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -983,6 +998,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
+                    .addComponent(jFileTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1560,6 +1579,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jFileName;
     private javax.swing.JComboBox<String> jFileName1;
     private javax.swing.JSpinner jFileTimeout;
+    private javax.swing.JComboBox<String> jFileTypeCombo;
     private javax.swing.JComboBox<String> jFilesizeCombo;
     private javax.swing.JCheckBox jIgnoreContentCase;
     private javax.swing.JCheckBox jIgnoreFilenameCase;
@@ -1575,6 +1595,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JCheckBox jLimitMaxFileSize;
     private javax.swing.JCheckBox jLimitMaxHits;
     private javax.swing.JCheckBox jLimitMaxRecurse;
