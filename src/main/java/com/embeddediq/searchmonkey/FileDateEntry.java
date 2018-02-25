@@ -30,17 +30,6 @@ public final class FileDateEntry {
     LocalDateTime after; // later than
     boolean useAfter;
 
-//    public FileDateEntry()
-//    {
-//        this(null, null);
-//    }
-//    
-//    public FileDateEntry(Date before, Date after)
-//    {
-//        setBefore(before);
-//        setAfter(after);
-//    }
-    
     public void setAfter(Date date)
     {
         useAfter = (date != null);

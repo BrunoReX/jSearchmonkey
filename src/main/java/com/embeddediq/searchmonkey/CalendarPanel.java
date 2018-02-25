@@ -17,7 +17,6 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
@@ -88,9 +87,6 @@ public class CalendarPanel extends javax.swing.JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
-            //Cells are by default rendered as a JLabel.
-            //JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-
             Calendar now = Calendar.getInstance();
             Calendar c = (Calendar)now.clone();
             c.setTime((Date)value);
@@ -121,7 +117,7 @@ public class CalendarPanel extends javax.swing.JPanel {
             
             if (row == hoverRow && col == hoverColumn)
             {
-                // Invert colours
+                // Invert colours on mouse hover
                 Color tmp = this.getBackground();
                 this.setBackground(this.getForeground());
                 this.setForeground(tmp);
@@ -136,13 +132,9 @@ public class CalendarPanel extends javax.swing.JPanel {
     Date date;
     public void setDate(Date date)
     {
-        // this.date = date;
         calendar.setTime(date);
         this.date = date;
         UpdateCalendar();
-        //int count = calendar - baseVal;
-        //jTable1.getColumnModel().getSelectionModel().addSelectionInterval(, WIDTH);
-        //TODO - select the cell after it has been chosen
     }
 
     private void setDate(int interval, int amount)
@@ -188,7 +180,6 @@ public class CalendarPanel extends javax.swing.JPanel {
         // Always clear the selection first
         jCalendar.clearSelection();
         jCalendar.getSelectionModel().clearSelection();
-        // jCalendar.changeSelection(-1, -1, false, false);
 
         monthView = (Calendar)calendar.clone();
         int fd = monthView.getFirstDayOfWeek();
@@ -513,31 +504,23 @@ public class CalendarPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPrevActionPerformed
-        this.jCalendar.clearSelection();
         calendar.add(Calendar.MONTH, -1);
         UpdateCalendar();
-        //updateDate();
     }//GEN-LAST:event_jPrevActionPerformed
 
     private void jNextYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNextYearActionPerformed
-        this.jCalendar.clearSelection();
         calendar.add(Calendar.YEAR, 1);
         UpdateCalendar();
-        //updateDate();
     }//GEN-LAST:event_jNextYearActionPerformed
 
     private void jNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNextActionPerformed
-        this.jCalendar.clearSelection();
         calendar.add(Calendar.MONTH, 1);
         UpdateCalendar();
-        //updateDate();
     }//GEN-LAST:event_jNextActionPerformed
 
     private void jPrevYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPrevYearActionPerformed
-        this.jCalendar.clearSelection();
         calendar.add(Calendar.YEAR, -1);
         UpdateCalendar();
-        //updateDate();
     }//GEN-LAST:event_jPrevYearActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
