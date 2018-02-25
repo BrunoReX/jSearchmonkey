@@ -21,7 +21,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +38,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
@@ -91,26 +91,25 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 //            SelectFileSize();
 //        });
         // Creating a custom class for the JComboBox
-        jFilesizeCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jFilesizeCombo.setModel(new SeparatorComboBoxModel(new FileSizeEntry(), "Other"));
         jFilesizeCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd_not_time = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size");
+        SelectDate sd_not_time = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
         jFilesizeCombo.addActionListener(new SeparatorComboBoxListener(jFilesizeCombo, sd_not_time));
-
         
         // Creating a custom class for the JComboBox
-        jCreatedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jCreatedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jCreatedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd3 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date");
+        SelectDate sd3 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date", new FileDatePanel());
         jCreatedCombo.addActionListener(new SeparatorComboBoxListener(jCreatedCombo, sd3));
         // Creating a custom class for the JComboBox
-        jModifiedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jModifiedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jModifiedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd1 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date");
+        SelectDate sd1 = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date", new FileDatePanel());
         jModifiedCombo.addActionListener(new SeparatorComboBoxListener(jModifiedCombo, sd1));
         // Creating a custom class for the JComboBox
-        jAccessedCombo.setModel(new SeparatorComboBoxModel("Other"));
+        jAccessedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date");
+        SelectDate sd = new SelectDate((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date", new FileDatePanel());
         jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
                 
         // Restore the settings
@@ -132,10 +131,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     {
         SelectDate callback;
 
-        SeparatorComboBoxModel(String button)
+        SeparatorComboBoxModel(Object donotcare, String button)
         {
             super(new Object[] {
-                new FileDateEntry(),
+                donotcare,
                 new JSeparator(JSeparator.HORIZONTAL),
                 new JButton(button)});
         }
@@ -191,7 +190,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         // Excluding the last two entries (Button + separator)
         public void addOrUpdateEntry(Object val)
         {
-            if (!(val instanceof FileDateEntry)) return;
+            // if (!(val instanceof FileDateEntry) && !(val instanceof FileSizeEntry)) return;
             
             int idx = super.getIndexOf(val);
             if (idx == 0) return; // Ignore the first entry
@@ -274,17 +273,17 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             this.combobox = combobox;
             this.callback = callback;
             combobox.setSelectedIndex(0);
-            oldItem = combobox.getSelectedItem();
+            oldItem = combobox.getModel().getSelectedItem();
             oldValue = oldItem;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Object selectedItem = combobox.getSelectedItem();
+            Object selectedItem = combobox.getModel().getSelectedItem();
             if (selectedItem instanceof JButton)
             {
                combobox.setSelectedItem(oldItem);
-               this.callback.setData((FileDateEntry)oldValue);
+               this.callback.setData(oldValue);
                SwingUtilities.invokeLater(callback);
             }    
             else if (selectedItem instanceof JSeparator)
@@ -353,10 +352,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     {
         
         //String val = (String)jCombo.getSelectedItem();
-        Object val = jCombo.getSelectedItem();
+        SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
+        Object val = model.getSelectedItem();
         if (val != null)
         {
-            SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
 
             // Update the combobox or refresh the ordering
             jCombo.setSelectedIndex(-1); // Deselect all
@@ -453,21 +452,25 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
         
 //        // TODO - switch config to using FileSizeEntry directly
-//        Object fsize = getSelectedItem(jFilesizeCombo);
-//        // FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
-//        if (fsize.useMinSize)
-//        {
-//            req.greaterThan = fsize.minSize;
-//        }
-//        if (fsize.useMaxSize)
-//        {
-//            req.lessThan = fsize.maxSize;
-//        }
-//        // If max size is not set, then use the built in override
-//        // TODO - remove this override..
-//        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
-//            req.lessThan = req.maxFileSize;
-//        }
+        Object fsize = getSelectedItem2(jFilesizeCombo);
+        if (fsize != null)
+        {
+            FileSizeEntry entry = (FileSizeEntry)fsize;
+            // FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
+            if (entry.useMinSize)
+            {
+                req.greaterThan = entry.minSize;
+            }
+            if (entry.useMaxSize)
+            {
+                req.lessThan = entry.maxSize;
+            }
+        }
+        // If max size is not set, then use the built in override
+        // TODO - remove this override..
+        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
+            req.lessThan = req.maxFileSize;
+        }
         
         Object modified = getSelectedItem2(jModifiedCombo);
         if (modified != null)
@@ -534,10 +537,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
         
         Object item = model.getSelectedItem();
-        if (model.getIndexOf(item) == -1) // If item is not in list, then add
+        if (item != null && model.getIndexOf(item) == -1) // If item is not in list, then add
         {
             model.addOrUpdateEntry(model.getSelectedItem()); // Lock in the current item before saving
-           jCombo.setSelectedItem(item); // And select it
+            jCombo.setSelectedItem(item); // And select it
         }
         List<Object> items = model.getEntries();
         String json = g.toJson(items);
@@ -1498,37 +1501,38 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             jLookIn.getModel().setSelectedItem(fname.getPath());
         }
     }
-    private void SelectFileSize()
-    {
-        JOptionPane frame = new JOptionPane("Enter file size", JOptionPane.PLAIN_MESSAGE);
-        
-        FileSizePanel panel = new FileSizePanel();
-        panel.set(new FileSizeEntry());
-        frame.setMessage(panel);
-        frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-        frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
-        frame.setMinimumSize(new Dimension(0, 0));
-        frame.setPreferredSize(new Dimension(450, 300));
-        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter file size");
-        dlg.pack();
-        dlg.setVisible(true);
-        Object ret = frame.getValue();
-
-        if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
-        {
-            FileSizeEntry entry = panel.get();
-            jFilesizeCombo.getModel().setSelectedItem(entry.toString());
-        }
-    }
+//    private void SelectFileSize()
+//    {
+//        JOptionPane frame = new JOptionPane("Enter file size", JOptionPane.PLAIN_MESSAGE);
+//        
+//        FileSizePanel panel = new FileSizePanel();
+//        panel.set(new FileSizeEntry());
+//        frame.setMessage(panel);
+//        frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+//        frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
+//        frame.setMinimumSize(new Dimension(0, 0));
+//        frame.setPreferredSize(new Dimension(450, 300));
+//        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter file size");
+//        dlg.pack();
+//        dlg.setVisible(true);
+//        Object ret = frame.getValue();
+//
+//        if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
+//        {
+//            FileSizeEntry entry = panel.get();
+//            jFilesizeCombo.getModel().setSelectedItem(entry.toString());
+//        }
+//    }
     
-    class SelectDate<T> implements Runnable {
-        private T panel;
+    class SelectDate implements Runnable {
+        // this.JPanel
+        private final JPanel panel;
         private Object data;
         private final String msg;
         private final JComboBox jCombo;
         private final Frame parent;
 
-        public SelectDate(Frame parent, JComboBox jCombo, String msg, T panel)
+        public SelectDate(Frame parent, JComboBox jCombo, String msg, JPanel panel)
         {
             this.parent = parent; //(Frame)SwingUtilities.getWindowAncestor(this)
             this.jCombo = jCombo;
@@ -1536,7 +1540,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             this.panel = panel;
         }
         
-        public void setData(FileDateEntry _data)
+        public void setData(Object _data)
         {
             this.data = _data;
             
@@ -1546,9 +1550,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         public void run() {
             JOptionPane frame = new JOptionPane(msg, JOptionPane.PLAIN_MESSAGE);
             //FileDatePanel panel = new FileDatePanel();
-            panel.set((FileDateEntry)data);
-            frame.setInheritsPopupMenu(true);
-            panel.setInheritsPopupMenu(true);
+            if (panel instanceof FileDatePanel)
+            {
+                ((FileDatePanel)panel).set((FileDateEntry)data);
+            } else { // if (panel instanceof FileSizePanel) {
+                ((FileSizePanel)panel).set((FileSizeEntry)data);
+            }
+            //panel.setInheritsPopupMenu(true);
+            //frame.setInheritsPopupMenu(true);
 
             frame.setMessage(panel);
             frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
@@ -1563,7 +1572,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
             if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
             {
-                Object entry = panel.get();
+                Object entry;
+                if (panel instanceof FileDatePanel)
+                {
+                    entry = ((FileDatePanel)panel).get();
+                } else { // if (panel instanceof FileSizePanel) {
+                    entry = ((FileSizePanel)panel).get();
+                    // ((FileSizePanel)panel).set((FileSizeEntry)data);
+                }
                 jCombo.getModel().setSelectedItem(entry);
             }
         }
