@@ -14,7 +14,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Paths;
@@ -44,7 +43,6 @@ import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.ws.rs.NotSupportedException;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
 
 
@@ -210,24 +208,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             super.insertElementAt(val, firstEntry);
         }
 
-//        @Override
-//        public Object getSelectedItem()
-//        {
-//            Object item = super.getSelectedItem();
-//            if (item == null) return null; // Nothing selected
-//            
-//            if (item instanceof FileDateEntry && !item.equals(new FileDateEntry())) // Don't care entry
-//            {
-//                int idx = super.getIndexOf(item);
-//                super.setSelectedIndex(-1); // Deselect all
-//                if (idx != -1)
-//                {
-//                    model.removeElementAt(idx);
-//                }
-//                
-//            }
-//            return item;
-//        }
     }
     
     class SeparatorComboBoxRenderer extends DefaultListCellRenderer // // JLabel implements ListCellRenderer // BasicComboBoxRenderer
@@ -308,23 +288,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-    
-//    private void AddComboHandler(JComboBox item, String browse, Runnable callback)
-//    {
-//        // Add a browse button to the jCombobox
-//        // final String browse = txt; // "<<BROWSE>>";
-//        item.addItem( browse );
-//        item.addItemListener((ItemEvent e) -> {
-//            if ( e.getStateChange() == ItemEvent.SELECTED)
-//            {
-//                if (browse.equals( e.getItem())) {
-//                    // Get last selected..
-//                    SwingUtilities.invokeLater(callback);
-//                }
-//            }
-//        });
-//    }
     
     int maxCombo = 10;
     private String getSelectedItem(JComboBox jCombo)
@@ -440,8 +403,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         
         // Get filename
         strItem = getSelectedItem(jUseFileRegex.isSelected() ? jFileName1 : jFileName);
-        //String prefix = (jUseFileRegex.isSelected() ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
-        //req.fileName = FileSystems.getDefault().getPathMatcher(prefix + strItem);
         req.fileNameText = strItem;
         
         // Get containing text
@@ -451,12 +412,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             if (strItem.length() > 0) // Is there a content match to make?
             {
                 req.containingText = strItem;
-//                int flags = 0;
-//                if (!req.flags.useContentRegex) flags |= Pattern.LITERAL;
-//                if (req.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
-//                //Pattern regex = Pattern.compile(strItem, flags);
-//                req.containingTextRegex = Pattern.compile(strItem, flags);
-                //req.containingText = new ContentMatch(regex);
             }
         }
         
@@ -465,7 +420,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         if (fsize != null)
         {
             FileSizeEntry entry = (FileSizeEntry)fsize;
-            // FileSizeEntry fsize = (FileSizeEntry)this.jFilesizeCombo.getSelectedItem();
             if (entry.useMinSize)
             {
                 req.greaterThan = entry.minSize;
@@ -474,11 +428,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             {
                 req.lessThan = entry.maxSize;
             }
-        }
-        // If max size is not set, then use the built in override
-        // TODO - remove this override..
-        if ((req.maxFileSize > 0) && (req.lessThan == 0)) {
-            req.lessThan = req.maxFileSize;
         }
         
         Object modified = getSelectedItem2(jModifiedCombo);
@@ -560,13 +509,13 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs.putInt(name + ".idx", idx);
     }
     
-    private void Save(String name, JSpinner jSpinner) throws SecurityException
-    {
-        Gson g = new Gson();
-        Object val = jSpinner.getValue();
-        String json = g.toJson(val);
-        prefs.put(name, json); // Add list of look in folders        
-    }
+//    private void Save(String name, JSpinner jSpinner) throws SecurityException
+//    {
+//        Gson g = new Gson();
+//        Object val = jSpinner.getValue();
+//        String json = g.toJson(val);
+//        prefs.put(name, json); // Add list of look in folders        
+//    }
     private final Preferences prefs;
     
     private void Restore(String name, JComboBox jCombo, Object def)
@@ -617,13 +566,13 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jCombo.setSelectedIndex(idx); // Select last item
     }    
     
-    private void Restore(String name, JSpinner jSpinner, Object def) throws SecurityException
-    {
-        Gson g = new Gson();
-        String json = prefs.get(name, g.toJson(def)); // Add list of look in folders        
-        Object val = g.fromJson(json, def.getClass());
-        jSpinner.setValue(val);
-    }
+//    private void Restore(String name, JSpinner jSpinner, Object def) throws SecurityException
+//    {
+//        Gson g = new Gson();
+//        String json = prefs.get(name, g.toJson(def)); // Add list of look in folders        
+//        Object val = g.fromJson(json, def.getClass());
+//        jSpinner.setValue(val);
+//    }
 
     public void Save() throws SecurityException
     {
@@ -1501,41 +1450,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         //Stop();
     }//GEN-LAST:event_jStopButtonActionPerformed
 
-//    private void SelectFileSize()
-//    {
-//        JOptionPane frame = new JOptionPane("Enter file size", JOptionPane.PLAIN_MESSAGE);
-//        
-//        FileSizePanel panel = new FileSizePanel();
-//        panel.set(new FileSizeEntry());
-//        frame.setMessage(panel);
-//        frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-//        frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
-//        frame.setMinimumSize(new Dimension(0, 0));
-//        frame.setPreferredSize(new Dimension(450, 300));
-//        JDialog dlg = frame.createDialog((Frame)SwingUtilities.getWindowAncestor(this), "Enter file size");
-//        dlg.pack();
-//        dlg.setVisible(true);
-//        Object ret = frame.getValue();
-//
-//        if (ret != null && ((Integer)ret).equals(JOptionPane.OK_OPTION))
-//        {
-//            FileSizeEntry entry = panel.get();
-//            jFilesizeCombo.getModel().setSelectedItem(entry.toString());
-//        }
-//    }
-//    private void SelectLookInFolder()
-//    {
-//        jFileChooser1.setApproveButtonText("OK");
-//        int ret = jFileChooser1.showOpenDialog(this);
-//        if (ret == JFileChooser.APPROVE_OPTION)
-//        {
-//            File fname = jFileChooser1.getSelectedFile();
-//            jLookIn.getModel().setSelectedItem(fname.getPath());
-//        }
-//    }
-    
     class AdvancedDialog implements Runnable {
-        // this.JPanel
         private final JPanel panel;
         private Object data;
         private final String msg;
@@ -1544,7 +1459,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         public AdvancedDialog(Frame parent, JComboBox jCombo, String msg, JPanel panel)
         {
-            this.parent = parent; //(Frame)SwingUtilities.getWindowAncestor(this)
+            this.parent = parent;
             this.jCombo = jCombo;
             this.msg = msg;
             this.panel = panel;
@@ -1573,8 +1488,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 } else { // if (panel instanceof FileSizePanel) {
                     ((FileSizePanel)panel).set((FileSizeEntry)data);
                 }
-                //panel.setInheritsPopupMenu(true);
-                //frame.setInheritsPopupMenu(true);
 
                 frame.setMessage(panel);
                 frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
@@ -1582,7 +1495,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 frame.setMinimumSize(new Dimension(0, 0));
                 frame.setPreferredSize(new Dimension(450, 300));
                 JDialog dlg = frame.createDialog(parent, msg);
-                //dlg.setContentPane(frame);
                 dlg.pack();
                 dlg.setVisible(true);
                 Object ret = frame.getValue();
@@ -1595,7 +1507,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                         entry = ((FileDatePanel)panel).get();
                     } else { // if (panel instanceof FileSizePanel) {
                         entry = ((FileSizePanel)panel).get();
-                        // ((FileSizePanel)panel).set((FileSizeEntry)data);
                     }
                     jCombo.getModel().setSelectedItem(entry);
                 }
