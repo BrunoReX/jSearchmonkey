@@ -21,16 +21,17 @@ The key features in this release are:-
 * Dates, when printed in the comboboxes, are now in local date format
 * Centred location of the wizards to the HMI
 * Title of the window set to Searchmonkey's tagline
+* Mime types dialog has been made larger to make it easier to scroll
+* Shortcuts (LNK) files are now ignored (user options)
 
 ##Known
 * In summary, the most recent file is not the most recent.
-* Shortcuts (LNK) files are not being ignored
 * File decode timeout (ms) should be moved to content search
 * Shortcut links on _About_ page do not work
-* Mime types are hard to scroll because the dialog is too small
 * Filename not restored after start up
 * Containing not restored after start up
 * Comboboxes can be filled with the same text multiple times
+* Restoring defaults does not reset the table columns + positions
 
 #IMPROVEMENTS
 
@@ -44,6 +45,8 @@ Search panel:
 * Accessed date: inverted range e.g. not between last week and last month
 * File Size Option: Inverted file range e.g. Greater than X OR less than Y
 * Filename search options: Remove limit max file size
+* Filename search options: Can now ignore common binary files
+* Filename search options: case insensitive search
 
 #TODO
 ##Work in progress
@@ -51,8 +54,6 @@ Search panel:
 * Mime Type Option: Wildcards in MIME types e.g. text/*, etc
 * Report current search parameters to the search summary
 * When performing a filename search (no content) show user message in the hits tab
-* Filename search options: Ignore binary files
-* Filename search options: case insensitive search
 * Results table: If number of hits exceeds the limit, then show this e.g. >999
 * Results table: Add file type icons, for known types
 * Folder search options: Hide/disable ignore case for Windows based systems

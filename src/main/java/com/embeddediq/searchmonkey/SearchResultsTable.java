@@ -68,6 +68,7 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jTable1.setDefaultRenderer(Object.class, new SearchMonkeyTableRenderer());
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setFillsViewportHeight(true);
+        jTable1.setRowHeight(28);
         jTable1.getColumn(SearchResult.COLUMN_NAMES[SearchResult.FLAGS]).setCellRenderer(new IconTableRenderer(jTable1.getRowHeight()-6));
         
         // Check to see if the Desktop().edit function is supported
@@ -450,6 +451,9 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
                         txtToolTip = "Normal file";
                     }
                     break;
+                case SearchResult.FILE_ICON: // Handle file icon
+                    setIcon(GetIcon((int)value));
+                    break;
                 case SearchResult.COUNT: // Handle Count
                     long count = (long)value;
                     if (count < 0L)
@@ -483,10 +487,62 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
                 setBackground(table.getBackground());
                 setForeground(table.getForeground());
             }
+            // this.set
 
             return this;
         }
     }
+    
+    public Icon GetIcon(int lookup)
+    {
+        return icons[lookup];
+    }
+    private final Icon[] icons = new Icon[] {
+        getScaledIcon(getClass().getResource("/images/Icons/icon-archive.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-audio.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-c.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-doc.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-drawing.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-font.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-h.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-htm.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-image.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-java.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-odb.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-odg.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-odp.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-ods.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-odt.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-pdf.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-ppt.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-spreadsheet.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-text-generic.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-unknown.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-video.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-word-processor.png"), 12),
+        getScaledIcon(getClass().getResource("/images/Icons/icon-xls.png"), 12),
+    };
+    
+    private Icon getScaledIcon(URL srcImg, int height) {
+        ImageIcon image = new ImageIcon(srcImg);
+
+        image.setImage(image.getImage());
+        //image.setImage(getScaledImage(image.getImage(), height));
+        return (Icon)image;
+    }
+//    private Image getScaledImage(Image srcImg, int height){
+//        int w = height * srcImg.getWidth(this) / srcImg.getHeight(this);
+//        BufferedImage resizedImg = new BufferedImage(w, height, BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D g2 = resizedImg.createGraphics();
+//
+//        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+//        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        g2.drawImage(srcImg, 0, 0, w, height, null);
+//        g2.dispose();
+//
+//        return resizedImg;
+//    }
     
     /**
      * This method is called from within the constructor to initialize the form.

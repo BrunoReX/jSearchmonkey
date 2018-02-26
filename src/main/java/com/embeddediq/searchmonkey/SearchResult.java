@@ -105,20 +105,21 @@ public class SearchResult {
      *
      */
     public final static String[] COLUMN_NAMES = new String[] {
-        "File", // 0
-        "Folder", // 1
-        "File size", // 2
-        "Count", // 3
-        "Last modified", // 4
-        "Created", // 5
-        "Last accessed", // 6
-        "Flags", // 7
-        "Extension", // 8
-        "Content Type", // 9
-        "Icon", // 10
+        "", // 0 = Icon
+        "File", // 1
+        "Folder", // 2
+        "File size", // 3
+        "Count", // 4
+        "Last modified", // 5
+        "Created", // 6
+        "Last accessed", // 7
+        "Flags", // 8
+        "Extension", // 9
+        "Content Type", // 10
     };
 
     public final static Class[] COLUMN_CLASSES = new Class[]  {
+        Integer.class, // Icon
         String.class,
         String.class,
         Long.class,
@@ -129,10 +130,10 @@ public class SearchResult {
         Integer.class,
         String.class,
         String.class,
-        Integer.class, // Icon
     };
 
     public final static Integer[] COLUMN_WIDTH = new Integer[]  {
+        24, /* File icon */
         200, /* Filename */
         400, /* Folder */
         100, /* File Size */
@@ -143,25 +144,25 @@ public class SearchResult {
         50, /* Flags */
         80, /* Extension */
         200, /* Content Type */
-        50, /* File icon */
     };
 
     // Forced enumeration of the column names
-    public final static int FILENAME = 0;
-    public final static int FOLDER = 1;
-    public final static int SIZE = 2;
-    public final static int COUNT = 3;
-    public final static int MODIFIED = 4;
-    public final static int CREATED = 5;
-    public final static int ACCESSED = 6;
-    public final static int FLAGS = 7;
-    public final static int EXTENSION = 8;
-    public final static int CONTENT_TYPE = 9;
-    public final static int FILE_ICON = 10; // ICON
+    public final static int FILE_ICON = 0; // ICON
+    public final static int FILENAME = 1;
+    public final static int FOLDER = 2;
+    public final static int SIZE = 3;
+    public final static int COUNT = 4;
+    public final static int MODIFIED = 5;
+    public final static int CREATED = 6;
+    public final static int ACCESSED = 7;
+    public final static int FLAGS = 8;
+    public final static int EXTENSION = 9;
+    public final static int CONTENT_TYPE = 10;
     
     public Object[] toArray()
     {
         Object[] def = new Object[] {
+            this.fileIcon,
             this.fileName,
             this.pathName,
             this.fileSize,
@@ -172,7 +173,6 @@ public class SearchResult {
             this.fileFlags,
             this.fileExtension,
             this.contentType,
-            this.fileIcon,
         };
         return def;
     }
@@ -256,10 +256,6 @@ public class SearchResult {
         return ICON_UNKNOWN;
     }
 
-    public Icon GetIcon(int lookup)
-    {
-        return icons[lookup];
-    }
     private static int ICON_ARCHIVE = 0;
     private static int ICON_AUDIO = 1;
     private static int ICON_C = 2;
@@ -284,51 +280,6 @@ public class SearchResult {
     private static int ICON_WORDPROC = 21;
     private static int ICON_XLS = 22;
     
-    private Icon[] icons = new Icon[] {
-        getScaledIcon(getClass().getResource("/images/Icons/icon-archive.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-audio.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-c.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-doc.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-drawing.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-font.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-h.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-htm.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-image.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-java.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-odb.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-odg.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-odp.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-ods.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-odt.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-pdf.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-ppt.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-spreadsheet.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-text-generic.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-unknown.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-video.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-word-processor.png"), 12),
-        getScaledIcon(getClass().getResource("/images/Icons/icon-xls.png"), 12),
-    };
-    
-    private Icon getScaledIcon(URL srcImg, int height) {
-        ImageIcon image = new ImageIcon(srcImg);
 
-        image.setImage(image.getImage());
-        //image.setImage(getScaledImage(image.getImage(), height));
-        return (Icon)image;
-    }
-//    private Image getScaledImage(Image srcImg, int height){
-//        int w = height * srcImg.getWidth(this) / srcImg.getHeight(this);
-//        BufferedImage resizedImg = new BufferedImage(w, height, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D g2 = resizedImg.createGraphics();
-//
-//        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-//        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//        g2.drawImage(srcImg, 0, 0, w, height, null);
-//        g2.dispose();
-//
-//        return resizedImg;
-//    }
 }
 
