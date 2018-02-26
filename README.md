@@ -47,6 +47,7 @@ Search panel:
 * Filename search options: Remove limit max file size
 * Filename search options: Can now ignore common binary files
 * Filename search options: case insensitive search
+* Results table: Added file type icons, for known types
 
 #TODO
 ##Work in progress
@@ -55,7 +56,6 @@ Search panel:
 * Report current search parameters to the search summary
 * When performing a filename search (no content) show user message in the hits tab
 * Results table: If number of hits exceeds the limit, then show this e.g. >999
-* Results table: Add file type icons, for known types
 * Folder search options: Hide/disable ignore case for Windows based systems
 * Folder search options: Add list of folders to skip e.g. .svn or .git etc
 * General options: Use power search check button

@@ -184,6 +184,7 @@ public class SearchResult {
         if (this.contentType.startsWith("application/"))
         {
             if (contentType.equals("application/zip") ||
+                    contentType.equals("application/x-zip") ||
                     contentType.equals("application/x-7z-compressed"))
                 return ICON_ARCHIVE;
             else if (contentType.equals("application/postscript") ||
@@ -208,7 +209,8 @@ public class SearchResult {
             else if (contentType.equals("application/vnd.ms-excel") ||
                     contentType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml"))
                 return ICON_XLS;
-            else if (contentType.equals("application/ms-word") || contentType.equals("application/vnd.ms-word") ||
+            else if (contentType.equals("application/ms-word") || contentType.equals("application/msword") || 
+                    contentType.equals("application/vnd.ms-word") || contentType.equals("application/vnd.msword") ||
                     contentType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml"))
                 return ICON_DOC;
             else if (contentType.equals("application/vnd.ms-powerpoint") ||
