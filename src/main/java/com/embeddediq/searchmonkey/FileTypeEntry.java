@@ -24,70 +24,40 @@ import java.io.Serializable;
  * @author cottr
  */
 public class FileTypeEntry implements Serializable {
-    @SerializedName("minSize")
-    long minSize; // Greater than
-    @SerializedName("useMinSize")
-    boolean useMinSize;
-    @SerializedName("maxSize")
-    long maxSize; // Less than
-    @SerializedName("useMaxSize")
-    boolean useMaxSize;
+    @SerializedName("isActive")
+    boolean isActive;
+    @SerializedName("mimeName")
+    String mimeName; // Less than
 
-    static public int getIndex(long val)
+    public FileTypeEntry(String name)
     {
-        int idx = 0;
-        while (val > 1024)
+        if (name != null && name.length() > 0)
         {
-            idx ++;
-            val /= 1024;
+            mimeName = name;
+            isActive = true;
         }
-        return idx;
+    }
+    public FileTypeEntry(Object clone)
+    {
+        if (clone != null && clone instanceof FileTypeEntry)
+        {
+            isActive = ((FileTypeEntry)clone).isActive;
+            mimeName = ((FileTypeEntry)clone).mimeName;
+        }
     }
 
+    public FileTypeEntry()
+    {
+        this(null);
+    }
+    
     @Override
     public String toString()
     {
-        String[] SCALAR = new String[]{
-            "Bytes",
-            "KBytes",
-            "MBytes",
-            "GBytes",
-            "TBytes",
-        };
-        String lessThan = null;
-        if (useMaxSize)
-        {
-            int idx = getIndex(maxSize);
-            lessThan = String.format("%.1f %s", 
-                    ((double)maxSize / Math.pow(1024, idx)),
-                    SCALAR[idx]);
-        }
-        String greaterThan = null;
-        if (useMinSize)
-        {
-            int idx = getIndex(minSize);
-            greaterThan = String.format("%.1f %s", 
-                    ((double)minSize / Math.pow(1024, idx)),
-                    SCALAR[idx]);
-        }
-        if (lessThan != null && greaterThan != null)
-        {
-            if (maxSize > minSize ) {
-                return String.format("Between %s and %s", greaterThan, lessThan);
-            } else if (maxSize < minSize ) {
-                return String.format("Greater than %s OR less than %s", greaterThan, lessThan);
-            } else {
-                return String.format("Exactly %s", greaterThan);
-            }
-        }
-        else if (lessThan != null)
-        {
-            return String.format("Less than %s", lessThan);
-            
-        } else if (greaterThan != null)
-        {
-            return String.format("Greater than %s", greaterThan);
-        }
-        return "Don't care";
+        if (!isActive) return "Don't care";
+        if (mimeName.length() > 30) return mimeName.substring(0, 30) + "...";
+        return mimeName;
     }
+    
+
 }

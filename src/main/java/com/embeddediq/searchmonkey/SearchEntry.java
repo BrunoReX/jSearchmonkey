@@ -30,6 +30,7 @@ public class SearchEntry {
     public long greaterThan; // <=0 is off, otherwise smaller than file size in bytes
     public Flags flags = new Flags();
     public Set<Path> ignoreFolderSet = new HashSet<>(); // Set of paths to ignore
+    public FileTypeEntry mime; // Use mime to search
 
     public class Flags {
         public boolean usePowerSearch; // Not sure what this does yet!!

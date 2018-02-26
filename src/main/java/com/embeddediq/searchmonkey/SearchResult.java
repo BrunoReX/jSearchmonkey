@@ -19,7 +19,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author cottr
  */
 public class SearchResult {
-    public SearchResult(Path file, BasicFileAttributes attrs, long matchCount)
+    public SearchResult(Path file, BasicFileAttributes attrs, long matchCount, String mimeType)
     {
         fileName = FilenameUtils.getName(file.toString());
         fileExtension = FilenameUtils.getExtension(fileName);
@@ -32,16 +32,16 @@ public class SearchResult {
         if (attrs.isSymbolicLink()) fileFlags |= SYMBOLIC_LINK;
         try {
             if (Files.isHidden(file)) fileFlags |= HIDDEN_FILE;
-            contentType = Files.probeContentType(file);
+            contentType = mimeType != null ? mimeType : Files.probeContentType(file);
         } catch (IOException ex) {
             Logger.getLogger(SearchResult.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.matchCount = matchCount;
     }
 
-    public SearchResult(Path file, BasicFileAttributes attrs)
+    public SearchResult(Path file, BasicFileAttributes attrs, String mimeType)
     {
-        this(file, attrs, 0);
+        this(file, attrs, 0, mimeType);
     }
     
     public Object get(int column)

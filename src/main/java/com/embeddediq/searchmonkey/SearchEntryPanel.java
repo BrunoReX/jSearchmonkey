@@ -434,7 +434,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 req.lessThan = entry.maxSize;
             }
         }
+
+        Object ftype = getSelectedItem2(jFileTypeCombo);
+        if (ftype != null)
+        {
+            req.mime = new FileTypeEntry(ftype);
+        }
         
+                
         Object modified = getSelectedItem2(jModifiedCombo);
         if (modified != null)
         {
@@ -555,6 +562,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     items = g.fromJson(json, new TypeToken<ArrayList<FileDateEntry>>() {}.getType());
                 } else if (def instanceof FileSizeEntry[]) {
                     items = g.fromJson(json, new TypeToken<ArrayList<FileSizeEntry>>() {}.getType());
+                } else if (def instanceof FileTypeEntry[]) {
+                    items = g.fromJson(json, new TypeToken<ArrayList<FileTypeEntry>>() {}.getType());
                 } else { //if (def instanceof String[]) {
                     items = g.fromJson(json, new TypeToken<ArrayList<String>>() {}.getType());
                 }
@@ -638,7 +647,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         Restore2("LookIn", jLookIn, new String[] {});
         jSubFolders.setSelected(prefs.getBoolean("LookInSubFolders", true));
         
-        Restore2("FileTypeCombo", jFileTypeCombo, new FileSizeEntry[] {});
+        Restore2("FileTypeCombo", jFileTypeCombo, new FileTypeEntry[] {});
         Restore2("FileSizeCombo", jFilesizeCombo, new FileSizeEntry[] {});
 
         Restore2("FileModifiedCombo", jModifiedCombo, new FileDateEntry[] {}); // Empty list
@@ -922,7 +931,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLookIn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jBasicSearchLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addContainerGap()
                         .addComponent(jSubFolders)))
                 .addContainerGap())
         );
@@ -1493,8 +1502,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     if (panel instanceof FileDatePanel)
                     {
                         entry = ((FileDatePanel)panel).get();
-                    } else { // if (panel instanceof FileSizePanel) {
+                    } else if (panel instanceof FileSizePanel) {
                         entry = ((FileSizePanel)panel).get();
+                    } else {
+                        entry = ((FileTypePanel)panel).get();
                     }
                     jCombo.getModel().setSelectedItem(entry);
                 }

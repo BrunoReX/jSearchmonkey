@@ -68,6 +68,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
     @Override
     public FileVisitResult visitFile(Path file,
             BasicFileAttributes attrs) throws IOException, FileNotFoundException {
+        String mimeType = null;
         summary.totalFiles ++;
         if (matcher.matches(file))
         {
@@ -87,6 +88,15 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 return CONTINUE;
             }
             
+            // If required
+            if (entry.mime.isActive) {
+                mimeType = Files.probeContentType(file);
+                if (mimeType == null || !mimeType.equals(entry.mime.mimeName))
+                {
+                    return CONTINUE; // continue;
+                }
+            }
+            
             long count = -1;
             if (entry.containingText != null)
             {
@@ -103,7 +113,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
             {
                 // Collect matching files
                 // TODO - support long in the SearchResult
-                SearchResult result = new SearchResult(file, attrs, count);
+                SearchResult result = new SearchResult(file, attrs, count, mimeType);
                 publish(result);
                 int lastResult = summary.matchFileCount;
                 summary.matchFileCount ++;
