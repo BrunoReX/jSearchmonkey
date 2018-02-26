@@ -16,18 +16,18 @@ The key features in this release are:-
 
 #BUGS
 ##Fixed
-* Modified date not working
-* Created date not working
-* Dates, when printed in the comboboxes, are not in local format
+* Modified date now working normally
+* Created date now working normally
+* Dates, when printed in the comboboxes, are now in local date format
+* Centred location of the wizards to the HMI
+* Title of the window set to Searchmonkey's tagline
 
 ##Known
 * In summary, the most recent file is not the most recent.
-* Shortcuts (Lnk) files are not being ignored
+* Shortcuts (LNK) files are not being ignored
 * File decode timeout (ms) should be moved to content search
 * Shortcut links on _About_ page do not work
-* Location of the wizards is not centred to the HMI
 * Mime types are hard to scroll because the dialog is too small
-* Version number in the header does not match the release number
 * Filename not restored after start up
 * Containing not restored after start up
 * Comboboxes can be filled with the same text multiple times
@@ -42,17 +42,17 @@ Cleaner HMI:
 
 Search panel:
 * Accessed date: inverted range e.g. not between last week and last month
+* File Size Option: Inverted file range e.g. Greater than X OR less than Y
+* Filename search options: Remove limit max file size
 
 #TODO
 ##Work in progress
 * Mime Type Option: Support for multiple MIME types e.g. "text/plain, text/html"
 * Mime Type Option: Wildcards in MIME types e.g. text/*, etc
-* File Size Option: Inverted file range e.g. Greater than X OR less than Y
 * Report current search parameters to the search summary
-* In file only search, show user friendly message in the hits
+* When performing a filename search (no content) show user message in the hits tab
 * Filename search options: Ignore binary files
 * Filename search options: case insensitive search
-* Filename search options: Remove limit max file size
 * Results table: If number of hits exceeds the limit, then show this e.g. >999
 * Results table: Add file type icons, for known types
 * Folder search options: Hide/disable ignore case for Windows based systems

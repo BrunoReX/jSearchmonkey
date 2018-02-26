@@ -181,7 +181,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Searchmonkey 3.0");
+        setTitle("Searchmonkey - power searching without the pain");
         setMinimumSize(new java.awt.Dimension(500, 500));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentMoved(java.awt.event.ComponentEvent evt) {

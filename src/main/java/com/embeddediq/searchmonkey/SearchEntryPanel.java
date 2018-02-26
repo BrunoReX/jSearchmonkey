@@ -1451,19 +1451,22 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 if (panel instanceof FileDatePanel)
                 {
                     ((FileDatePanel)panel).set((FileDateEntry)data);
+                    frame.setPreferredSize(new Dimension(450, 300));
                 } else if (panel instanceof FileSizePanel) {
                     ((FileSizePanel)panel).set((FileSizeEntry)data);
+                    frame.setPreferredSize(new Dimension(450, 300));
                 } else { // if (panel instanceof FileTypePanel) {
                     ((FileTypePanel)panel).set((FileTypeEntry)data);
-                }
+                    frame.setPreferredSize(new Dimension(550, 600));
+            }
 
                 frame.setMessage(panel);
                 frame.setOptionType(JOptionPane.OK_CANCEL_OPTION);
                 frame.setMaximumSize(new Dimension(0xFFFF, 0xFFFF));
                 frame.setMinimumSize(new Dimension(0, 0));
-                frame.setPreferredSize(new Dimension(450, 300));
                 JDialog dlg = frame.createDialog(parent, msg);
                 dlg.pack();
+                dlg.setLocationRelativeTo(parent); // Centre on parent
                 dlg.setVisible(true);
                 Object ret = frame.getValue();
 
