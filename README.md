@@ -18,6 +18,7 @@ The key features in this release are:-
 ##Fixed
 * Modified date not working
 * Created date not working
+* Dates, when printed in the comboboxes, are not in local format
 
 ##Known
 * In summary, the most recent file is not the most recent.
@@ -30,7 +31,6 @@ The key features in this release are:-
 * Filename not restored after start up
 * Containing not restored after start up
 * Comboboxes can be filled with the same text multiple times
-* Dates, when printed in the comboboxes, are not in local format
 
 #IMPROVEMENTS
 

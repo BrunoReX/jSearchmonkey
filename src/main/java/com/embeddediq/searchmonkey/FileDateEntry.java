@@ -20,6 +20,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 
 /**
@@ -74,15 +76,17 @@ public final class FileDateEntry implements Serializable {
     @Override
     public String toString()
     {
+        DateTimeFormatter fmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
+                
         String s_after = null;
         if (useAfter)
         {
-            s_after = this.after.toString();
+            s_after = this.after.format(fmt);
         }
         String s_before = null;
         if (useBefore)
         {
-            s_before = this.before.toString();
+            s_before = this.before.format(fmt);
         }
         if (s_before != null && s_after != null)
         {
@@ -93,7 +97,7 @@ public final class FileDateEntry implements Serializable {
             } 
             else if (dval < 0)
             {
-                return String.format("Not between %s and %s", s_after, s_before);
+                return String.format("Not between %s and %s (inverse)", s_after, s_before);
             }
             else
             {
