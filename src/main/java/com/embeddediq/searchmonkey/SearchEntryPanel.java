@@ -226,13 +226,19 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         public Component getListCellRendererComponent( JList list,
                Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
-            if (isSelected)
+            try
             {
-                setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].background").getRGB()));
-                setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].textForeground").getRGB()));
-            } else {
-                setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\".background").getRGB()));
-                setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox.foreground").getRGB()));
+                if (isSelected)
+                {
+                    setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].background").getRGB()));
+                    setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\"[Selected].textForeground").getRGB()));
+                } else {
+                    setBackground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox:\"ComboBox.listRenderer\".background").getRGB()));
+                    setForeground(new Color(UIManager.getLookAndFeelDefaults().getColor("ComboBox.foreground").getRGB()));
+                }
+            } catch (Exception ioe)
+            {
+                Logger.getLogger(Searchmonkey.class.getName()).log(Level.WARNING, null, ioe);
             }
 
             if (value instanceof Icon) {
