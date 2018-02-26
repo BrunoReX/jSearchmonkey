@@ -72,17 +72,92 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         summary.totalFiles ++;
         if (matcher.matches(file))
         {
+            if (entry.greaterThan > 0 && entry.lessThan > 0)
+            {
+                if (entry.greaterThan > entry.lessThan) // Inverted search
+                {
+                    if ((attrs.size() > entry.lessThan) && (attrs.size() < entry.greaterThan)) 
+                    {
+                        return CONTINUE;
+                    }
+                } else if ((attrs.size() > entry.lessThan) || (attrs.size() < entry.greaterThan)) // Standard search
+                    {
+                        return CONTINUE;
+                    }
+            }
+            else if (((entry.lessThan > 0) && (attrs.size() > entry.lessThan)) ||
+                    ((entry.greaterThan > 0) && (attrs.size() < entry.greaterThan)))
+                     
+            {
+                return CONTINUE;
+            }
+ 
+           if (entry.modifiedAfter != null && entry.modifiedBefore != null)
+            {
+                if (entry.modifiedAfter.compareTo(entry.modifiedBefore) > 0) // Inverted search
+                {
+                    if ((attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0) &&
+                        (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0)) 
+                    {
+                        return CONTINUE;
+                    }
+                } else if ((attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0) || // Standard search
+                        (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0))
+                    {
+                        return CONTINUE;
+                    }
+            }
+            else if (((entry.modifiedBefore != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0)) ||
+                     ((entry.modifiedAfter != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0)))
+            {
+                return CONTINUE;
+            }
+
+           if (entry.accessedAfter != null && entry.accessedBefore != null)
+            {
+                if (entry.accessedAfter.compareTo(entry.accessedBefore) > 0) // Inverted search
+                {
+                    if ((attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0) &&
+                        (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0)) 
+                    {
+                        return CONTINUE;
+                    }
+                } else if ((attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0) || // Standard search
+                        (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0))
+                    {
+                        return CONTINUE;
+                    }
+            }
+            else if (((entry.accessedBefore != null) && (attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0)) ||
+                     ((entry.accessedAfter != null) && (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0)))
+            {
+                return CONTINUE;
+            }
+
+           if (entry.createdAfter != null && entry.createdBefore != null)
+            {
+                if (entry.createdAfter.compareTo(entry.createdBefore) > 0) // Inverted search
+                {
+                    if ((attrs.creationTime().compareTo(entry.createdBefore) > 0) &&
+                        (attrs.creationTime().compareTo(entry.createdAfter) < 0)) 
+                    {
+                        return CONTINUE;
+                    }
+                } else if ((attrs.creationTime().compareTo(entry.createdBefore) > 0) || // Standard search
+                        (attrs.creationTime().compareTo(entry.createdAfter) < 0))
+                    {
+                        return CONTINUE;
+                    }
+            }
+            else if (((entry.createdBefore != null) && (attrs.creationTime().compareTo(entry.createdBefore) > 0)) ||
+                     ((entry.createdAfter != null) && (attrs.creationTime().compareTo(entry.createdAfter) < 0)))
+            {
+                return CONTINUE;
+            }
+           
             if (
                     (entry.flags.ignoreSymbolicLinks && attrs.isSymbolicLink()) ||
-                    (entry.flags.ignoreHiddenFiles && file.toFile().isHidden()) ||
-                    (entry.greaterThan > 0 && (attrs.size() < entry.greaterThan)) ||
-                    (entry.lessThan > 0 && (attrs.size() > entry.lessThan)) ||
-                    ((entry.modifiedAfter != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0)) ||
-                    ((entry.modifiedBefore != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0)) ||
-                    ((entry.accessedAfter != null) && (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0)) ||
-                    ((entry.accessedBefore != null) && (attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0)) ||
-                    ((entry.createdAfter != null) && (attrs.creationTime().compareTo(entry.createdAfter) < 0)) ||
-                    ((entry.createdBefore != null) && (attrs.creationTime().compareTo(entry.createdBefore) > 0))
+                    (entry.flags.ignoreHiddenFiles && file.toFile().isHidden())
                 )
             {
                 return CONTINUE;

@@ -448,11 +448,11 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             FileDateEntry entry = (FileDateEntry)modified;
             if (entry.useAfter)
             {
-                req.accessedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
+                req.modifiedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
             }
             if (entry.useBefore)
             {
-                req.accessedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
+                req.modifiedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
             }
         }
 
@@ -476,11 +476,11 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             FileDateEntry entry = (FileDateEntry)created;
             if (entry.useAfter)
             {
-                req.accessedAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
+                req.createdAfter = FileTime.from(entry.after.toInstant(ZoneOffset.UTC));
             }
             if (entry.useBefore)
             {
-                req.accessedBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
+                req.createdBefore = FileTime.from(entry.before.toInstant(ZoneOffset.UTC));
             }
         }
 
