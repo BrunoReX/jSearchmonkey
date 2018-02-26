@@ -132,7 +132,7 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
             {
                 jTable1.getColumn(SearchResult.COLUMN_NAMES[i]).setPreferredWidth(indices[i]);
             }
-            catch (IllegalArgumentException ex)
+            catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex)
             {
                 Logger.getLogger(SearchResultsTable.class.getName()).log(Level.SEVERE, null, ex);
             }
