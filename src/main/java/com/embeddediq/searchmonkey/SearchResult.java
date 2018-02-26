@@ -129,7 +129,7 @@ public class SearchResult {
         Integer.class,
         String.class,
         String.class,
-        Integer.class,
+        Integer.class, // Icon
     };
 
     public final static Integer[] COLUMN_WIDTH = new Integer[]  {
@@ -172,7 +172,7 @@ public class SearchResult {
             this.fileFlags,
             this.fileExtension,
             this.contentType,
-            this.fileIcon
+            this.fileIcon,
         };
         return def;
     }
@@ -201,6 +201,8 @@ public class SearchResult {
                 return ICON_ODG;
             else if (contentType.equals("application/vnd.oasis.opendocument.presentation"))
                 return ICON_ODP;
+            else if (contentType.equals("application/vnd.oasis.opendocument.spreadsheet"))
+                return ICON_ODS;
             else if (contentType.equals("application/vnd.oasis.opendocument.text"))
                 return ICON_ODT;
             else if (contentType.equals("application/vnd.ms-excel") ||
