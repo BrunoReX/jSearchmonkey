@@ -7,11 +7,7 @@ package com.embeddediq.searchmonkey;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.lang.System.nanoTime;
 import java.nio.file.FileVisitResult;
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
-import static java.nio.file.FileVisitResult.TERMINATE;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,7 +43,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
     protected SearchSummary doInBackground() {            
         summary = new SearchSummary();
         Path startingDir = entry.lookIn.get(0);
-        summary.startTime = nanoTime();
+        summary.startTime = System.nanoTime();
         try {
             if (entry.lookInSubFolders) {
                 Files.walkFileTree(startingDir, this);
@@ -59,7 +55,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         {
             Logger.getLogger(SearchWorker.class.getName()).log(Level.WARNING, null, ioe);
         }
-        summary.endTime = nanoTime(); // We are done!
+        summary.endTime = System.nanoTime(); // We are done!
         return summary;
     }
     
@@ -78,18 +74,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 {
                     if ((attrs.size() > entry.lessThan) && (attrs.size() < entry.greaterThan)) 
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
                 } else if ((attrs.size() > entry.lessThan) || (attrs.size() < entry.greaterThan)) // Standard search
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
             }
             else if (((entry.lessThan > 0) && (attrs.size() > entry.lessThan)) ||
                     ((entry.greaterThan > 0) && (attrs.size() < entry.greaterThan)))
                      
             {
-                return CONTINUE;
+                return FileVisitResult.CONTINUE;
             }
  
            if (entry.modifiedAfter != null && entry.modifiedBefore != null)
@@ -99,18 +95,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                     if ((attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0) &&
                         (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0)) 
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
                 } else if ((attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0) || // Standard search
                         (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0))
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
             }
             else if (((entry.modifiedBefore != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedBefore) > 0)) ||
                      ((entry.modifiedAfter != null) && (attrs.lastModifiedTime().compareTo(entry.modifiedAfter) < 0)))
             {
-                return CONTINUE;
+                return FileVisitResult.CONTINUE;
             }
 
            if (entry.accessedAfter != null && entry.accessedBefore != null)
@@ -120,18 +116,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                     if ((attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0) &&
                         (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0)) 
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
                 } else if ((attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0) || // Standard search
                         (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0))
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
             }
             else if (((entry.accessedBefore != null) && (attrs.lastAccessTime().compareTo(entry.accessedBefore) > 0)) ||
                      ((entry.accessedAfter != null) && (attrs.lastAccessTime().compareTo(entry.accessedAfter) < 0)))
             {
-                return CONTINUE;
+                return FileVisitResult.CONTINUE;
             }
 
            if (entry.createdAfter != null && entry.createdBefore != null)
@@ -141,18 +137,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                     if ((attrs.creationTime().compareTo(entry.createdBefore) > 0) &&
                         (attrs.creationTime().compareTo(entry.createdAfter) < 0)) 
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
                 } else if ((attrs.creationTime().compareTo(entry.createdBefore) > 0) || // Standard search
                         (attrs.creationTime().compareTo(entry.createdAfter) < 0))
                     {
-                        return CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
             }
             else if (((entry.createdBefore != null) && (attrs.creationTime().compareTo(entry.createdBefore) > 0)) ||
                      ((entry.createdAfter != null) && (attrs.creationTime().compareTo(entry.createdAfter) < 0)))
             {
-                return CONTINUE;
+                return FileVisitResult.CONTINUE;
             }
            
             if (
@@ -160,7 +156,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                     (entry.flags.ignoreHiddenFiles && file.toFile().isHidden())
                 )
             {
-                return CONTINUE;
+                return FileVisitResult.CONTINUE;
             }
             
             // If required
@@ -168,7 +164,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 mimeType = Files.probeContentType(file);
                 if (mimeType == null || !mimeType.equals(entry.mime.mimeName))
                 {
-                    return CONTINUE; // continue;
+                    return FileVisitResult.CONTINUE; // continue;
                 }
             }
             
@@ -207,7 +203,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
 
             }
         }
-        return CONTINUE;
+        return FileVisitResult.CONTINUE;
     }
     
     // Invoke the pattern matching
@@ -220,11 +216,11 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         if (entry.ignoreFolderSet.contains(dir) || 
                 (entry.flags.ignoreHiddenFolders && dir.toFile().isHidden()))
         {
-            return SKIP_SUBTREE;
+            return FileVisitResult.SKIP_SUBTREE;
         }
 
-        if (this.isCancelled()) return TERMINATE; // user has requested an early exit
-        return CONTINUE;
+        if (this.isCancelled()) return FileVisitResult.TERMINATE; // user has requested an early exit
+        return FileVisitResult.CONTINUE;
     }
 
     @Override
