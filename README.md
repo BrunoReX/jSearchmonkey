@@ -75,4 +75,11 @@ Developer Notes
 
 Searchmonkey was written using maven and on NetBeans 8. If you are using a fresh installation of NetBeans, then be sure to install the Maven plugin before attempting to import this project as there will be a lot of missing dependencies.
 
+The following compile time warnings are normal:-
 
+```
+--- maven-dependency-plugin:3.0.2:analyze-only (analyze) @ searchmonkey ---
+Unused declared dependencies found:
+   org.apache.tika:tika-parsers:jar:1.17:compile
+   org.apache.sis.core:sis-metadata:jar:0.6:compil
+```
