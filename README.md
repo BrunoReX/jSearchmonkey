@@ -30,6 +30,7 @@ The key features in this release are:-
 * Filename not restored after start up
 * Containing not restored after start up
 * Comboboxes can be filled with the same text multiple times
+* Dates, when printed in the comboboxes, are not in local format
 
 #IMPROVEMENTS
 
