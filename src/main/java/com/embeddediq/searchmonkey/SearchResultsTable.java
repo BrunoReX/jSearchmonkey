@@ -189,18 +189,11 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
     // Use with SearchWorker
     public void clearTable()
     {
-        // rowData.clear();
-        myModel.clear(); // setRowCount(0);
-        // myModel.fireTableDataChanged();
+        myModel.clear();
     }
     public void insertRows(List<SearchResult> results)
     {
-        //int s = myModel.getRowCount();
-        //int e = s + results.size() - 1;
-        //rowData.addAll(results);
         myModel.addRows(results);
-        // myModel.addRow((Object[])results);
-        //myModel.fireTableRowsInserted(s, e);
     }
     // Use with SearchWorker
     
@@ -276,7 +269,7 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         
         @Override
         public int getColumnCount() {
-            return SearchResult.COLUMN_NAMES.length; // Constan
+            return SearchResult.COLUMN_NAMES.length; // Constant
         }
         
         @Override
@@ -288,50 +281,9 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         public boolean isCellEditable(int row, int col)
             { return false; }
 
-//        @Override
-//        public void setValueAt(Object value, int row, int col) {
-//            // TODO - allow user editing of these fields
-//            SearchResult val = rowData.get(row);
-//            switch (col) {
-//                case SearchResult.FILENAME:
-//                    val.fileName = (String)value;
-//                    break;
-//                case SearchResult.FOLDER:
-//                    val.pathName = (String)value;
-//                    break;
-//                case SearchResult.COUNT:
-//                    val.matchCount = (int)value;
-//                    break;
-//                case SearchResult.SIZE:
-//                    val.fileSize = (long)value;
-//                    break;
-//                case SearchResult.CREATED:
-//                    val.creationTime = (FileTime)value;
-//                    break;
-//                case SearchResult.MODIFIED:
-//                    val.lastModified = (FileTime)value;
-//                    break;
-//                case SearchResult.ACCESSED:
-//                    val.lastAccessTime = (FileTime)value;
-//                    break;
-//                case SearchResult.FLAGS:
-//                    val.fileFlags = (int)value;
-//                    break;
-//                case SearchResult.EXTENSION:
-//                    val.fileExtension = (String)value;
-//                    break;
-//                case SearchResult.CONTENT_TYPE:
-//                    val.contentType = (String)value;
-//                    break;
-//                default:
-//                    break;
-//            }
-//            // rowData[row] // [col] = value;
-//            fireTableCellUpdated(row, col);
-//        }
     }
     
-    class IconTableRenderer extends DefaultTableCellRenderer // JPanel implements UIResource
+    class IconTableRenderer extends DefaultTableCellRenderer
     {
 
         private final JLabel hidden;

@@ -69,6 +69,8 @@ Search panel:
 * Export results as spreadsheet
 * Export hits or preview to file
 * Save/Restore a complete set of search results (e.g. for comparison)
+* Better RTL (right-to-left) support
+* Add translations (German, French, Russian)
 
 Developer Notes
 ===============
