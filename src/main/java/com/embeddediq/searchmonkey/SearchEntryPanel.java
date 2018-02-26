@@ -365,11 +365,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         req.flags.ignoreSymbolicLinks = jIgnoreSymbolicLinks.isSelected();
         req.flags.skipBinaryFiles = jSkipBinaryFiles.isSelected();
         req.flags.ignoreFilenameCase = jIgnoreFilenameCase.isSelected();
-        longVal = 0L;
-        if (jLimitMaxFileSize.isSelected()) {
-            longVal = (long)(1024.0 * 1024.0 * (Double)jMaxFileSize.getValue());
-        }
-        req.maxFileSize = longVal;
         intVal = 0;
         if (jEnableFileTimeout.isSelected()) {
             intVal = (int)jFileTimeout.getValue();
@@ -624,8 +619,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         prefs.putBoolean("SkipBinaryFiles", jSkipBinaryFiles.isSelected());
         prefs.putBoolean("StrictFilenameSearch", jStrictFilenameSearch.isSelected());
         prefs.putBoolean("IgnoreFileCase", jIgnoreFilenameCase.isSelected());
-        prefs.putBoolean("LimitMaxFileSize", jLimitMaxFileSize.isSelected());
-        prefs.putDouble("MaxFileSize", (Double)jMaxFileSize.getValue());
         prefs.putBoolean("EnableFileTimeout", jEnableFileTimeout.isSelected());
         prefs.putInt("FileTimeout", (Integer)jFileTimeout.getValue());
 
@@ -673,8 +666,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jSkipBinaryFiles.setSelected(prefs.getBoolean("SkipBinaryFiles", true));
         jStrictFilenameSearch.setSelected(prefs.getBoolean("StrictFilenameSearch", false));
         jIgnoreFilenameCase.setSelected(prefs.getBoolean("IgnoreFileCase", true));
-        jLimitMaxFileSize.setSelected(prefs.getBoolean("LimitMaxFileSize", true));
-        jMaxFileSize.setValue(prefs.getDouble("MaxFileSize", 10.0)); // limit to 10 MBytes
         jEnableFileTimeout.setSelected(prefs.getBoolean("EnableFileTimeout", true));
         jFileTimeout.setValue(prefs.getInt("FileTimeout", 5000)); // limit to 5 seconds per file
 
@@ -751,9 +742,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jIgnoreHiddenFiles = new javax.swing.JCheckBox();
         jUseFileRegex = new javax.swing.JRadioButton();
         jUseFileGlobs = new javax.swing.JRadioButton();
-        jLimitMaxFileSize = new javax.swing.JCheckBox();
         jSkipBinaryFiles = new javax.swing.JCheckBox();
-        jMaxFileSize = new javax.swing.JSpinner();
         jIgnoreFilenameCase = new javax.swing.JCheckBox();
         jEnableFileTimeout = new javax.swing.JCheckBox();
         jFileTimeout = new javax.swing.JSpinner();
@@ -924,21 +913,17 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jBasicSearchLayout.setHorizontalGroup(
             jBasicSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBasicSearchLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jBasicSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jBasicSearchLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jBasicSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jBasicSearchLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLookIn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jBasicSearchLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSubFolders)))
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLookIn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSubFolders))
                 .addContainerGap())
         );
         jBasicSearchLayout.setVerticalGroup(
@@ -1138,21 +1123,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jUseFileGlobs.setText(bundle.getString("SearchEntryPanel.jUseFileGlobs.text")); // NOI18N
         jUseFileGlobs.setToolTipText(bundle.getString("SearchEntryPanel.jUseFileGlobs.toolTipText")); // NOI18N
 
-        jLimitMaxFileSize.setSelected(true);
-        jLimitMaxFileSize.setText(bundle.getString("SearchEntryPanel.jLimitMaxFileSize.text")); // NOI18N
-        jLimitMaxFileSize.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxFileSize.toolTipText")); // NOI18N
-        jLimitMaxFileSize.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jLimitMaxFileSizeItemStateChanged(evt);
-            }
-        });
-
         jSkipBinaryFiles.setSelected(true);
         jSkipBinaryFiles.setText(bundle.getString("SearchEntryPanel.jSkipBinaryFiles.text")); // NOI18N
         jSkipBinaryFiles.setToolTipText(bundle.getString("SearchEntryPanel.jSkipBinaryFiles.toolTipText")); // NOI18N
-
-        jMaxFileSize.setModel(new javax.swing.SpinnerNumberModel(64.0f, 0.0f, null, 1.0f));
-        jMaxFileSize.setToolTipText(bundle.getString("SearchEntryPanel.jMaxFileSize.toolTipText")); // NOI18N
 
         jIgnoreFilenameCase.setSelected(true);
         jIgnoreFilenameCase.setText(bundle.getString("SearchEntryPanel.jIgnoreFilenameCase.text")); // NOI18N
@@ -1184,10 +1157,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     .addComponent(jUseFileRegex)
                     .addComponent(jUseFileGlobs)
                     .addComponent(jIgnoreHiddenFiles)
-                    .addGroup(jPanel14Layout.createSequentialGroup()
-                        .addComponent(jLimitMaxFileSize)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jIgnoreFilenameCase)
                     .addComponent(jIgnoreSymbolicLinks)
                     .addComponent(jSkipBinaryFiles)
@@ -1196,7 +1165,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                         .addGap(6, 6, 6)
                         .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jStrictFilenameSearch))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1215,10 +1184,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addComponent(jSkipBinaryFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jIgnoreFilenameCase)
-                .addGap(0, 0, 0)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLimitMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jMaxFileSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1563,10 +1528,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jManageSkipFoldersActionPerformed
 
-    private void jLimitMaxFileSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxFileSizeItemStateChanged
-        jMaxFileSize.setEnabled(jLimitMaxFileSize.isSelected());
-    }//GEN-LAST:event_jLimitMaxFileSizeItemStateChanged
-
     private void jLimitMaxRecurseItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxRecurseItemStateChanged
         jMaxRecurse.setEnabled(jLimitMaxRecurse.isSelected());
     }//GEN-LAST:event_jLimitMaxRecurseItemStateChanged
@@ -1615,12 +1576,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JCheckBox jLimitMaxFileSize;
     private javax.swing.JCheckBox jLimitMaxHits;
     private javax.swing.JCheckBox jLimitMaxRecurse;
     private javax.swing.JComboBox<String> jLookIn;
     private javax.swing.JButton jManageSkipFolders;
-    private javax.swing.JSpinner jMaxFileSize;
     private javax.swing.JSpinner jMaxHits;
     private javax.swing.JSpinner jMaxRecurse;
     private javax.swing.JComboBox<String> jModifiedCombo;

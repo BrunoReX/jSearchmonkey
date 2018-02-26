@@ -50,7 +50,6 @@ public class SearchEntry {
     
     // Some advanced 'safety' features
     public long maxRecurse; // <= 0 is off, otherwise limit recurse depth
-    public long maxFileSize; // max file (in bytes) size we support (set in options)
     public long maxHits; // <=0 is off, otherwise limit hits to this value
     public int FileTimeout; // Timeout in nanoseconds
     
