@@ -46,7 +46,7 @@ Source: "etc\Java\jre-8u161-windows-x64.exe.bin"; DestDir: "{tmp}"; DestName: "j
 Source: "..\..\..\..\..\target\{#MyAppName}-{#MyAppVersion}-jar-with-dependencies.jar"; DestDir: "{app}"; DestName: "{#MyAppName}.jar"; Flags: ignoreversion nocompression
 
 ; Extras
-Source: "etc\readme.txt"; DestDir: "{app}"; Flags: isreadme
+Source: "..\..\..\..\..\README.md"; DestDir: "{app}"; Flags: isreadme
 Source: "..\..\..\resources\images\ico.ico"; DestDir: "{app}"
 
 [Icons]

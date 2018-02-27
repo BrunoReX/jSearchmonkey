@@ -14,7 +14,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{89CAA77F-6F11-476C-BA53-3AEA14214E1E}
+AppId={{34A8F398-5830-427A-BA20-F4D8F5063978}
 AppName={#MyAppGroup} {#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -24,7 +24,7 @@ AppSupportURL={#MyAppURL}
 ; AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppGroup}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename={#MyAppName}_full_v{#MyAppVersion}
+OutputBaseFilename={#MyAppName}_v{#MyAppVersion}
 OutputDir=.
 Compression=lzma
 SolidCompression=yes
@@ -38,21 +38,15 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "jre"; Description: "Install Oracle prerequisits"; GroupDescription: "Other tasks:"
 
 [Files]
-Source: "etc\Java\jre-8u161-windows-i586.exe.bin"; DestDir: "{tmp}"; DestName: "jre-8u161-windows.exe"; Tasks: jre; Flags: deleteafterinstall ignoreversion nocompression;  Check: Is64BitInstallMode
-Source: "etc\Java\jre-8u161-windows-x64.exe.bin"; DestDir: "{tmp}"; DestName: "jre-8u161-windows.exe"; Tasks: jre; Flags: deleteafterinstall ignoreversion nocompression; Check: not Is64BitInstallMode
 Source: "..\..\..\..\..\target\{#MyAppName}-{#MyAppVersion}-jar-with-dependencies.jar"; DestDir: "{app}"; DestName: "{#MyAppName}.jar"; Flags: ignoreversion nocompression
 
 ; Extras
-Source: "etc\readme.txt"; DestDir: "{app}"; Flags: isreadme
+Source: "..\..\..\..\..\README.md"; DestDir: "{app}"; Flags: isreadme
 Source: "..\..\..\resources\images\ico.ico"; DestDir: "{app}"
 
 [Icons]
 Name: "{commonprograms}\{#MyAppGroup}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.jar"; IconFilename: "{app}\ico.ico"
 Name: "{commondesktop}\{#MyAppGroup} {#MyAppName}"; Filename: "{app}\{#MyAppName}.jar"; IconFilename: "{app}\ico.ico"; Tasks: desktopicon
-
-[Run]
-Filename: "{tmp}\jre-8u161-windows.exe"; Tasks: jre; Parameters: "/s REMOVEOUTOFDATEJRES=1 AUTO_UPDATE=Disable"; StatusMsg: "Installing Java 8 Runtime..."
 
