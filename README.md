@@ -26,6 +26,7 @@ The key features in this release are:-
 * Filename are restored after start up
 * Containing are restored after start up
 * Changes to the column number will reset the table column width + positions
+* The icon column header is shown in the context menu (but not in the results table)
 
 ##Known
 * In summary, the most recent file is not the most recent.
@@ -33,7 +34,6 @@ The key features in this release are:-
 * Shortcut links on _About_ page do not work
 * Comboboxes can be filled with the same text multiple times
 * Restoring defaults does not reset the table columns + positions
-* The icon column header is not shown in the context menu
 
 #IMPROVEMENTS
 
