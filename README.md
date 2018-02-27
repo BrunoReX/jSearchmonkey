@@ -1,5 +1,12 @@
-# searchmonkey
-Searchmonkey - Power searching without the pain. Perform powerful desktop searches without having to index your system using regular expressions. Graphical equivalent to grep.
+# Searchmonkey v3.1.0
+
+Release date: 27th February 2018
+
+Searchmonkey is Power searching without the pain.
+
+Perform powerful desktop searches without having to index your system using regular expressions. Searchmonkey is the graphical equivalent to grep + find, and is available in Gnome, KDE or JAVA editions.
+
+This is the release notes for the JAVA edition.
 
 ##Highlights
 
@@ -14,21 +21,23 @@ The key features in this release are:-
 .* And much, much more besides
 * Improved HMI look-and-feel for true next generation feel
 
-#BUGS
-##Fixed
-* Modified date now working normally
-* Created date now working normally
-* Dates, when printed in the comboboxes, are now in local date format
-* Centred location of the wizards to the HMI
-* Title of the window set to Searchmonkey's tagline
-* Mime types dialog has been made larger to make it easier to scroll
-* Shortcuts (LNK) files are now ignored (user options)
-* Filename are restored after start up
-* Containing are restored after start up
-* Changes to the column number will reset the table column width + positions
-* The icon column header is shown in the context menu (but not in the results table)
 
-##Known
+#BUGS
+
+##Fixed Issues
+* Modified date now working normally *DONE*
+* Created date now working normally *DONE*
+* Dates, when printed in the comboboxes, are now in local date format *DONE*
+* Centred location of the wizards to the HMI *DONE*
+* Title of the window set to Searchmonkey's tagline *DONE*
+* Mime types dialog has been made larger to make it easier to scroll *DONE*
+* Shortcuts (LNK) files are now ignored (user options) *DONE*
+* Filename are restored after start up *DONE*
+* Containing are restored after start up *DONE*
+* Changes to the column number will reset the table column width + positions *DONE*
+* The icon column header is shown in the context menu (but not in the results table) *DONE*
+
+##Known Issues
 * In summary, the most recent file is not the most recent.
 * File decode timeout (ms) should be moved to content search
 * Shortcut links on _About_ page do not work
@@ -38,20 +47,21 @@ The key features in this release are:-
 #IMPROVEMENTS
 
 Cleaner HMI:
-* Search panel moved to the left-hand side
-* Advanced search options simplified by replacing with comboboxes
-* Intelligent comboboxes used to enter data with advanced features
-* Options tab used to keep search options easy to view and change
+* Search panel moved to the left-hand side *DONE*
+* Advanced search options simplified by replacing with comboboxes *DONE*
+* Intelligent comboboxes used to enter data with advanced features *DONE*
+* Options tab used to keep search options easy to view and change *DONE*
 
 Search panel:
-* Accessed date: inverted range e.g. not between last week and last month
-* File Size Option: Inverted file range e.g. Greater than X OR less than Y
-* Filename search options: Removed limit max file size option
-* Filename search options: Can now ignore common binary files
-* Filename search options: case insensitive search
-* Results table: Added file type icons, for known types
+* Accessed date: inverted range e.g. not between last week and last month *DONE*
+* File Size Option: Inverted file range e.g. Greater than X OR less than Y *DONE*
+* Filename search options: Removed limit max file size option *DONE*
+* Filename search options: Can now ignore common binary files *DONE*
+* Filename search options: case insensitive search *DONE*
+* Results table: Added file type icons, for known types *DONE*
 
 #TODO
+
 ##Work in progress
 * Mime Type Option: Support for multiple MIME types e.g. "text/plain, text/html"
 * Mime Type Option: Wildcards in MIME types e.g. text/*, etc
@@ -75,8 +85,9 @@ Search panel:
 * Better RTL (right-to-left) support
 * Add translations (German, French, Russian)
 
-Developer Notes
-===============
+===
+
+# Developer Notes
 
 Searchmonkey was written using maven and on NetBeans 8. If you are using a fresh installation of NetBeans, then be sure to install the Maven plugin before attempting to import this project as there will be a lot of missing dependencies.
 
