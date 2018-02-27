@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.Painter;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -352,7 +354,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        System.exit(0);
+        CloseApp();
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
@@ -405,9 +407,20 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     static private final int FLAG_SAVE_SEARCH = 0x10; // Save the search panel options (i.e. before closing)
     static private final int FLAG_SAVE_RESULTS = 0x20; // Save the search results
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Save(FLAG_SAVE_SEARCH | FLAG_SAVE_RESULTS);
+        if (evt.getID() == WindowEvent.WINDOW_CLOSING)
+        {
+            CloseApp();
+        }
     }//GEN-LAST:event_formWindowClosing
 
+    public void CloseApp()
+    {
+        // Todo - check for any 
+        this.Stop(); // Stop/cancel search if in progress
+        Save(FLAG_SAVE_SEARCH | FLAG_SAVE_RESULTS);
+        System.exit(0);
+    }
+    
     private void jSplitPane2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSplitPane2PropertyChange
         if (evt.getPropertyName().equals(JSplitPane.DIVIDER_LOCATION_PROPERTY))
         {
@@ -415,10 +428,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         }
     }//GEN-LAST:event_jSplitPane2PropertyChange
 
-    boolean first_time = true;
     private void Save(int flag) throws SecurityException
     {
-        if (first_time) return;
+        if (restoreInProgress) return;
         // In normal mode
         int eState = this.getExtendedState();
         if (eState == Frame.NORMAL)
@@ -477,8 +489,10 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         }
 }
     
+    boolean restoreInProgress = false;
     private void Restore() throws SecurityException
     {
+        restoreInProgress = true;
         // Restore last position
         int h = prefs.getInt("Height", -1);
         int w = prefs.getInt("Width", -1);
@@ -516,8 +530,14 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jSplitPane1.setOrientation(isHoriz ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setDividerLocation(pos);
 
-        first_time = false;
-
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                restoreInProgress = false;
+            });
+        } catch (InterruptedException | InvocationTargetException ex) {
+            Logger.getLogger(Searchmonkey.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     private void testRegexExpression()
