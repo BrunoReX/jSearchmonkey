@@ -23,15 +23,17 @@ The key features in this release are:-
 * Title of the window set to Searchmonkey's tagline
 * Mime types dialog has been made larger to make it easier to scroll
 * Shortcuts (LNK) files are now ignored (user options)
+* Filename are restored after start up
+* Containing are restored after start up
+* Changes to the column number will reset the table column width + positions
 
 ##Known
 * In summary, the most recent file is not the most recent.
 * File decode timeout (ms) should be moved to content search
 * Shortcut links on _About_ page do not work
-* Filename not restored after start up
-* Containing not restored after start up
 * Comboboxes can be filled with the same text multiple times
 * Restoring defaults does not reset the table columns + positions
+* The icon column header is not shown in the context menu
 
 #IMPROVEMENTS
 
@@ -44,7 +46,7 @@ Cleaner HMI:
 Search panel:
 * Accessed date: inverted range e.g. not between last week and last month
 * File Size Option: Inverted file range e.g. Greater than X OR less than Y
-* Filename search options: Remove limit max file size
+* Filename search options: Removed limit max file size option
 * Filename search options: Can now ignore common binary files
 * Filename search options: case insensitive search
 * Results table: Added file type icons, for known types

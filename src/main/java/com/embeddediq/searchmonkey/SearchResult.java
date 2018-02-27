@@ -105,7 +105,7 @@ public class SearchResult {
      *
      */
     public final static String[] COLUMN_NAMES = new String[] {
-        "", // 0 = Icon
+        "Icon", // 0 = Icon
         "File", // 1
         "Folder", // 2
         "File size", // 3
