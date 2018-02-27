@@ -471,16 +471,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         }
 
         // Save the results panel (column order, visibility)
-        if ((flag & FLAG_SAVE_SEARCH) == FLAG_SAVE_SEARCH)
-        {
-            searchEntryPanel1.Save();
-        }
-
         if ((flag & FLAG_SAVE_RESULTS) == FLAG_SAVE_RESULTS)
         {
             this.searchResultsTable1.Save();
         }
-    }
+}
     
     private void Restore() throws SecurityException
     {
