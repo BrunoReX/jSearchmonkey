@@ -133,7 +133,7 @@ public class SearchResult {
     };
 
     public final static int[] COLUMN_WIDTH = new int[]  {
-        24, /* File icon */
+        35, /* File icon */
         200, /* Filename */
         400, /* Folder */
         100, /* File Size */

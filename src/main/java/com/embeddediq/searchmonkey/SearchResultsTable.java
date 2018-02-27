@@ -248,7 +248,7 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         
         @Override
         public String getColumnName(int col) {
-            if (col == SearchResult.FILE_ICON) return "";
+            // if (col == SearchResult.FILE_ICON) return ""; // !!Don't do this as it breaks stuff downstream!!
             return SearchResult.COLUMN_NAMES[col];
         }
         

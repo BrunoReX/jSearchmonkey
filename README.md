@@ -43,6 +43,7 @@ The key features in this release are:-
 * Shortcut links on _About_ page do not work
 * Comboboxes can be filled with the same text multiple times
 * Restoring defaults does not reset the table columns + positions
+* Hidden columns will be restored on startup (not saved)
 
 #IMPROVEMENTS
 
