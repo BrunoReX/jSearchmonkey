@@ -76,12 +76,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
         
         // Add a browse button to the jCombobox
-//        AddComboHandler(jLookIn, "<<BROWSE>>", () -> {
-//            jLookIn.getModel().setSelectedItem(jLookIn.getItemAt(0));
-//            // TODO - allow the item name to select which dialog is shown
-//            String name = jLookIn.getName();
-//            SelectLookInFolder();
-//        });
         jLookIn.setModel(new SeparatorComboBoxModel(System.getProperty("user.home"), "Browse"));
         jLookIn.setRenderer(new SeparatorComboBoxRenderer());
         AdvancedDialog sd_folder = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jLookIn, "Enter file size");
@@ -131,7 +125,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     
     class SeparatorComboBoxModel extends DefaultComboBoxModel
     {
-        //private AdvancedDialog callback;
         private final int firstEntry;
 
         SeparatorComboBoxModel(Object fixedEntry, String button)
@@ -201,8 +194,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         // Excluding the last two entries (Button + separator)
         public void addOrUpdateEntry(Object val)
         {
-            // if (!(val instanceof FileDateEntry) && !(val instanceof FileSizeEntry)) return;
-            
             int idx = super.getIndexOf(val);
             if ((idx >= 0) && (idx < firstEntry)) return; // Ignore the first entry
             if (idx != -1)
@@ -268,7 +259,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         AdvancedDialog callback;
 
         SeparatorComboBoxListener(JComboBox combobox, AdvancedDialog callback) { // Frame parent, JComboBox combobox, String msg) {
-            //callback = new AdvancedDialog(parent, combobox, msg);
             this.combobox = combobox;
             this.callback = callback;
             combobox.setSelectedIndex(0);
@@ -303,8 +293,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     int maxCombo = 10;
     private String getSelectedItem(JComboBox jCombo)
     {
-        
-        //String val = (String)jCombo.getSelectedItem();
         String val = (String)jCombo.getEditor().getItem();
         if (val != null && val.length() > 0)
         {
@@ -333,8 +321,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
     private Object getSelectedItem2(JComboBox jCombo)
     {
-        
-        //String val = (String)jCombo.getSelectedItem();
         SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
         Object val = model.getSelectedItem();
         if (val != null)
@@ -501,6 +487,10 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
         String json = g.toJson(items);
         prefs.put(name, json); // Add list of look in folders        
+
+        // Store the index as well
+        int idx = jCombo.getSelectedIndex();
+        prefs.putInt(name + ".idx", idx);
     }
     private void Save2(String name, JComboBox jCombo) throws SecurityException
     {
@@ -548,6 +538,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         {
             jCombo.insertItemAt(items.get(i), 0);
         }
+     
+        int idx = prefs.getInt(name + ".idx", 0);
+        jCombo.setSelectedIndex(idx); // Select last item
     }
     
     private void Restore2(String name, JComboBox jCombo, Object[] def)
