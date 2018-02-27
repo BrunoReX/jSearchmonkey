@@ -78,6 +78,7 @@ Search panel:
 * Content: keywords wizard
 * Content: keyword searching e.g. hello OR world, etc
 * Results table: Add column for guessed file type e.g. UTF-8, etc
+* Add command-line support e.g. searchmonkey <folder> [Options]
 
 ## Future roadmap
 * Export results as spreadsheet
