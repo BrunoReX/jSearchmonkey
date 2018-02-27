@@ -86,6 +86,10 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         
         String strdef = prefs.get(name, g.toJson(def));
         int[] indices = g.fromJson(strdef, int[].class);
+        if (indices.length != ((int[])def).length)
+        {
+            indices = ((int[])def);
+        }
         
         TableColumnModel columnModel = jTable1.getColumnModel();
         
@@ -126,6 +130,10 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         
         String strdef = prefs.get(name, g.toJson(def));
         int[] indices = g.fromJson(strdef, int[].class);
+        if (indices.length != ((int[])def).length)
+        {
+            indices = ((int[])def);
+        }
         
         for (int i=0; i<SearchResult.COLUMN_NAMES.length; i++)
         {

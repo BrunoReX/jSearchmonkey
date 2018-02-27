@@ -132,7 +132,7 @@ public class SearchResult {
         String.class,
     };
 
-    public final static Integer[] COLUMN_WIDTH = new Integer[]  {
+    public final static int[] COLUMN_WIDTH = new int[]  {
         24, /* File icon */
         200, /* Filename */
         400, /* Folder */
