@@ -539,8 +539,11 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             jCombo.insertItemAt(items.get(i), 0);
         }
      
-        int idx = prefs.getInt(name + ".idx", 0);
-        jCombo.setSelectedIndex(idx); // Select last item
+        if (jCombo.getModel().getSize() > 0)
+        {
+            int idx = prefs.getInt(name + ".idx", 0);
+            jCombo.setSelectedIndex(idx); // Select last item
+        }
     }
     
     private void Restore2(String name, JComboBox jCombo, Object[] def)
