@@ -530,13 +530,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jSplitPane1.setOrientation(isHoriz ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setDividerLocation(pos);
 
-        try {
-            SwingUtilities.invokeAndWait(() -> {
-                restoreInProgress = false;
-            });
-        } catch (InterruptedException | InvocationTargetException ex) {
-            Logger.getLogger(Searchmonkey.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Do this later to allow time for the GUI to process the
+        // restore commands without saving..
+        SwingUtilities.invokeLater(() -> {
+            restoreInProgress = false;
+        });
         
     }
 
