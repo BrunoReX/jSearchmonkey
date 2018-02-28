@@ -24,7 +24,7 @@ AppSupportURL={#MyAppURL}
 ; AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppGroup}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename={#MyAppName}_v{#MyAppVersion}
+OutputBaseFilename={#MyAppName}_lite_v{#MyAppVersion}
 OutputDir=.
 Compression=lzma
 SolidCompression=yes
@@ -43,7 +43,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "..\..\..\..\..\target\{#MyAppName}-{#MyAppVersion}-jar-with-dependencies.jar"; DestDir: "{app}"; DestName: "{#MyAppName}.jar"; Flags: ignoreversion nocompression
 
 ; Extras
-Source: "..\..\..\..\..\README.md"; DestDir: "{app}"; Flags: isreadme
+Source: "..\..\..\..\..\README.md"; DestDir: "{app}"; DestName: "Release Notes.txt"; Flags: isreadme
 Source: "..\..\..\resources\images\ico.ico"; DestDir: "{app}"
 
 [Icons]
