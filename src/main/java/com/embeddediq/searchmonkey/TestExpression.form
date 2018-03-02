@@ -385,6 +385,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="//g"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextPane1KeyTyped"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

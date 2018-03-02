@@ -18,6 +18,7 @@ package com.embeddediq.searchmonkey;
 
 import com.google.gson.Gson;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;
@@ -25,7 +26,9 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+// import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -59,7 +62,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         }
         jTextPane2.setStyledDocument(doc);
         
-        this.jTextField1
+        // Add document listener to the regex edit tool
+        jTextPane1.getDocument().addDocumentListener(this);
+//        x = new Timer(0, new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent ae) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//            }
+//        } );
 
         // Add listener
         // jTextField1.getDocument().addDocumentListener(this);
@@ -69,6 +79,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         //this.jTextPane2.addMouseListener(popupListener);
 
     }
+    
+    private Timer x;
     
     private final String def1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec orci laoreet mauris venenatis malesuada. Sed vel pretium ex. Aliquam quis metus tristique, cursus augue eu, molestie erat. Praesent eu purus erat. Vestibulum placerat arcu at mi feugiat vulputate. Aenean faucibus libero a lectus iaculis semper. Integer eget ante non eros feugiat volutpat at a tellus. Nulla in sollicitudin tellus, nec tempus odio. Donec sagittis velit sed posuere varius. Duis magna leo, vulputate nec sapien non, efficitur euismod odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse congue justo quis sapien dignissim, vel pellentesque est gravida.";
     private String wizardName;
@@ -101,12 +113,12 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     
     public String getRegex()
     {
-        return jTextField1.getText();
+        return jTextPane1.getText();
     }
     
     public void setRegex(String val)
     {
-        jTextField1.setText(val);
+        jTextPane1.setText(val);
     }
     
     private int flags;
@@ -115,15 +127,21 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         int count = 0;
         try
         {
-            String txt = jTextField1.getText();
+            String txt = jTextPane1.getText();
             if (txt.length() == 0) return;
+            //flags |= Pattern.CASE_INSENSITIVE;
+            //flags |= Pattern.DOTALL;
+            //flags |= Pattern.UNICODE_CASE;
+            //flags |= Pattern.UNICODE_CASE;
+            // CASE_INSENSITIVE, MULTILINE, DOTALL, UNICODE_CASE, CANON_EQ, UNIX_LINES, LITERAL, UNICODE_CHARACTER_CLASS and COMMENTS;
+            
             Pattern compile = Pattern.compile(txt, flags);
             Matcher m = compile.matcher(this.jTextPane2.getText().replaceAll("(?!\\r)\\n", ""));
             PreviewResultDoc doc = (PreviewResultDoc)this.jTextPane2.getDocument();
             doc.setCharacterAttributes(0, doc.getLength(), doc.nameStyle, true);
             if (m.find())
             {
-                this.jTextField1.setBackground(Color.GREEN);
+                this.jTextPane1.setBackground(Color.GREEN);
                 do{
                     int s = m.start();
                     int e = m.end();
@@ -134,13 +152,13 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             }
             else
             {
-                this.jTextField1.setBackground(Color.ORANGE);
+                this.jTextPane1.setBackground(Color.ORANGE);
                 this.jTextPane2.setSelectionColor(Color.ORANGE);
             }
         }
         catch (IllegalArgumentException ex)
         {
-            this.jTextField1.setBackground(Color.RED);
+            this.jTextPane1.setBackground(Color.RED);
         }
         // Update the status message
         this.jStatus.setText(String.format("Status: Found %d match%s", count, count == 1 ? "" : "es"));
@@ -338,6 +356,11 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jStatus.setOpaque(true);
 
         jTextPane1.setText("//g");
+        jTextPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextPane1KeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -401,13 +424,18 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     }//GEN-LAST:event_jTextField1InputMethodTextChanged
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.jTextField1.setText("sample");
+        this.jTextPane1.setText("sample");
         this.jTextPane2.setText("<Copy and paste your sample text here>");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         UpdateRegex();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextPane1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPane1KeyTyped
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextPane1KeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
