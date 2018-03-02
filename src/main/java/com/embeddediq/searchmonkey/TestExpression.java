@@ -49,14 +49,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         Restore(); // Load back previous example content
         
         this.flags = flags;
-        
-//        try {
-//            String fn = "/help/regex.htm";
-//            URL url = getClass().getResource(fn);
-//            jTextPane1.setPage(url);
-//        } catch (IOException ex) {
-//            Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
         // Create some styles
         PreviewResultDoc doc = new PreviewResultDoc();
@@ -66,6 +58,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
         jTextPane2.setStyledDocument(doc);
+        
+        this.jTextField1
 
         // Add listener
         // jTextField1.getDocument().addDocumentListener(this);
@@ -167,6 +161,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jTextField1 = new javax.swing.JTextField();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -182,10 +177,11 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jTextPane2 = new javax.swing.JTextPane();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextPane3 = new javax.swing.JTextPane();
         jStatus = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -203,6 +199,18 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jMenuItem4.setText("jMenuItem4");
         jPopupMenu1.add(jMenuItem4);
+
+        jTextField1.setText("//g");
+        jTextField1.setToolTipText("Enter test regular expresion");
+        jTextField1.setComponentPopupMenu(jPopupMenu1);
+        jTextField1.setMargin(new java.awt.Insets(5, 10, 5, 10));
+        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jTextField1InputMethodTextChanged(evt);
+            }
+        });
 
         setMaximumSize(new java.awt.Dimension(480, 350));
         setMinimumSize(new java.awt.Dimension(480, 350));
@@ -315,18 +323,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
         jLabel2.setOpaque(true);
 
-        jTextField1.setText("//g");
-        jTextField1.setToolTipText("Enter test regular expresion");
-        jTextField1.setComponentPopupMenu(jPopupMenu1);
-        jTextField1.setMargin(new java.awt.Insets(5, 10, 5, 10));
-        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jTextField1InputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-        });
-
         jScrollPane4.setComponentPopupMenu(jPopupMenu1);
 
         jTextPane3.setText("<Enter sample text here to test regular expression>");
@@ -341,27 +337,30 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jStatus.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         jStatus.setOpaque(true);
 
+        jTextPane1.setText("//g");
+        jScrollPane1.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1)
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addComponent(jStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jStatus)
                 .addGap(0, 0, 0)
@@ -429,15 +428,17 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JLabel jStatus;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
     private javax.swing.JTextPane jTextPane3;
     private javax.swing.JToolBar jToolBar1;
