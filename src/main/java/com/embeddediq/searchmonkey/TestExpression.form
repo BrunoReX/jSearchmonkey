@@ -3,6 +3,9 @@
 <Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPopupMenu" name="jPopupMenu1">
+      <Events>
+        <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="jPopupMenu1PopupMenuWillBecomeVisible"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
         <Property name="useNullLayout" type="boolean" value="true"/>
@@ -12,6 +15,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Cut"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
           <Properties>
@@ -42,21 +48,6 @@
         </Menu>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="jTextField1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="//g"/>
-        <Property name="toolTipText" type="java.lang.String" value="Enter test regular expresion"/>
-        <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="jPopupMenu1"/>
-        </Property>
-        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[5, 10, 5, 10]"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="jTextField1InputMethodTextChanged"/>
-      </Events>
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">

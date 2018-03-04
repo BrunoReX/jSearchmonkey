@@ -32,6 +32,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import com.google.gson.Gson;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
 /**
@@ -165,7 +169,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jTextField1 = new javax.swing.JTextField();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -187,7 +190,22 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
 
+        jPopupMenu1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jPopupMenu1PopupMenuWillBecomeVisible(evt);
+            }
+        });
+
         jMenuItem1.setText("Cut");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Copy");
@@ -208,18 +226,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jMenu1.add(jMenuItem4);
 
         jPopupMenu1.add(jMenu1);
-
-        jTextField1.setText("//g");
-        jTextField1.setToolTipText("Enter test regular expresion");
-        jTextField1.setComponentPopupMenu(jPopupMenu1);
-        jTextField1.setMargin(new java.awt.Insets(5, 10, 5, 10));
-        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jTextField1InputMethodTextChanged(evt);
-            }
-        });
 
         setMaximumSize(new java.awt.Dimension(480, 350));
         setMinimumSize(new java.awt.Dimension(480, 350));
@@ -382,14 +388,28 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextField1InputMethodTextChanged
-        // TODO - add a short delay
-        //UpdateRegex();
-    }//GEN-LAST:event_jTextField1InputMethodTextChanged
-
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        this.jTextPane2.setText(def1);
+        jTextPane2.setText(def1);
+        UpdateRegex();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jPopupMenu1PopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jPopupMenu1PopupMenuWillBecomeVisible
+        jSeparator1.setVisible(evt.getSource().equals(this.jTextPane2));
+        jMenu1.setVisible(evt.getSource().equals(this.jTextPane2));
+        
+        JTextPane item = (JTextPane)evt.getSource();
+        boolean enable_copy = item.getSelectedText() != null;
+        jMenuItem1.setEnabled(enable_copy);
+        jMenuItem2.setEnabled(enable_copy);        
+    }//GEN-LAST:event_jPopupMenu1PopupMenuWillBecomeVisible
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        JTextPane item = (JTextPane)evt.getSource();
+        
+        clipboard.setContents(new StringSelection(item.getSelectedText()), this);
+        //Toolkit.getSystemClipboard(); // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton4;
@@ -415,7 +435,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JLabel jStatus;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
     private javax.swing.JTextPane jTextPane3;
@@ -439,44 +458,5 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         // TODO - add a short delay
         UpdateRegex();
     }
-
-    class PopupListener2 implements MouseListener
-    {
     
-        private void showPopup(MouseEvent e)
-        {
-            if (e.isPopupTrigger()) {
-                jPopupMenu1.show(e.getComponent(),
-                           e.getX(), e.getY());
-            }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent me) {
-            showPopup(me);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent me) {
-            // if (me.getButton() == MouseEvent.BUTTON2)
-            {
-                showPopup(me);
-            }
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent me) {
-            // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent me) {
-            // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public void mouseExited(MouseEvent me) {
-            // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
 }
