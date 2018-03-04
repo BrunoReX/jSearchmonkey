@@ -360,6 +360,7 @@
           <SubComponents>
             <Component class="javax.swing.JTextPane" name="jTextPane3">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jPopupMenu1"/>

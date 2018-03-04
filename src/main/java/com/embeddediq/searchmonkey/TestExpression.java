@@ -32,6 +32,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import com.google.gson.Gson;
+import javax.swing.UIManager;
 
 /**
  *
@@ -107,7 +108,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         try
         {
             String txt = jTextPane1.getText();
-            if (txt.length() == 0) return;
+            
+            jTextPane1.setBackground(UIManager.getLookAndFeelDefaults().getColor("TextPane.background"));
+            jTextPane3.setText("");
+            //if (txt.length() == 0) return;
             //flags |= Pattern.CASE_INSENSITIVE;
             //flags |= Pattern.DOTALL;
             //flags |= Pattern.UNICODE_CASE;
@@ -119,23 +123,27 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             doc.setCharacterAttributes(0, doc.getLength(), doc.nameStyle, true);
             if (m.find())
             {
-                this.jTextPane1.setBackground(Color.GREEN);
-                do{
-                    int s = m.start();
-                    int e = m.end();
-                    doc.setCharacterAttributes(s, e-s, doc.linkStyle, false);
-                    count ++;
-                } while (m.find());
+                if (txt.length() != 0)
+                {
+                    this.jTextPane1.setBackground(Color.GREEN);
+                    do{
+                        int s = m.start();
+                        int e = m.end();
+                        doc.setCharacterAttributes(s, e-s, doc.linkStyle, false);
+                        count ++;
+                    } while (m.find());
+                }
             }
             else
             {
                 this.jTextPane1.setBackground(Color.ORANGE);
-                this.jTextPane2.setSelectionColor(Color.ORANGE);
+                //this.jTextPane2.setSelectionColor(Color.ORANGE);
             }
         }
         catch (IllegalArgumentException ex)
         {
             this.jTextPane1.setBackground(Color.RED);
+            this.jTextPane3.setText(ex.getLocalizedMessage());
         }
         // Update the status message
         this.jStatus.setText(String.format("Status: Found %d match%s", count, count == 1 ? "" : "es"));
@@ -327,6 +335,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jScrollPane4.setComponentPopupMenu(jPopupMenu1);
 
+        jTextPane3.setEditable(false);
         jTextPane3.setToolTipText("");
         jTextPane3.setComponentPopupMenu(jPopupMenu1);
         jTextPane3.setInheritsPopupMenu(true);
