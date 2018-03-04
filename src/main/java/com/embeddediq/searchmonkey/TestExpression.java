@@ -16,7 +16,6 @@
  */
 package com.embeddediq.searchmonkey;
 
-import com.google.gson.Gson;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -26,12 +25,13 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-// import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+
+import com.google.gson.Gson;
 
 /**
  *
@@ -64,23 +64,11 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         
         // Add document listener to the regex edit tool
         jTextPane1.getDocument().addDocumentListener(this);
-//        x = new Timer(0, new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent ae) {
-//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-//        } );
-
-        // Add listener
-        // jTextField1.getDocument().addDocumentListener(this);
-        // jTextPane2.getDocument().addDocumentListener(this);
         
         //MouseListener popupListener = (MouseListener) new PopupListener2();
         //this.jTextPane2.addMouseListener(popupListener);
-
     }
     
-    private Timer x;
     
     private final String def1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec orci laoreet mauris venenatis malesuada. Sed vel pretium ex. Aliquam quis metus tristique, cursus augue eu, molestie erat. Praesent eu purus erat. Vestibulum placerat arcu at mi feugiat vulputate. Aenean faucibus libero a lectus iaculis semper. Integer eget ante non eros feugiat volutpat at a tellus. Nulla in sollicitudin tellus, nec tempus odio. Donec sagittis velit sed posuere varius. Duis magna leo, vulputate nec sapien non, efficitur euismod odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse congue justo quis sapien dignissim, vel pellentesque est gravida.";
     private String wizardName;
@@ -92,10 +80,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         String item = g.fromJson(json, String.class);
         jTextPane2.setText(item);
     }
-//    private void RestoreDefaults() // Load back previous example content
-//    {
-//        jTextPane2.setText(def1);
-//    }
     
     public void Save()
     {
@@ -105,11 +89,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         prefs.put(wizardName, json); // Add list of look in folders        
     }
     private final Preferences prefs;
-    
-    public JButton getCloseButton()
-    {
-        return this.jButton2;
-    }
     
     public String getRegex()
     {
@@ -133,7 +112,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             //flags |= Pattern.DOTALL;
             //flags |= Pattern.UNICODE_CASE;
             //flags |= Pattern.UNICODE_CASE;
-            // CASE_INSENSITIVE, MULTILINE, DOTALL, UNICODE_CASE, CANON_EQ, UNIX_LINES, LITERAL, UNICODE_CHARACTER_CLASS and COMMENTS;
             
             Pattern compile = Pattern.compile(txt, flags);
             Matcher m = compile.matcher(this.jTextPane2.getText().replaceAll("(?!\\r)\\n", ""));
@@ -147,7 +125,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
                     int e = m.end();
                     doc.setCharacterAttributes(s, e-s, doc.linkStyle, false);
                     count ++;
-                    //doc.setParagraphAttributes(s, e-s, as, false);
                 } while (m.find());
             }
             else
@@ -178,6 +155,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jTextField1 = new javax.swing.JTextField();
         jDesktopPane1 = new javax.swing.JDesktopPane();
@@ -200,10 +178,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jStatus = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         jMenuItem1.setText("Cut");
         jPopupMenu1.add(jMenuItem1);
@@ -215,8 +189,17 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jPopupMenu1.add(jMenuItem3);
         jPopupMenu1.add(jSeparator1);
 
-        jMenuItem4.setText("jMenuItem4");
-        jPopupMenu1.add(jMenuItem4);
+        jMenu1.setText("Reset");
+
+        jMenuItem4.setText("Lorem ipsum..");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jPopupMenu1.add(jMenu1);
 
         jTextField1.setText("//g");
         jTextField1.setToolTipText("Enter test regular expresion");
@@ -308,10 +291,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(217, Short.MAX_VALUE))
+                .addContainerGap(250, Short.MAX_VALUE))
             .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                    .addContainerGap(228, Short.MAX_VALUE)
+                    .addContainerGap(261, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );
@@ -324,6 +307,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jTextPane2.setText("<Enter sample text here to test regular expression>");
         jTextPane2.setToolTipText("Enter sample text or copy in from a file to test expression");
+        jTextPane2.setComponentPopupMenu(jPopupMenu1);
         jTextPane2.setInheritsPopupMenu(true);
         jTextPane2.setMargin(new java.awt.Insets(5, 10, 5, 10));
         jScrollPane3.setViewportView(jTextPane2);
@@ -343,8 +327,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jScrollPane4.setComponentPopupMenu(jPopupMenu1);
 
-        jTextPane3.setText("<Enter sample text here to test regular expression>");
-        jTextPane3.setToolTipText("Enter sample text or copy in from a file to test expression");
+        jTextPane3.setToolTipText("");
+        jTextPane3.setComponentPopupMenu(jPopupMenu1);
         jTextPane3.setInheritsPopupMenu(true);
         jTextPane3.setMargin(new java.awt.Insets(5, 10, 5, 10));
         jScrollPane4.setViewportView(jTextPane3);
@@ -355,12 +339,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jStatus.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         jStatus.setOpaque(true);
 
-        jTextPane1.setText("//g");
-        jTextPane1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextPane1KeyTyped(evt);
-            }
-        });
+        jTextPane1.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -383,7 +362,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
                 .addGap(0, 0, 0)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jStatus)
                 .addGap(0, 0, 0)
@@ -392,30 +371,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         );
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
-
-        jButton1.setText("Apply");
-        jButton1.setToolTipText("Click apply to test regular expression");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton1);
-
-        jButton2.setText("Close");
-        jButton2.setToolTipText("Close the dialog");
-        jPanel3.add(jButton2);
-
-        jButton3.setText("Reset");
-        jButton3.setToolTipText("Reset dialog back to the defaults");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton3);
-
-        add(jPanel3, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextField1InputMethodTextChanged
@@ -423,25 +378,11 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         //UpdateRegex();
     }//GEN-LAST:event_jTextField1InputMethodTextChanged
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.jTextPane1.setText("sample");
-        this.jTextPane2.setText("<Copy and paste your sample text here>");
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        UpdateRegex();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextPane1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPane1KeyTyped
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextPane1KeyTyped
-
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        this.jTextPane2.setText(def1);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -449,12 +390,12 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;

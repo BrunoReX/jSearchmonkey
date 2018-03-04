@@ -540,27 +540,19 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
     private void testRegexExpression()
     {
+        JOptionPane optPanel = new JOptionPane();
+        // optPanel.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        
         int flags = 0;
-        JDialog frame = new JDialog(this, "Test Regular Expression", false);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         TestExpression panel = new TestExpression(flags, "Contains");
-        panel.getCloseButton().addActionListener((ActionEvent ae) -> {
-            panel.Save();
-            frame.setVisible(false);
-        });
-        frame.getContentPane().add(panel);
-        frame.setResizable(false);
+        optPanel.setMessage(panel);
+        JDialog frame = optPanel.createDialog(this, "Test Regular Expression");
+        frame.setResizable(true);
         frame.pack();
-
-        // Center on parent
         frame.setLocationRelativeTo(this);
-        frame.addWindowStateListener((WindowEvent we) -> {
-            if (we.equals(WindowEvent.WINDOW_CLOSING))
-            {
-                panel.Save();
-            }
-        });
-        frame.setVisible(true);                
+        
+        frame.setVisible(true);       
+        panel.Save();
     }
     
     /**
