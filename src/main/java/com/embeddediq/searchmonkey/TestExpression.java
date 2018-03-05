@@ -16,33 +16,32 @@
  */
 package com.embeddediq.searchmonkey;
 
+import com.google.gson.Gson;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.UIManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JButton;
-import javax.swing.Timer;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-
-import com.google.gson.Gson;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
 
 /**
  *
  * @author cottr
  */
-public class TestExpression extends javax.swing.JPanel implements DocumentListener {
+public class TestExpression extends javax.swing.JPanel implements DocumentListener, ClipboardOwner {
 
     /**
      * Creates new form RegexHelper
@@ -209,9 +208,19 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jPopupMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Copy");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Paste");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(jMenuItem3);
         jPopupMenu1.add(jSeparator1);
 
@@ -397,19 +406,54 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jSeparator1.setVisible(evt.getSource().equals(this.jTextPane2));
         jMenu1.setVisible(evt.getSource().equals(this.jTextPane2));
         
-        JTextPane item = (JTextPane)evt.getSource();
+        
+        JTextPane item = (JTextPane)this.jPopupMenu1.getInvoker();
         boolean enable_copy = item.getSelectedText() != null;
         jMenuItem1.setEnabled(enable_copy);
         jMenuItem2.setEnabled(enable_copy);        
     }//GEN-LAST:event_jPopupMenu1PopupMenuWillBecomeVisible
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // Copy the text
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        JTextPane item = (JTextPane)evt.getSource();
-        
+        JTextPane item = (JTextPane)jPopupMenu1.getInvoker();
         clipboard.setContents(new StringSelection(item.getSelectedText()), this);
-        //Toolkit.getSystemClipboard(); // TODO add your handling code here:
+        
+        // Remove the text
+        try {
+            item.getDocument().remove(item.getSelectionStart(), item.getSelectionEnd());
+        } catch (BadLocationException ex) {
+            Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // Copy the text
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        JTextPane item = (JTextPane)jPopupMenu1.getInvoker();
+        clipboard.setContents(new StringSelection(item.getSelectedText()), this);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // Paste the text
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contents = clipboard.getContents(null);
+        if ((contents != null) &&
+          contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          try {
+            String result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+            
+            // Paste the data
+            JTextPane item = (JTextPane)jPopupMenu1.getInvoker();
+            item.getDocument().remove(item.getSelectionStart(), item.getSelectionEnd());
+            item.getDocument().insertString(item.getCaretPosition(), result, null);
+          }
+          catch (UnsupportedFlavorException | IOException | BadLocationException ex){
+            Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton4;
@@ -443,20 +487,23 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
     @Override
     public void insertUpdate(DocumentEvent de) {
-        // TODO - add a short delay
         UpdateRegex();
     }
 
     @Override
     public void removeUpdate(DocumentEvent de) {
-        // TODO - add a short delay
         UpdateRegex();
     }
 
     @Override
     public void changedUpdate(DocumentEvent de) {
-        // TODO - add a short delay
         UpdateRegex();
+    }
+
+    @Override
+    public void lostOwnership(Clipboard clpbrd, Transferable t) {
+        // Don't really care!
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
