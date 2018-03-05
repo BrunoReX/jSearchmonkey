@@ -16,14 +16,12 @@
  */
 package com.embeddediq.searchmonkey;
 
-import java.awt.Color;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 
 /**
  *
@@ -66,14 +64,13 @@ public class About extends javax.swing.JPanel {
         jTextPane2.setEditable(false);
         jTextPane2.setContentType("text/html"); // NOI18N
         jTextPane2.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        jTextPane2.setText("<html><h3>JAVA Searchmonkey v3.1.0</h3> <p>JAVA Searchmonkey is copyright Adam Cottrell <a href=\"mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey\">searchmonkey@embededdiq.com</a>. Searchmonkey is open source and released under the GPL license</p><br/> <p>For help and support <a href=\"http://searchmonnkey.embeddediq.com/forum\">visit our forum</a>. <a href=\"http://searchmonnkey.embeddediq.com/downloads\">Download the latest Searchmonkey</a></p> </html>");
+        jTextPane2.setText("<html><h3>JAVA Searchmonkey v3.2.0</h3> <p>JAVA Searchmonkey is copyright Adam Cottrell <a href=\"mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey\">searchmonkey@embededdiq.com</a>. Searchmonkey is open source and released under the GPL license</p><br/> <p>For help and support <a href=\"http://searchmonnkey.embeddediq.com/forum\">visit our forum</a>. <a href=\"http://searchmonnkey.embeddediq.com/downloads\">Download the latest Searchmonkey</a></p> </html>");
         jScrollPane3.setViewportView(jTextPane2);
 
         add(jScrollPane3, java.awt.BorderLayout.SOUTH);
 
         jLabel2.setText("<html><h1>Welcome!</h1><p><b>JAVA Searchmonkey</b> is a powerful desktop tool for finding files and their content using regular expressions. Searchmonkey combines the power of find/grep and can look inside most text files including PDF, DOCX, XLSX, ODT, and much more besides.</p><br/> <p>To learn more about what Searchmonkey can do for you, then visit our web page: <a href=\"http://searchmonnkey.embeddediq.com\">http://searchmonnkey.embeddediq.com</a></p></html>");
         add(jLabel2, java.awt.BorderLayout.CENTER);
-        jLabel2.getAccessibleContext().setAccessibleName("<html><h1>Welcome!</h1><p><b>JAVA Searchmonkey</b> is a powerful desktop tool for finding files and their content using regular expressions. Searchmonkey combines the power of find/grep and can look inside most text files including PDF, DOCX, XLSX, ODT, and much more besides.</p><br/> <p>To learn more about what Searchmonkey can do for you, then visit our web page: <a href=\"http://searchmonnkey.embeddediq.com\">http://searchmonnkey.embeddediq.com</a></p></html>");
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
