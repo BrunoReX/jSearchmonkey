@@ -503,7 +503,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     @Override
     public void lostOwnership(Clipboard clpbrd, Transferable t) {
         // Don't really care!
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
