@@ -5,21 +5,25 @@
                 width: 100%
             }
             td, th {
-                background-color: #112233
+                background-color: #FFFFFF
             }
         </style>
     </head>
     <body>
-        HTML table test:
+        <h1>HTML table test:</h1
         <div style="background-color: black">
             <table border="0" cellpadding="2" cellspacing="1">
                 <tr>
-                    <td>cell1</td>
-                    <td>cell2</td>
+                    <td>.</td>
+                    <td>any character except newline</td>
                 </tr>
                 <tr>
-                    <td>cell3</td>
-                    <td>cell4</td>
+                    <td>\w \d \s</td>
+                    <td>Any word, digit or space</td>
+                </tr>
+                <tr>
+                    <td>\W \D \S</td>
+                    <td>Any word, digit or space</td>
                 </tr>
         </div>
     </body>
