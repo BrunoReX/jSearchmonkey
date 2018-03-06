@@ -7,7 +7,7 @@
                 margin: 0;
                 padding: 0;
             }
-            .label {
+            .label1 {
                 background: #3c4044;
                 padding: .25rem .5rem;
                 color: #80c0f0;
@@ -40,30 +40,29 @@
         </style>
     </head>
     <body>
-        <h1>HTML table test:</h1>
         <ul class="list">
-            <li data-id="charclasses"><span class="label">Character classes</span>
+            <li data-id="charclasses"><span class="label1">Character classes</span>
                 <ul class="list"><li data-id="set"><span class="label">character set</span><span class="token">[ABC]</span></li><li data-id="setnot"><span class="label">negated set</span><span class="token">[^ABC]</span></li><li data-id="range"><span class="label">range</span><span class="token">[A-Z]</span></li><li data-id="dot"><span class="label">dot</span><span class="token">.</span></li><li data-id="word"><span class="label">word</span><span class="token">\w</span></li><li data-id="notword"><span class="label">not word</span><span class="token">\W</span></li><li data-id="digit"><span class="label">digit</span><span class="token">\d</span></li><li data-id="notdigit"><span class="label">not digit</span><span class="token">\D</span></li><li data-id="whitespace"><span class="label">whitespace</span><span class="token">\s</span></li><li data-id="notwhitespace"><span class="label">not whitespace</span><span class="token">\S</span></li></ul></li>
-            <li data-id="anchors"><span class="label">Anchors</span>
+            <li data-id="anchors"><span class="label1">Anchors</span>
                 <ul class="list"><li data-id="bof"><span class="label">beginning</span><span class="token">^</span></li><li data-id="eof"><span class="label">end</span><span class="token">$</span></li><li data-id="wordboundary"><span class="label">word boundary</span><span class="token">\b</span></li><li data-id="notwordboundary"><span class="label">not word boundary</span><span class="token">\B</span></li></ul>
             </li>
-            <li data-id="escchars"><span class="label">Escaped characters</span>
-                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="escchars"><span class="label1">Escaped characters</span>
+                <ul class="list"><li data-id="reservedchar"><span class="label">reserved characters</span><span class="token">\+</span></li><li data-id="escoctal"><span class="label">octal escape</span><span class="token">\000</span></li><li data-id="eschexadecimal"><span class="label">hexadecimal escape</span><span class="token">\xFF</span></li><li data-id="escunicodeu"><span class="label">unicode escape</span><span class="token">\uFFFF</span></li><li data-id="escunicodeub"><span class="label">extended unicode escape</span><span class="token">\u{FFFF}</span></li><li data-id="esccontrolchar"><span class="label">control character escape</span><span class="token">\cI</span></li><li data-id="esc_9"><span class="label">tab</span><span class="token">\t</span></li><li data-id="esc_10"><span class="label">line feed</span><span class="token">\n</span></li><li data-id="esc_11"><span class="label">vertical tab</span><span class="token">\v</span></li><li data-id="esc_12"><span class="label">form feed</span><span class="token">\f</span></li><li data-id="esc_13"><span class="label">carriage return</span><span class="token">\r</span></li><li data-id="esc_0"><span class="label">null</span><span class="token">\0</span></li></ul>
             </li>
-            <li data-id="groups"><span class="label">Groups &amp; References</span>
-                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="groups"><span class="label1">Groups &amp; References</span>
+                <ul class="list"><li data-id="group"><span class="label">capturing group</span><span class="token">(ABC)</span></li><li data-id="numref"><span class="label">numeric reference</span><span class="token">\1</span></li><li data-id="noncapgroup"><span class="label">non-capturing group</span><span class="token">(?:ABC)</span></li></ul>
             </li>
-            <li data-id="lookaround"><span class="label">Lookaround</span>
-                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="lookaround"><span class="label1">Look-around</span>
+                <ul class="list"><li data-id="poslookahead"><span class="label">positive lookahead</span><span class="token">(?=ABC)</span></li><li data-id="neglookahead"><span class="label">negative lookahead</span><span class="token">(?!ABC)</span></li></ul>
             </li>
-            <li data-id="quants"><span class="label">Quantifiers &amp; Alternation</span>
-                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="quants"><span class="label1">Quantifiers &amp; Alternation</span>
+                <ul class="list"><li data-id="plus"><span class="label">plus</span><span class="token">+</span></li><li data-id="star"><span class="label">star</span><span class="token">*</span></li><li data-id="quant"><span class="label">quantifier</span><span class="token">{1,3}</span></li><li data-id="opt"><span class="label">optional</span><span class="token">?</span></li><li data-id="lazy"><span class="label">lazy</span><span class="token">?</span></li><li data-id="alt"><span class="label">alternation</span><span class="token">|</span></li></ul>
             </li>
-            <li data-id="subst"><span class="label">Substitution</span><svg class="small icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="subst"><span class="label1">Substitution</span>
+                <ul class="list"><li data-id="plus"><span class="label">plus</span><span class="token">+</span></li><li data-id="star"><span class="label">star</span><span class="token">*</span></li><li data-id="quant"><span class="label">quantifier</span><span class="token">{1,3}</span></li><li data-id="opt"><span class="label">optional</span><span class="token">?</span></li><li data-id="lazy"><span class="label">lazy</span><span class="token">?</span></li><li data-id="alt"><span class="label">alternation</span><span class="token">|</span></li></ul>
             </li>
-            <li data-id="flags"><span class="label">Flags</span><svg class="small icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            <li data-id="flags"><span class="label1">Flags</span>
+                <ul class="list"><li data-id="caseinsensitive"><span class="label">ignore case</span><span class="token">i</span></li><li data-id="global"><span class="label">global search</span><span class="token">g</span></li><li data-id="multiline"><span class="label">multiline</span><span class="token">m</span></li><li data-id="unicode"><span class="label">unicode</span><span class="token">u</span></li><li data-id="sticky"><span class="label">sticky</span><span class="token">y</span></li></ul>
             </li>
             
         </ul>

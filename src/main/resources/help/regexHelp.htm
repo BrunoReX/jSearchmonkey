@@ -1,26 +1,56 @@
 <html>
     <head>
         <style type="text/css">
-            table {
-                width: 100%
+            .list {
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
             }
-            td, th {
-                background-color: #FFFFFF
+            .label1 {
+                background: #3c4044;
+                padding: .25rem .5rem;
+                color: #80c0f0;
+                font-weight: bold;
+                display: -webkit-box;
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
             }
+            ul {
+                display: flex;
+                flex: 1 1 0;
+                overflow-y: auto;
+                align-items: stretch;
+                list-style-type: none;
+            }
+            li {
+                display: flex;
+                flex: 0 0 auto;
+                justify-content: center;
+                align-items: center;
+                padding: .5rem;
+                margin: 0px;
+                padding: 0px;
+                border-bottom: 1px solid rgba(243,244,244,0.06);
+                flex-flow: column;
+            }
+
         </style>
     </head>
     <body>
-        <h1>HTML table test:</h1
-        <div style="background-color: black">
-            <table border="0" cellpadding="2" cellspacing="1">
-                <tr>
-                    <td>cell1</td>
-                    <td>cell2</td>
-                </tr>
-                <tr>
-                    <td>cell3</td>
-                    <td>cell4</td>
-                </tr>
-        </div>
+        <ul class="list">
+            <li data-id="charclasses"><span class="label1">About</span>
+                <div class="content">Created by Adam Cottrell.</div>
+            </li>
+            <li data-id="charclasses"><span class="label1">Getting started</span>
+                <div class="content">Searchmonkey provides real-time visual results, syntax highlighting, tooltips, and undo/redo (ctrl-Z / Y) so it's easy and fun to explore Regular Expressions.<p>Browse through the <b>Reference</b> and test different tokens to see what they do, then check out the <b>Community</b> to see example patterns.</p><p>You can also <b>Save</b> your patterns for later reference, or to share with others.</p></div>
+            </li>
+            <li data-id="flags"><span class="label1">Flags</span>
+                <ul class="list"><li data-id="caseinsensitive"><span class="label">ignore case</span><span class="token">i</span></li><li data-id="global"><span class="label">global search</span><span class="token">g</span></li><li data-id="multiline"><span class="label">multiline</span><span class="token">m</span></li><li data-id="unicode"><span class="label">unicode</span><span class="token">u</span></li><li data-id="sticky"><span class="label">sticky</span><span class="token">y</span></li></ul>
+            </li>
+            
+        </ul>
     </body>
 </html>

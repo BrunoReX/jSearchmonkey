@@ -506,6 +506,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.jBackButton.setText("< Reference");
     }//GEN-LAST:event_jReferenceButtonActionPerformed
 
     private void UpdateHelpPage(String resource) throws URISyntaxException, IOException
@@ -528,6 +529,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.jBackButton.setText("< Help");
     }//GEN-LAST:event_jHelpButtonActionPerformed
 
     private void jCheatSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheatSheetActionPerformed
@@ -537,6 +539,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.jBackButton.setText("< Cheat Sheet");
     }//GEN-LAST:event_jCheatSheetActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
