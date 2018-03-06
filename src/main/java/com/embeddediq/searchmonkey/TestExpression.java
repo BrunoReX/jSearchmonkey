@@ -502,7 +502,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void jReferenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReferenceButtonActionPerformed
         this.jLayeredPane1.moveToFront(this.jReference);
         try {
-            UpdateHelpPage("help/regexRef.htm");
+            UpdateHelpPage("/help/regexRef.htm");
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -511,8 +511,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void UpdateHelpPage(String resource) throws URISyntaxException, IOException
     {
         URL url = this.getClass().getResource(resource);
-        Path path;
-        path = Paths.get(url.toURI());
+        Path path = Paths.get(url.toURI());
 
         List<String> content = Files.readAllLines(path, StandardCharsets.UTF_8);
         this.jHelpPage.setText(String.join("\n", content));
@@ -525,7 +524,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void jHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHelpButtonActionPerformed
         this.jLayeredPane1.moveToFront(this.jReference);
         try {
-            UpdateHelpPage("help/regexHelp.htm");
+            UpdateHelpPage("/help/regexHelp.htm");
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -534,7 +533,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void jCheatSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheatSheetActionPerformed
         this.jLayeredPane1.moveToFront(this.jReference);
         try {
-            UpdateHelpPage("help/regexCheat.htm");
+            UpdateHelpPage("/help/regexCheat.htm");
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }

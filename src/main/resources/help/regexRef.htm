@@ -1,26 +1,71 @@
 <html>
     <head>
         <style type="text/css">
-            table {
-                width: 100%
+            .list {
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
             }
-            td, th {
-                background-color: #FFFFFF
+            .label {
+                background: #3c4044;
+                padding: .25rem .5rem;
+                color: #80c0f0;
+                font-weight: bold;
+                display: -webkit-box;
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
             }
+            ul {
+                display: flex;
+                flex: 1 1 0;
+                overflow-y: auto;
+                align-items: stretch;
+                list-style-type: none;
+            }
+            li {
+                display: flex;
+                flex: 0 0 auto;
+                justify-content: center;
+                align-items: center;
+                padding: .5rem;
+                margin: 0px;
+                padding: 0px;
+                border-bottom: 1px solid rgba(243,244,244,0.06);
+                flex-flow: column;
+            }
+
         </style>
     </head>
     <body>
-        <h1>HTML table test:</h1
-        <div style="background-color: black">
-            <table border="0" cellpadding="2" cellspacing="1">
-                <tr>
-                    <td>cell1</td>
-                    <td>cell2</td>
-                </tr>
-                <tr>
-                    <td>cell3</td>
-                    <td>cell4</td>
-                </tr>
-        </div>
+        <h1>HTML table test:</h1>
+        <ul class="list">
+            <li data-id="charclasses"><span class="label">Character classes</span>
+                <ul class="list"><li data-id="set"><span class="label">character set</span><span class="token">[ABC]</span></li><li data-id="setnot"><span class="label">negated set</span><span class="token">[^ABC]</span></li><li data-id="range"><span class="label">range</span><span class="token">[A-Z]</span></li><li data-id="dot"><span class="label">dot</span><span class="token">.</span></li><li data-id="word"><span class="label">word</span><span class="token">\w</span></li><li data-id="notword"><span class="label">not word</span><span class="token">\W</span></li><li data-id="digit"><span class="label">digit</span><span class="token">\d</span></li><li data-id="notdigit"><span class="label">not digit</span><span class="token">\D</span></li><li data-id="whitespace"><span class="label">whitespace</span><span class="token">\s</span></li><li data-id="notwhitespace"><span class="label">not whitespace</span><span class="token">\S</span></li></ul></li>
+            <li data-id="anchors"><span class="label">Anchors</span>
+                <ul class="list"><li data-id="bof"><span class="label">beginning</span><span class="token">^</span></li><li data-id="eof"><span class="label">end</span><span class="token">$</span></li><li data-id="wordboundary"><span class="label">word boundary</span><span class="token">\b</span></li><li data-id="notwordboundary"><span class="label">not word boundary</span><span class="token">\B</span></li></ul>
+            </li>
+            <li data-id="escchars"><span class="label">Escaped characters</span>
+                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            <li data-id="groups"><span class="label">Groups &amp; References</span>
+                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            <li data-id="lookaround"><span class="label">Lookaround</span>
+                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            <li data-id="quants"><span class="label">Quantifiers &amp; Alternation</span>
+                <svg class="small icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            <li data-id="subst"><span class="label">Substitution</span><svg class="small icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            <li data-id="flags"><span class="label">Flags</span><svg class="small icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrowright"></use></svg>
+            </li>
+            
+        </ul>
     </body>
 </html>

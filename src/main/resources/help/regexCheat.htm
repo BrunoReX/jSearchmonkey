@@ -2,29 +2,29 @@
     <head>
         <style type="text/css">
             table {
-                width: 100%
+                width: 100%;
+                background: #FFFFFF;
+                color: #f3f4f4;
+                border-spacing: 2px;
+                border-color: grey;
             }
-            td, th {
-                background-color: #FFFFFF
+            th {
+                background: #3c4044;
+                padding: .25rem .5rem;
+                color: #80c0f0;
+                font-weight: bold;
+            }
+            table td {
+                background: #F0F0F0;
+                color: #101020;
             }
         </style>
     </head>
     <body>
-        <h1>HTML table test:</h1
-        <div style="background-color: black">
-            <table border="0" cellpadding="2" cellspacing="1">
-                <tr>
-                    <td>.</td>
-                    <td>any character except newline</td>
-                </tr>
-                <tr>
-                    <td>\w \d \s</td>
-                    <td>Any word, digit or space</td>
-                </tr>
-                <tr>
-                    <td>\W \D \S</td>
-                    <td>Any word, digit or space</td>
-                </tr>
-        </div>
+        <table border="0" cellpadding="2" cellspacing="1">
+            <tbody>
+                <tr><th colspan="2" data-id="charclasses">Character classes</th></tr><tr><td>.</td><td>any character except newline</td></tr><tr><td>\w \d \s</td><td>word, digit, whitespace</td></tr><tr><td>\W \D \S</td><td>not word, digit, whitespace</td></tr><tr><td>[abc]</td><td>any of a, b, or c</td></tr><tr><td>[^abc]</td><td>not a, b, or c</td></tr><tr><td>[a-g]</td><td>character between a &amp; g</td></tr><tr><th colspan="2" data-id="anchors">Anchors</th></tr><tr><td>^abc$</td><td>start / end of the string</td></tr><tr><td>\b \B</td><td>word, not-word boundary</td></tr><tr><th colspan="2" data-id="escchars">Escaped characters</th></tr><tr><td>\. \* \\</td><td>escaped special characters</td></tr><tr><td>\t \n \r</td><td>tab, linefeed, carriage return</td></tr><tr><td>\u00A9</td><td>unicode escaped ©</td></tr><tr><th colspan="2" data-id="groups">Groups &amp; Lookaround</th></tr><tr><td>(abc)</td><td>capture group</td></tr><tr><td>\1</td><td>backreference to group #1</td></tr><tr><td>(?:abc)</td><td>non-capturing group</td></tr><tr><td>(?=abc)</td><td>positive lookahead</td></tr><tr><td>(?!abc)</td><td>negative lookahead</td></tr><tr><th colspan="2" data-id="quants">Quantifiers &amp; Alternation</th></tr><tr><td>a* a+ a?</td><td>0 or more, 1 or more, 0 or 1</td></tr><tr><td>a{5} a{2,}</td><td>exactly five, two or more</td></tr><tr><td>a{1,3}</td><td>between one &amp; three</td></tr><tr><td>a+? a{2,}?</td><td>match as few as possible</td></tr><tr><td>ab|cd</td><td>match ab or cd</td></tr>
+            </tbody>
+        </table>
     </body>
 </html>
