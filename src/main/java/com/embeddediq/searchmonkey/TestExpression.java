@@ -76,8 +76,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         // Add document listener to the regex edit tool
         jTextPane1.getDocument().addDocumentListener(this);
         
-        //MouseListener popupListener = (MouseListener) new PopupListener2();
-        //this.jTextPane2.addMouseListener(popupListener);
+        UpdateHelpPage(null);
     }
     
     
@@ -185,7 +184,12 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jStatus = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
+        jLayeredPane1 = new javax.swing.JPanel();
+        jReference = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jHelpPage = new javax.swing.JTextPane();
+        jToolBar2 = new javax.swing.JToolBar();
+        jBackButton = new javax.swing.JButton();
         jTopMenu = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -196,11 +200,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jCheatSheet = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         jLabel1 = new javax.swing.JLabel();
-        jReference = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jHelpPage = new javax.swing.JTextPane();
-        jToolBar2 = new javax.swing.JToolBar();
-        jBackButton = new javax.swing.JButton();
 
         jPopupMenu1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -249,9 +248,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jPopupMenu1.add(jMenu1);
 
-        setMaximumSize(new java.awt.Dimension(480, 350));
         setMinimumSize(new java.awt.Dimension(480, 350));
-        setName(""); // NOI18N
+        setName("jLayeredPane1"); // NOI18N
         setPreferredSize(new java.awt.Dimension(480, 350));
         setLayout(new java.awt.BorderLayout());
 
@@ -301,7 +299,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addComponent(jStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -317,7 +315,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
                 .addGap(0, 0, 0)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jStatus)
                 .addGap(0, 0, 0)
@@ -327,68 +325,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jTopMenu.setPreferredSize(new java.awt.Dimension(150, 100));
-        jTopMenu.setLayout(new java.awt.BorderLayout());
-
-        jToolBar1.setFloatable(false);
-        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar1.setRollover(true);
-        jToolBar1.setOpaque(false);
-        jToolBar1.add(jSeparator2);
-
-        jHelpButton.setBackground(new java.awt.Color(0, 0, 204));
-        jHelpButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jHelpButton.setForeground(new java.awt.Color(255, 255, 255));
-        jHelpButton.setText("Help");
-        jHelpButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jHelpButton.setMaximumSize(new java.awt.Dimension(150, 21));
-        jHelpButton.setMinimumSize(new java.awt.Dimension(15, 21));
-        jHelpButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jHelpButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jHelpButtonActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jHelpButton);
-        jToolBar1.add(jSeparator3);
-
-        jReferenceButton.setBackground(new java.awt.Color(0, 0, 204));
-        jReferenceButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jReferenceButton.setForeground(new java.awt.Color(255, 255, 255));
-        jReferenceButton.setText("Reference");
-        jReferenceButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jReferenceButton.setMaximumSize(new java.awt.Dimension(150, 21));
-        jReferenceButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jReferenceButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jReferenceButtonActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jReferenceButton);
-        jToolBar1.add(jSeparator4);
-
-        jCheatSheet.setBackground(new java.awt.Color(0, 0, 204));
-        jCheatSheet.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jCheatSheet.setForeground(new java.awt.Color(255, 255, 255));
-        jCheatSheet.setText("Cheat sheet");
-        jCheatSheet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jCheatSheet.setMaximumSize(new java.awt.Dimension(150, 21));
-        jCheatSheet.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jCheatSheet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheatSheetActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jCheatSheet);
-
-        jSeparator5.setBackground(new java.awt.Color(255, 255, 255));
-        jSeparator5.setForeground(new java.awt.Color(255, 255, 255));
-        jToolBar1.add(jSeparator5);
-
-        jTopMenu.add(jToolBar1, java.awt.BorderLayout.CENTER);
-
-        jLabel1.setText("<html><p>Enter a test expression and the syntax will automatically highlight the text within the search panel.</p></html>");
-        jTopMenu.add(jLabel1, java.awt.BorderLayout.SOUTH);
+        jLayeredPane1.setLayout(new java.awt.BorderLayout());
 
         jReference.setLayout(new java.awt.BorderLayout());
 
@@ -416,27 +353,64 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jReference.add(jToolBar2, java.awt.BorderLayout.NORTH);
 
-        jLayeredPane1.setLayer(jTopMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jLayeredPane1.setLayer(jReference, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(jReference, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
-        jLayeredPane1.setLayout(jLayeredPane1Layout);
-        jLayeredPane1Layout.setHorizontalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jTopMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jReference, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jLayeredPane1Layout.setVerticalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jTopMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jReference, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jTopMenu.setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setBorder(null);
+        jToolBar1.setFloatable(false);
+        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setRollover(true);
+        jToolBar1.add(jSeparator2);
+
+        jHelpButton.setBackground(new java.awt.Color(0, 0, 204));
+        jHelpButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jHelpButton.setForeground(new java.awt.Color(255, 255, 255));
+        jHelpButton.setText("Help");
+        jHelpButton.setAlignmentX(0.5F);
+        jHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jHelpButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jHelpButton);
+        jToolBar1.add(jSeparator3);
+
+        jReferenceButton.setBackground(new java.awt.Color(0, 0, 204));
+        jReferenceButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jReferenceButton.setForeground(new java.awt.Color(255, 255, 255));
+        jReferenceButton.setText("Reference");
+        jReferenceButton.setAlignmentX(0.5F);
+        jReferenceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jReferenceButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jReferenceButton);
+        jToolBar1.add(jSeparator4);
+
+        jCheatSheet.setBackground(new java.awt.Color(0, 0, 204));
+        jCheatSheet.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jCheatSheet.setForeground(new java.awt.Color(255, 255, 255));
+        jCheatSheet.setText("Cheat sheet");
+        jCheatSheet.setAlignmentX(0.5F);
+        jCheatSheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheatSheetActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jCheatSheet);
+
+        jSeparator5.setBackground(new java.awt.Color(255, 255, 255));
+        jSeparator5.setForeground(new java.awt.Color(255, 255, 255));
+        jToolBar1.add(jSeparator5);
+
+        jTopMenu.add(jToolBar1, java.awt.BorderLayout.CENTER);
+
+        jLabel1.setText("<html><p>Enter a test expression and the syntax will automatically highlight the text within the search panel.</p></html>");
+        jTopMenu.add(jLabel1, java.awt.BorderLayout.SOUTH);
+
+        jLayeredPane1.add(jTopMenu, java.awt.BorderLayout.CENTER);
 
         add(jLayeredPane1, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents
@@ -500,45 +474,41 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     }//GEN-LAST:event_jPasteActionPerformed
 
     private void jReferenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReferenceButtonActionPerformed
-        this.jLayeredPane1.moveToFront(this.jReference);
-        try {
-            UpdateHelpPage("/help/regexRef.htm");
-        } catch (URISyntaxException | IOException ex) {
-            Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        UpdateHelpPage("/help/regexRef.htm");
         this.jBackButton.setText("< Reference");
     }//GEN-LAST:event_jReferenceButtonActionPerformed
 
-    private void UpdateHelpPage(String resource) throws URISyntaxException, IOException
+    private void UpdateHelpPage(String resource)
     {
-        URL url = this.getClass().getResource(resource);
-        Path path = Paths.get(url.toURI());
+        boolean restoreMenu = (resource == null);
+        jReference.setVisible(!restoreMenu);
+        jTopMenu.setVisible(restoreMenu);
+        this.setSize(250, 200);
+        if (restoreMenu) return; // We are done
 
-        List<String> content = Files.readAllLines(path, StandardCharsets.UTF_8);
-        this.jHelpPage.setText(String.join("\n", content));
-    }
-    
-    private void jBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackButtonActionPerformed
-        this.jLayeredPane1.moveToBack(this.jReference);
-    }//GEN-LAST:event_jBackButtonActionPerformed
+        try
+        {
+            URL url = this.getClass().getResource(resource);
+            Path path = Paths.get(url.toURI());
 
-    private void jHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHelpButtonActionPerformed
-        this.jLayeredPane1.moveToFront(this.jReference);
-        try {
-            UpdateHelpPage("/help/regexHelp.htm");
+            List<String> content = Files.readAllLines(path, StandardCharsets.UTF_8);
+            this.jHelpPage.setText(String.join("\n", content));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void jBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackButtonActionPerformed
+        UpdateHelpPage(null);
+    }//GEN-LAST:event_jBackButtonActionPerformed
+
+    private void jHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHelpButtonActionPerformed
+        UpdateHelpPage("/help/regexHelp.htm");
         this.jBackButton.setText("< Help");
     }//GEN-LAST:event_jHelpButtonActionPerformed
 
     private void jCheatSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheatSheetActionPerformed
-        this.jLayeredPane1.moveToFront(this.jReference);
-        try {
-            UpdateHelpPage("/help/regexCheat.htm");
-        } catch (URISyntaxException | IOException ex) {
-            Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        UpdateHelpPage("/help/regexCheat.htm");
         this.jBackButton.setText("< Cheat Sheet");
     }//GEN-LAST:event_jCheatSheetActionPerformed
 
@@ -552,7 +522,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jLayeredPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JMenuItem jPaste;
