@@ -547,9 +547,13 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         TestExpression panel = new TestExpression(flags, "Contains");
         optPanel.setMessage(panel);
         JDialog frame = optPanel.createDialog(this, "Test Regular Expression");
+        frame.setLocationRelativeTo(this);
+        frame.setMinimumSize(new Dimension(800,400));
+        frame.setMaximumSize(new Dimension(65535,65535));
+        // frame.setSize(800, 400); // From defaults
         frame.setResizable(true);
         frame.pack();
-        frame.setLocationRelativeTo(this);
+        frame.setMinimumSize(frame.getSize());
         
         frame.setVisible(true);       
         panel.Save();
