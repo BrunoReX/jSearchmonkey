@@ -183,9 +183,9 @@ public class SearchResult {
         
         if (this.contentType.startsWith("application/"))
         {
-            if (contentType.equals("application/zip") ||
-                    contentType.equals("application/x-zip") ||
-                    contentType.equals("application/x-7z-compressed"))
+            if (contentType.startsWith("application/zip") ||
+                    contentType.startsWith("application/x-zip") ||
+                    contentType.startsWith("application/x-7z"))
                 return ICON_ARCHIVE;
             else if (contentType.equals("application/postscript") ||
                     contentType.equals("application/pdf"))
