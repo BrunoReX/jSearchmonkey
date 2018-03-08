@@ -352,7 +352,7 @@
                         <StringItem index="3" value="Character classes: dot ."/>
                         <StringItem index="4" value="Character classes: word \w"/>
                         <StringItem index="5" value="Character classes: not word \W"/>
-                        <StringItem index="6" value="Character classes: Character classes: digit \d"/>
+                        <StringItem index="6" value="Character classes: digit \d"/>
                         <StringItem index="7" value="Character classes: not digit \D"/>
                         <StringItem index="8" value="Character classes: whitespace \s"/>
                         <StringItem index="9" value="Character classes: not whitespace \S"/>
@@ -360,35 +360,35 @@
                         <StringItem index="11" value="Anchors: end $"/>
                         <StringItem index="12" value="Anchors: word boundary \b"/>
                         <StringItem index="13" value="Anchors: not word boundary \B"/>
-                        <StringItem index="14" value="Escaped characters: reserved characters \+"/>
-                        <StringItem index="15" value="Escaped characters: octal escape \000"/>
-                        <StringItem index="16" value="Escaped characters: hexadecimal escape \xFF"/>
-                        <StringItem index="17" value="Escaped characters: unicode escape \uFFFF"/>
-                        <StringItem index="18" value="Escaped characters: extended unicode escape \u{FFFF}"/>
-                        <StringItem index="19" value="Escaped characters: control character escape \cI"/>
-                        <StringItem index="20" value="Escaped characters: tab \t"/>
-                        <StringItem index="21" value="Escaped characters: line feed \n"/>
-                        <StringItem index="22" value="Escaped characters: vertical tab \v"/>
-                        <StringItem index="23" value="Escaped characters: form feed \f"/>
-                        <StringItem index="24" value="Escaped characters: carriage return \r"/>
-                        <StringItem index="25" value="Escaped characters: &gt;null \0"/>
-                        <StringItem index="26" value="Groups &amp; References: capturing group (ABC)"/>
-                        <StringItem index="27" value="Groups &amp; References: numeric reference \1"/>
-                        <StringItem index="28" value="Groups &amp; References: non-capturing group (?:ABC)"/>
-                        <StringItem index="29" value="Look-around: positive lookahead (?=ABC)"/>
-                        <StringItem index="30" value="Look-around: negative lookahead (?!ABC)"/>
+                        <StringItem index="14" value="Escaped: reserved characters \+"/>
+                        <StringItem index="15" value="Escaped: octal escape \0000"/>
+                        <StringItem index="16" value="Escaped: hexadecimal escape \xFF"/>
+                        <StringItem index="17" value="Escaped: unicode escape \uFFFF"/>
+                        <StringItem index="18" value="Escaped: extended escape \u{FFFF}"/>
+                        <StringItem index="19" value="Escaped: control character \cI"/>
+                        <StringItem index="20" value="Escaped: tab \t"/>
+                        <StringItem index="21" value="Escaped: line feed \n"/>
+                        <StringItem index="22" value="Escaped: vertical tab \v"/>
+                        <StringItem index="23" value="Escaped: form feed \f"/>
+                        <StringItem index="24" value="Escaped: carriage return \r"/>
+                        <StringItem index="25" value="Escaped: null \0"/>
+                        <StringItem index="26" value="Groups: capturing group (ABC)"/>
+                        <StringItem index="27" value="Groups: numeric reference \1"/>
+                        <StringItem index="28" value="Groups: non-capturing group (?:ABC)"/>
+                        <StringItem index="29" value="Look-around: lookahead (?=ABC)"/>
+                        <StringItem index="30" value="Look-around: look-behind (?!ABC)"/>
                         <StringItem index="31" value="Quantifiers &amp; Alternation: plus +"/>
                         <StringItem index="32" value="Quantifiers &amp; Alternation: star *"/>
                         <StringItem index="33" value="Quantifiers &amp; Alternation: quantifier {1,3}"/>
                         <StringItem index="34" value="Quantifiers &amp; Alternation: optional ?"/>
                         <StringItem index="35" value="Quantifiers &amp; Alternation: lazy ?"/>
-                        <StringItem index="36" value="Quantifiers &amp; Alternation: alternation |&lt;/h3&gt;&lt;/div&gt;"/>
-                        <StringItem index="37" value="Substitution: plus +"/>
-                        <StringItem index="38" value="Substitution: star *"/>
-                        <StringItem index="39" value="Substitution: quantifier {1,3}"/>
-                        <StringItem index="40" value="Substitution: optional ?"/>
-                        <StringItem index="41" value="Substitution: lazy ?"/>
-                        <StringItem index="42" value="Substitution: alternation |"/>
+                        <StringItem index="36" value="Quantifiers &amp; Alternation: alternation |"/>
+                        <StringItem index="37" value="Substitution: match $&amp;"/>
+                        <StringItem index="38" value="Substitution: capture group $1"/>
+                        <StringItem index="39" value="Substitution: before match $`"/>
+                        <StringItem index="40" value="Substitution: after match $&apos;"/>
+                        <StringItem index="41" value="Substitution: escaped $ $$"/>
+                        <StringItem index="42" value="Substitution: escaped characters \n"/>
                         <StringItem index="43" value="Flags: ignore case i"/>
                         <StringItem index="44" value="Flags: global search g"/>
                         <StringItem index="45" value="Flags: multiline m"/>
