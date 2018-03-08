@@ -18,6 +18,19 @@
                 margin: 0;
                 padding: 0;
             }
+            .token {
+                background: #3c4044;
+                padding: .25rem .5rem;
+                color: #80c0f0;
+                font-weight: bold;
+                display: -webkit-box;
+                display: flex;
+                flex-direction: column;
+                text-align: right;
+                float: right;
+                margin: 0;
+                padding: 0;
+            }
             ul {
                 display: flex;
                 flex: 1 1 0;
@@ -36,35 +49,209 @@
                 border-bottom: 1px solid rgba(243,244,244,0.06);
                 flex-flow: column;
             }
+            .content {
+                display: none;
+            }
+            
+            em {
+                background-color: #66cc00;
+                text-weight: bold;
+            }
 
         </style>
     </head>
     <body>
-        <ul class="list">
-            <li data-id="charclasses"><span class="label1">Character classes</span>
-                <ul class="list"><li data-id="set"><span class="label">character set</span><span class="token">[ABC]</span></li><li data-id="setnot"><span class="label">negated set</span><span class="token">[^ABC]</span></li><li data-id="range"><span class="label">range</span><span class="token">[A-Z]</span></li><li data-id="dot"><span class="label">dot</span><span class="token">.</span></li><li data-id="word"><span class="label">word</span><span class="token">\w</span></li><li data-id="notword"><span class="label">not word</span><span class="token">\W</span></li><li data-id="digit"><span class="label">digit</span><span class="token">\d</span></li><li data-id="notdigit"><span class="label">not digit</span><span class="token">\D</span></li><li data-id="whitespace"><span class="label">whitespace</span><span class="token">\s</span></li><li data-id="notwhitespace"><span class="label">not whitespace</span><span class="token">\S</span></li></ul></li>
-            <li data-id="anchors"><span class="label1">Anchors</span>
-                <ul class="list"><li data-id="bof"><span class="label">beginning</span><span class="token">^</span></li><li data-id="eof"><span class="label">end</span><span class="token">$</span></li><li data-id="wordboundary"><span class="label">word boundary</span><span class="token">\b</span></li><li data-id="notwordboundary"><span class="label">not word boundary</span><span class="token">\B</span></li></ul>
-            </li>
-            <li data-id="escchars"><span class="label1">Escaped characters</span>
-                <ul class="list"><li data-id="reservedchar"><span class="label">reserved characters</span><span class="token">\+</span></li><li data-id="escoctal"><span class="label">octal escape</span><span class="token">\000</span></li><li data-id="eschexadecimal"><span class="label">hexadecimal escape</span><span class="token">\xFF</span></li><li data-id="escunicodeu"><span class="label">unicode escape</span><span class="token">\uFFFF</span></li><li data-id="escunicodeub"><span class="label">extended unicode escape</span><span class="token">\u{FFFF}</span></li><li data-id="esccontrolchar"><span class="label">control character escape</span><span class="token">\cI</span></li><li data-id="esc_9"><span class="label">tab</span><span class="token">\t</span></li><li data-id="esc_10"><span class="label">line feed</span><span class="token">\n</span></li><li data-id="esc_11"><span class="label">vertical tab</span><span class="token">\v</span></li><li data-id="esc_12"><span class="label">form feed</span><span class="token">\f</span></li><li data-id="esc_13"><span class="label">carriage return</span><span class="token">\r</span></li><li data-id="esc_0"><span class="label">null</span><span class="token">\0</span></li></ul>
-            </li>
-            <li data-id="groups"><span class="label1">Groups &amp; References</span>
-                <ul class="list"><li data-id="group"><span class="label">capturing group</span><span class="token">(ABC)</span></li><li data-id="numref"><span class="label">numeric reference</span><span class="token">\1</span></li><li data-id="noncapgroup"><span class="label">non-capturing group</span><span class="token">(?:ABC)</span></li></ul>
-            </li>
-            <li data-id="lookaround"><span class="label1">Look-around</span>
-                <ul class="list"><li data-id="poslookahead"><span class="label">positive lookahead</span><span class="token">(?=ABC)</span></li><li data-id="neglookahead"><span class="label">negative lookahead</span><span class="token">(?!ABC)</span></li></ul>
-            </li>
-            <li data-id="quants"><span class="label1">Quantifiers &amp; Alternation</span>
-                <ul class="list"><li data-id="plus"><span class="label">plus</span><span class="token">+</span></li><li data-id="star"><span class="label">star</span><span class="token">*</span></li><li data-id="quant"><span class="label">quantifier</span><span class="token">{1,3}</span></li><li data-id="opt"><span class="label">optional</span><span class="token">?</span></li><li data-id="lazy"><span class="label">lazy</span><span class="token">?</span></li><li data-id="alt"><span class="label">alternation</span><span class="token">|</span></li></ul>
-            </li>
-            <li data-id="subst"><span class="label1">Substitution</span>
-                <ul class="list"><li data-id="plus"><span class="label">plus</span><span class="token">+</span></li><li data-id="star"><span class="label">star</span><span class="token">*</span></li><li data-id="quant"><span class="label">quantifier</span><span class="token">{1,3}</span></li><li data-id="opt"><span class="label">optional</span><span class="token">?</span></li><li data-id="lazy"><span class="label">lazy</span><span class="token">?</span></li><li data-id="alt"><span class="label">alternation</span><span class="token">|</span></li></ul>
-            </li>
-            <li data-id="flags"><span class="label1">Flags</span>
-                <ul class="list"><li data-id="caseinsensitive"><span class="label">ignore case</span><span class="token">i</span></li><li data-id="global"><span class="label">global search</span><span class="token">g</span></li><li data-id="multiline"><span class="label">multiline</span><span class="token">m</span></li><li data-id="unicode"><span class="label">unicode</span><span class="token">u</span></li><li data-id="sticky"><span class="label">sticky</span><span class="token">y</span></li></ul>
-            </li>
-            
-        </ul>
+        <h2 class="label1">Character classes</h2>
+        <div data-id="set">
+            <h3 class="label">character set [ABC]</h3>
+            <div class="content">Match any character in the set.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>[aeiou]</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>gl<em>i</em>b j<em>o</em>cks v<em>e</em>x dw<em>a</em>rv<em>e</em>s!</code></div></div>
+        </div>
+        
+        <div data-id="setnot"><h3 class="label">negated set [^ABC]</h3>
+            <div class="content">Match any character that is not in the set.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>[^aeiou]</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>g</em><em>l</em>i<em>b</em><em> </em><em>j</em>o<em>c</em><em>k</em><em>s</em><em> </em><em>v</em>e<em>x</em><em> </em><em>d</em><em>w</em>a<em>r</em><em>v</em>e<em>s</em><em>!</em></code></div></div>
+        </div>
+        
+        <div data-id="range"><h3 class="label">range [A-Z]</h3>
+            <div class="content">Matches a character having a character code between the two specified characters inclusive.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>[g-s]</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>abcdef<em>g</em><em>h</em><em>i</em><em>j</em><em>k</em><em>l</em><em>m</em><em>n</em><em>o</em><em>p</em><em>q</em><em>r</em><em>s</em>tuvwxyz</code></div></div>
+        </div>
+        
+        <div data-id="dot"><h3 class="label">dot .</h3>
+            <div class="content">Matches any character except linebreaks. Equivalent to <code>[^\n\r]</code>.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>.</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>g</em><em>l</em><em>i</em><em>b</em><em> </em><em>j</em><em>o</em><em>c</em><em>k</em><em>s</em><em> </em><em>v</em><em>e</em><em>x</em><em> </em><em>d</em><em>w</em><em>a</em><em>r</em><em>v</em><em>e</em><em>s</em><em>!</em></code></div></div>
+        </div>
+        
+        <div data-id="word"><h3 class="label">word \w</h3>
+            <div class="content">Matches any word character (alphanumeric &amp; underscore). Only matches low-ascii characters (no accented or non-roman characters). Equivalent to <code>[A-Za-z0-9_]</code><div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\w</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>b</em><em>o</em><em>n</em><em>j</em><em>o</em><em>u</em><em>r</em>, <em>m</em><em>o</em><em>n</em> <em>f</em><em>r</em>è<em>r</em><em>e</em></code></div></div>
+        </div>
+        
+        <div data-id="notword"><h3 class="label">not word \W</h3>
+            <div class="content">Matches any character that is not a word character (alphanumeric &amp; underscore). Equivalent to <code>[^A-Za-z0-9_]</code><div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\W</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>bonjour<em>,</em><em> </em>mon<em> </em>fr<em>è</em>re</code></div></div>
+        </div>
+
+        <div data-id="digit"><h3 class="label">digit \d</h3>
+            <div class="content">Matches any digit character (0-9). Equivalent to <code>[0-9]</code>.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\d</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>+<em>1</em>-(<em>4</em><em>4</em><em>4</em>)-<em>5</em><em>5</em><em>5</em>-<em>1</em><em>2</em><em>3</em><em>4</em></code></div></div>
+        </div>
+        
+        <div data-id="notdigit"><h3 class="label">not digit \D</h3>
+            <div class="content">Matches any character that is not a digit character (0-9). Equivalent to <code>[^0-9]</code>.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\D</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>+</em>1<em>-</em><em>(</em>444<em>)</em><em>-</em>555<em>-</em>1234</code></div></div>
+        </div>
+        
+        <div data-id="whitespace"><h3 class="label">whitespace \s</h3>
+            <div class="content">Matches any whitespace character (spaces, tabs, line breaks).<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\s</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>glib<em> </em>jocks<em> </em>vex<em> </em>dwarves!</code></div></div>
+        </div>
+        
+        <div data-id="notwhitespace"><h3 class="label">not whitespace \S</h3>
+            <div class="content">Matches any character that is not a whitespace character (spaces, tabs, line breaks).<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\S</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>g</em><em>l</em><em>i</em><em>b</em> <em>j</em><em>o</em><em>c</em><em>k</em><em>s</em> <em>v</em><em>e</em><em>x</em> <em>d</em><em>w</em><em>a</em><em>r</em><em>v</em><em>e</em><em>s</em><em>!</em></code></div></div>
+        </div>
+
+        <h2 class="label1">Anchors</h2>
+        <div data-id="bof"><h3 class="label">beginning ^</h3>
+            <div class="content">Matches the beginning of the string, or the beginning of a line if the multiline flag (<code>m</code>) is enabled. This matches a position, not a character.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>^\w+</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>she</em> sells seashells</code></div></div>
+        </div>
+        
+        <div data-id="eof"><h3 class="label">end $</h3>
+            <div class="content">Matches the end of the string, or the end of a line if the multiline flag (<code>m</code>) is enabled. This matches a position, not a character.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\w+$</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>she sells <em>seashells</em></code></div></div>
+        </div>
+        
+        <div data-id="wordboundary"><h3 class="label">word boundary \b</h3>
+            <div class="content">Matches a word boundary position between a word character and non-word character or position (start / end of string). See the word character class (<code>w</code>) for more info.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>s\b</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>she sell<em>s</em> seashell<em>s</em></code></div></div>
+        </div>
+        
+        <div data-id="notwordboundary"><h3 class="label">not word boundary \B</h3>
+            <div class="content">Matches any position that is not a word boundary. This matches a position, not a character.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>s\B</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>s</em>he <em>s</em>ells <em>s</em>ea<em>s</em>hells</code></div></div>
+        </div>
+
+        <h2 class="label1">Escaped characters</h2>
+        <div data-id="reservedchar"><h3 class="label">reserved characters \+</h3>
+            <div class="content">The following character have special meaning, and must be preceded by a <code>\</code> (backslash) to represent a literal character:<p><code>+*?^$\.[]{}()|/</code></p><p>Within a character set, only <code>\</code>, <code>-</code>, and <code>]</code> need to be escaped.</p><div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\+</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>1 <em>+</em> 1 = 2</code></div></div>
+        </div>
+        
+        <div data-id="escoctal"><h3 class="label">octal escape \0000</h3>
+            <div class="content">Octal escaped character in the form <code>\0000</code>. Value must be less than 255 (<code>\0377</code>).<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\0251</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>Searchmonkey is <em>©</em>2018</code></div></div>
+        </div>
+        
+        <div data-id="eschexadecimal"><h3 class="label">hexadecimal escape \xFF</h3>
+            <div class="content">Hexadecimal escaped character in the form <code>\xFF</code>.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\xA9</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>Searchmonkey is <em>©</em>2018</code></div></div>
+        </div>
+        
+        <div data-id="escunicodeu"><h3 class="label">unicode escape \uFFFF</h3>
+            <div class="content">Unicode escaped character in the form <code>\uFFFF</code><div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\u00A9</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>Searchmonkey is <em>©</em>2018</code></div></div>
+        </div>
+        
+        <div data-id="escunicodeub"><h3 class="label">extended unicode escape \u{FFFF}</h3>
+            <div class="content">Unicode escaped character in the form <code>\u{FFFF}</code>. Supports a full range of unicode point escapes with any number of hex digits. <p>Requires the unicode flag (<code>u</code>).</p></div>
+        </div>
+        
+        <div data-id="esccontrolchar"><h3 class="label">control character escape \cI</h3>
+            <div class="content">Escaped control character in the form <code>\cZ</code>. This can range from <code>\cA</code> (SOH, char code 1) to <code>\cZ</code> (SUB, char code 26). <h1>Example:</h1><code>\cI</code> matches TAB (char code 9).</div>
+        </div>
+        
+        <div data-id="esc_9"><h3 class="label">tab \t</h3>
+            <div class="content">Escaped control character in the form <code>\cZ</code>. This can range from <code>\cA</code> (SOH, char code 1) to <code>\cZ</code> (SUB, char code 26). <h1>Example:</h1><code>\cI</code> matches TAB (char code 9).</div>
+        </div>
+        
+        <div data-id="esc_10"><h3 class="label">line feed \n</h3>
+            <div class="content">Matches a LINE FEED character (char code 10).</div>
+        </div>
+        
+        <div data-id="esc_11"><h3 class="label">vertical tab \v</h3>
+            <div class="content">Matches a VERTICAL TAB character (char code 11).</div>
+        </div>
+        
+        <div data-id="esc_12"><h3 class="label">form feed \f</h3>
+            <div class="content">Matches a FORM FEED character (char code 12).</div>
+        </div>
+        
+        <div data-id="esc_13"><h3 class="label">carriage return \r</h3>
+            <div class="content">Matches a CARRIAGE RETURN character (char code 13).</div>
+        </div>
+        
+        <div data-id="esc_0"><h3 class="label">null \0</h3>
+            <div class="content">Matches a NULL character (char code 0).</div>
+        </div>
+
+        <h2 class="label1">Groups &amp; References</h2>
+        <div data-id="group"><h3 class="label">capturing group (ABC)</h3>
+            <div class="content">Groups multiple tokens together and creates a capture group for extracting a substring or using a backreference.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>(ha)+</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>hahaha</em> <em>ha</em>a <em>ha</em>h!</code></div></div>
+        </div>
+        <div data-id="numref"><h3 class="label">numeric reference \1</h3>
+            <div class="content">Matches the results of a capture group. For example <code>\1</code> matches the results of the first capture group &amp; <code>\3</code> matches the third.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>(\w)a\1</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>hah</em> <em>dad</em> bad dab <em>gag</em> gab</code></div></div>
+        </div>
+        <div data-id="noncapgroup"><h3 class="label">non-capturing group (?:ABC)</h3>
+            <div class="content">Groups multiple tokens together without creating a capture group.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>(?:ha)+</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>hahaha</em> <em>ha</em>a <em>ha</em>h!</code></div></div>
+        </div>
+
+        <h2 class="label1">Look-around</h2>
+        <div data-id="poslookahead"><h3 class="label">positive lookahead (?=ABC)</h3>
+            <div class="content">Matches a group after the main expression without including it in the result.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\d(?=px)</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>1pt <em>2</em>px 3em <em>4</em>px</code></div></div>
+        </div>
+        
+        <div data-id="neglookahead"><h3 class="label">negative lookahead (?!ABC)</h3>
+            <div class="content">Specifies a group that can not match after the main expression (if it matches, the result is discarded).<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>\d(?!px)</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>1</em>pt 2px <em>3</em>em 4px</code></div></div>
+        </div>
+
+        <h2 class="label1">Quantifiers &amp; Alternation</h2>
+
+        <div data-id="plus"><h3 class="label">plus +</h3>
+            <div class="content">Matches 1 or more of the preceding token.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>b\w+</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>b <em>be</em> <em>bee</em> <em>beer</em> <em>beers</em></code></div></div>
+        </div>
+        
+        <div data-id="star"><h3 class="label">star *</h3>
+            <div class="content">Matches 0 or more of the preceding token.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>b\w*</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>b</em> <em>be</em> <em>bee</em> <em>beer</em> <em>beers</em></code></div></div>            
+        </div>
+        
+        <div data-id="quant"><h3 class="label">quantifier {1,3}</h3>
+            <div class="content">Matches the specified quantity of the previous token. <code>{1,3}</code> will match 1 to 3. <code>{3}</code> will match exactly 3. <code>{3,}</code> will match 3 or more. <div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>b\w{2,3}</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>b be <em>bee</em> <em>beer</em> <em>beer</em>s</code></div></div>
+        </div>
+        
+        <div data-id="opt"><h3 class="label">optional ?</h3>
+            <div class="content">Matches 0 or 1 of the preceding token, effectively making it optional.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>colou?r</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>color</em> <em>colour</em></code></div></div>            
+        </div>
+        
+        <div data-id="lazy"><h3 class="label">lazy ?</h3>
+            <div class="content">Makes the preceding quantifier lazy, causing it to match as few characters as possible. By default, quantifiers are greedy, and will match as many characters as possible.<div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>b\w+?</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg>b <em>be</em> <em>be</em>e <em>be</em>er <em>be</em>ers</code></div></div>
+        </div>
+        
+        <div data-id="alt"><h3 class="label">alternation |</h3>
+            <div class="content">Acts like a boolean OR. Matches the expression before or after the <code>|</code>.<p>It can operate within a group, or on a whole expression. The patterns will be tested in order.</p><div class="example"><h1>Example</h1><hr><code class="expression"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load expression</title></use></svg>b(a|e|i)d</code><hr><code class="text"><svg class="icon load"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#load"><title>Load text</title></use></svg><em>bad</em> bud bod <em>bed</em> <em>bid</em></code></div></div>
+        </div>
+
+        <h2 class="label1">Substitution</h2>
+        
+        <div data-id="subst_$&amp;match" class="selected"><h3 class="label">match $&amp;</h3>
+            <div class="content">Inserts the matched text.</div>
+        </div>
+        <div data-id="subst_group"><h3 class="label">capture group $1</h3>
+            <div class="content">Inserts the results of the specified capture group. For example, <code>$3</code> would insert the third capture group.</div>
+        </div>
+        <div data-id="subst_$before"><h3 class="label">before match $`</h3>
+            <div class="content">Inserts the portion of the source string that precedes the match.</div>
+        </div>
+        <div data-id="subst_$after"><h3 class="label">after match $'</h3>
+            <div class="content">Inserts the portion of the source string that follows the match.</div>
+        </div>
+        <div data-id="subst_$esc"><h3 class="label">escaped $ $$</h3>
+            <div class="content">Inserts a dollar sign character ($).</div>
+        </div>
+        <div data-id="subst_esc"><h3 class="label">escaped characters \n</h3>
+            <div class="content">For convenience, these escaped characters are supported in the Replace string in Searchmonkey: <code>\n</code>, <code>\r</code>, <code>\t</code>, <code>\\</code>, and unicode escapes <code>\uFFFF</code>. This may vary in your deploy environment.</div>
+        </div>
+
+
+        <h2 class="label1">Flags</h2>
+        <div data-id="caseinsensitive"><h3 class="label">ignore case i</h3>
+            <div class="content">Makes the whole expression case-insensitive. For example, <code>/aBc/i</code> would match <code>AbC</code>.</div>
+        </div>
+        <div data-id="global"><h3 class="label">global search g</h3>
+            <div class="content">Retain the index of the last match, allowing subsequent searches to start from the end of the previous match.<p>Without the global flag, subsequent searches will return the same match.</p><hr>Searchmonkey only searches for a single match when the global flag is disabled to avoid infinite match errors.</div>
+        </div>
+        <div data-id="multiline"><h3 class="label">multiline m</h3>
+            <div class="content">When the multiline flag is enabled, beginning and end anchors (<code>^</code> and <code>$</code>) will match the start and end of a line, instead of the start and end of the whole string.<p>Note that patterns such as <code>/^[\s\S]+$/m</code> may return matches that span multiple lines because the anchors will match the start/end of <b>any</b> line.</p></div>
+        </div>
+        <div data-id="unicode"><h3 class="label">unicode u</h3>
+            <div class="content">When the unicode flag is enabled, you can use extended unicode escapes in the form <code>\x{FFFFF}</code>.<p>It also makes other escapes stricter, causing unrecognised escapes (ex. <code>\j</code>) to throw an error.</p></div>
+        </div>
+        <div data-id="sticky"><h3 class="label">sticky y</h3>
+            <div class="content">The expression will only match from its lastIndex position and ignores the global (<code>g</code>) flag if set. Because each search in Searchmonkey is discrete, this flag has no further impact on the displayed results.</div>
+        </div>
     </body>
 </html>
