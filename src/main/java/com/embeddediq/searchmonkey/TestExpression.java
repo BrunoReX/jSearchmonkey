@@ -43,6 +43,12 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JList;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -189,8 +195,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jLabel1 = new javax.swing.JLabel();
         jReference = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jHelpPage = new javax.swing.JTextPane();
-        jReference1 = new javax.swing.JPanel();
+        jReferencePage = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jReferenceList = new javax.swing.JList<>();
+        jCheat = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jHelpPage1 = new javax.swing.JTextPane();
 
@@ -331,23 +339,40 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jReference.setLayout(new java.awt.BorderLayout());
 
-        jHelpPage.setEditable(false);
-        jHelpPage.setContentType("text/html"); // NOI18N
-        jHelpPage.setText("<html>\n    <head>\n        <style type=\"text/css\">\n            table {\n                width: 100%\n            }\n            td, th {\n                background-color: #112233\n            }\n        </style>\n    </head>\n    <body>\n        HTML table test:\n        <div style=\"background-color: black\">\n            <table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n                <tr>\n                    <td>cell1</td>\n                    <td>cell2</td>\n                </tr>\n                <tr>\n                    <td>cell3</td>\n                    <td>cell4</td>\n                </tr>\n        </div>\n    </body>\n</html>");
-        jHelpPage.setToolTipText("");
-        jHelpPage.setAutoscrolls(false);
+        jReferencePage.setEditable(false);
+        jReferencePage.setContentType("text/html"); // NOI18N
+        jReferencePage.setText("<html>\n    <head>\n        <style type=\"text/css\">\n            table {\n                width: 100%\n            }\n            td, th {\n                background-color: #112233\n            }\n        </style>\n    </head>\n    <body>\n        HTML table test:\n        <div style=\"background-color: black\">\n            <table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n                <tr>\n                    <td>cell1</td>\n                    <td>cell2</td>\n                </tr>\n                <tr>\n                    <td>cell3</td>\n                    <td>cell4</td>\n                </tr>\n        </div>\n    </body>\n</html>");
+        jReferencePage.setToolTipText("");
+        jReferencePage.setAutoscrolls(false);
         try {
-            jHelpPage.setPage(getClass().getResource("/help/regexRef.htm"));
+            jReferencePage.setPage(getClass().getResource("/help/regexRef.htm"));
         } catch (java.io.IOException e1) {
             e1.printStackTrace();
         }
-        jScrollPane2.setViewportView(jHelpPage);
+        jScrollPane2.setViewportView(jReferencePage);
 
         jReference.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        jReferenceList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Character classes: character set [ABC]", "Character classes: negated set [^ABC]", "Character classes: range [A-Z]", "Character classes: dot .", "Character classes: word \\w", "Character classes: not word \\W", "Character classes: Character classes: digit \\d", "Character classes: not digit \\D", "Character classes: whitespace \\s", "Character classes: not whitespace \\S", "Anchors: beginning ^", "Anchors: end $", "Anchors: word boundary \\b", "Anchors: not word boundary \\B", "Escaped characters: reserved characters \\+", "Escaped characters: octal escape \\000", "Escaped characters: hexadecimal escape \\xFF", "Escaped characters: unicode escape \\uFFFF", "Escaped characters: extended unicode escape \\u{FFFF}", "Escaped characters: control character escape \\cI", "Escaped characters: tab \\t", "Escaped characters: line feed \\n", "Escaped characters: vertical tab \\v", "Escaped characters: form feed \\f", "Escaped characters: carriage return \\r", "Escaped characters: >null \\0", "Groups & References: capturing group (ABC)", "Groups & References: numeric reference \\1", "Groups & References: non-capturing group (?:ABC)", "Look-around: positive lookahead (?=ABC)", "Look-around: negative lookahead (?!ABC)", "Quantifiers & Alternation: plus +", "Quantifiers & Alternation: star *", "Quantifiers & Alternation: quantifier {1,3}", "Quantifiers & Alternation: optional ?", "Quantifiers & Alternation: lazy ?", "Quantifiers & Alternation: alternation |</h3></div>", "Substitution: plus +", "Substitution: star *", "Substitution: quantifier {1,3}", "Substitution: optional ?", "Substitution: lazy ?", "Substitution: alternation |", "Flags: ignore case i", "Flags: global search g", "Flags: multiline m", "Flags: unicode u", "Flags: sticky y" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jReferenceList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jReferenceList.setToolTipText("Click on item to select");
+        jReferenceList.setVisibleRowCount(6);
+        jReferenceList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jReferenceListValueChanged(evt);
+            }
+        });
+        jScrollPane6.setViewportView(jReferenceList);
+
+        jReference.add(jScrollPane6, java.awt.BorderLayout.PAGE_START);
+
         jTabbedPane1.addTab("Reference", jReference);
 
-        jReference1.setLayout(new java.awt.BorderLayout());
+        jCheat.setLayout(new java.awt.BorderLayout());
 
         jHelpPage1.setEditable(false);
         jHelpPage1.setContentType("text/html"); // NOI18N
@@ -361,9 +386,9 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         }
         jScrollPane5.setViewportView(jHelpPage1);
 
-        jReference1.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+        jCheat.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Cheat Sheet", jReference1);
+        jTabbedPane1.addTab("Cheat Sheet", jCheat);
 
         add(jTabbedPane1, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents
@@ -426,6 +451,31 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
     }//GEN-LAST:event_jPasteActionPerformed
 
+    private void jReferenceListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jReferenceListValueChanged
+        if (evt.getValueIsAdjusting()) return;
+        int idx = ((JList)evt.getSource()).getSelectedIndex();
+        if (idx == -1) return;
+
+        try {
+            Document doc;
+            doc = Jsoup.parse(getClass().getResourceAsStream("/help/regexRef.htm"), 
+                    "UTF-8", "");
+            // Element content = doc.select("div").get(idx);
+            String head = doc.select("head").first().toString();
+            Elements items = doc.select("div.content");
+            if (items.size() > idx)
+            {
+                Element content = items.get(idx);
+                this.jReferencePage.setText("<html>" + head + content.toString() + "</html>");
+                return;
+            }
+        } catch (IOException | IndexOutOfBoundsException ex) {
+            // Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.jReferencePage.setText("<html>Nothing found</html>");
+    }//GEN-LAST:event_jReferenceListValueChanged
+
     private void UpdateHelpPage(String resource)
     {
         boolean restoreMenu = (resource == null);
@@ -440,16 +490,16 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             Path path = Paths.get(url.toURI());
 
             List<String> content = Files.readAllLines(path, StandardCharsets.UTF_8);
-            this.jHelpPage.setText(String.join("\n", content));
+            this.jReferencePage.setText(String.join("\n", content));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jCheat;
     private javax.swing.JMenuItem jCopy;
     private javax.swing.JMenuItem jCut;
-    private javax.swing.JTextPane jHelpPage;
     private javax.swing.JTextPane jHelpPage1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -459,13 +509,15 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JMenuItem jPaste;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPanel jReference;
-    private javax.swing.JPanel jReference1;
+    private javax.swing.JList<String> jReferenceList;
+    private javax.swing.JTextPane jReferencePage;
     private javax.swing.JMenuItem jResetLatin;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel jStatus;
     private javax.swing.JTabbedPane jTabbedPane1;
