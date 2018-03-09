@@ -198,8 +198,8 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
                 if (summary.lastModified == null || attrs.lastModifiedTime().compareTo(summary.lastModified) > 0) summary.lastModified = attrs.lastModifiedTime();
                 if (summary.firstAccessed == null || attrs.lastAccessTime().compareTo(summary.firstAccessed) < 0) summary.firstAccessed = attrs.lastAccessTime();
                 if (summary.lastAccessed == null || attrs.lastAccessTime().compareTo(summary.lastAccessed) > 0) summary.lastAccessed = attrs.lastAccessTime();
-                if (summary.firstCreated == null || attrs.creationTime().compareTo(summary.firstCreated) < 0) summary.firstModified = attrs.lastModifiedTime();
-                if (summary.lastCreated == null || attrs.creationTime().compareTo(summary.lastCreated) > 0) summary.lastModified = attrs.lastModifiedTime();
+                if (summary.firstCreated == null || attrs.creationTime().compareTo(summary.firstCreated) < 0) summary.firstCreated = attrs.creationTime();
+                if (summary.lastCreated == null || attrs.creationTime().compareTo(summary.lastCreated) > 0) summary.lastCreated = attrs.creationTime();
 
             }
         }
