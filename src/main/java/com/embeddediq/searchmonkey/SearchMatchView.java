@@ -327,6 +327,10 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                     if (result.isTitle)
                     {
                         doc.insertString(doc.getLength(), result.title, doc.pathStyle);
+                        if (match == null)
+                        {
+                            doc.insertString(doc.getLength(), "\n\nContent matching was not used. Search with content to show hits within document.\n", doc.nameStyle);
+                        }
                     } else {
                         doc.insertString(doc.getLength(), String.format("Line %d:\t", result.line_nr), doc.numberStyle);
 
