@@ -320,12 +320,9 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;    &lt;head&gt;&#xa;        &lt;style type=&quot;text/css&quot;&gt;&#xa;            table {&#xa;                width: 100%&#xa;            }&#xa;            td, th {&#xa;                background-color: #112233&#xa;            }&#xa;        &lt;/style&gt;&#xa;    &lt;/head&gt;&#xa;    &lt;body&gt;&#xa;        HTML table test:&#xa;        &lt;div style=&quot;background-color: black&quot;&gt;&#xa;            &lt;table border=&quot;0&quot; cellpadding=&quot;2&quot; cellspacing=&quot;1&quot;&gt;&#xa;                &lt;tr&gt;&#xa;                    &lt;td&gt;cell1&lt;/td&gt;&#xa;                    &lt;td&gt;cell2&lt;/td&gt;&#xa;                &lt;/tr&gt;&#xa;                &lt;tr&gt;&#xa;                    &lt;td&gt;cell3&lt;/td&gt;&#xa;                    &lt;td&gt;cell4&lt;/td&gt;&#xa;                &lt;/tr&gt;&#xa;        &lt;/div&gt;&#xa;    &lt;/body&gt;&#xa;&lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value=""/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="autoscrolls" type="boolean" value="false"/>
-                    <Property name="page" type="java.net.URL" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="getClass().getResource(&quot;/help/regexRef.htm&quot;)" type="code"/>
-                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -398,6 +395,7 @@
                     </Property>
                     <Property name="selectionMode" type="int" value="0"/>
                     <Property name="toolTipText" type="java.lang.String" value="Click on item to select"/>
+                    <Property name="selectedIndex" type="int" value="0"/>
                     <Property name="visibleRowCount" type="int" value="6"/>
                   </Properties>
                   <Events>

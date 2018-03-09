@@ -44,7 +44,6 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JList;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -83,6 +82,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jTextPane1.getDocument().addDocumentListener(this);
         
         UpdateHelpPage(null);
+        // jReferenceList.setSelectedIndex(0); // Select the first item
+        this.UpdateReference(0);
     }
     
     
@@ -341,14 +342,9 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jReferencePage.setEditable(false);
         jReferencePage.setContentType("text/html"); // NOI18N
-        jReferencePage.setText("<html>\n    <head>\n        <style type=\"text/css\">\n            table {\n                width: 100%\n            }\n            td, th {\n                background-color: #112233\n            }\n        </style>\n    </head>\n    <body>\n        HTML table test:\n        <div style=\"background-color: black\">\n            <table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n                <tr>\n                    <td>cell1</td>\n                    <td>cell2</td>\n                </tr>\n                <tr>\n                    <td>cell3</td>\n                    <td>cell4</td>\n                </tr>\n        </div>\n    </body>\n</html>");
+        jReferencePage.setText("");
         jReferencePage.setToolTipText("");
         jReferencePage.setAutoscrolls(false);
-        try {
-            jReferencePage.setPage(getClass().getResource("/help/regexRef.htm"));
-        } catch (java.io.IOException e1) {
-            e1.printStackTrace();
-        }
         jScrollPane2.setViewportView(jReferencePage);
 
         jReference.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -360,6 +356,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         });
         jReferenceList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jReferenceList.setToolTipText("Click on item to select");
+        jReferenceList.setSelectedIndex(0);
         jReferenceList.setVisibleRowCount(6);
         jReferenceList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -455,12 +452,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         if (evt.getValueIsAdjusting()) return;
         int idx = ((JList)evt.getSource()).getSelectedIndex();
         if (idx == -1) return;
-
+        UpdateReference(idx);
+    }//GEN-LAST:event_jReferenceListValueChanged
+    private void UpdateReference(int idx)
+    {                                            
         try {
             Document doc;
             doc = Jsoup.parse(getClass().getResourceAsStream("/help/regexRef.htm"), 
                     "UTF-8", "");
-            // Element content = doc.select("div").get(idx);
             String head = doc.select("head").first().toString();
             Elements items = doc.select("div.content");
             if (items.size() > idx)
@@ -474,7 +473,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         }
         
         this.jReferencePage.setText("<html>Nothing found</html>");
-    }//GEN-LAST:event_jReferenceListValueChanged
+    }
 
     private void UpdateHelpPage(String resource)
     {
