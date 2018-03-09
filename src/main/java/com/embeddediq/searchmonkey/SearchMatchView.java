@@ -327,7 +327,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                     if (result.isTitle)
                     {
                         doc.insertString(doc.getLength(), result.title, doc.pathStyle);
-                        if (match == null)
+                        if (entry.containingText == null || entry.containingText.length() == 0)
                         {
                             doc.insertString(doc.getLength(), "\n\nContent matching was not used. Search with content to show hits within document.\n", doc.nameStyle);
                         }
@@ -391,8 +391,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         // if (busy.get() == 0)
         {
             // Clear the results
-            jHitsTextPane.setText("\n\nClick on search results to show the matched text within the file.\n");
-            jPreviewTextPane.setText("\n\nClick on search results to show a preview of the file content.\n");
+            jHitsTextPane.setText("");
+            jPreviewTextPane.setText("\n\nProcessing! Please wait...\n");
 
             // After a short delay, update the hits
             task = new ViewUpdate(paths);
