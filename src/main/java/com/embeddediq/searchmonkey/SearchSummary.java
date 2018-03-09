@@ -6,6 +6,8 @@
 package com.embeddediq.searchmonkey;
 
 import java.nio.file.attribute.FileTime;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -21,7 +23,9 @@ public class SearchSummary {
     public int totalFiles; // Number of files checked    
     public int totalFolders; // Number of folders checked
     public int skippedFolders; // Due to IOException
+    public List<String> skippedFolderList = new CopyOnWriteArrayList<>(); // List of files skipped
     public int skippedFiles; // Due to IOException
+    public List<String> skippedFileList = new CopyOnWriteArrayList<>(); // List of files skipped
     public long totalMatchBytes; // Size of files that matched (in bytes)
     public long minMatchBytes = -1; // Size of files that matched (in bytes)
     public long maxMatchBytes = -1; // Size of files that matched (in bytes)

@@ -230,6 +230,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         // We expect the occassional failure
         if (ioe != null) {
             summary.skippedFiles ++;
+            summary.skippedFileList.add(file.toString());
             //Logger.getLogger(Searchmonkey.class.getName()).log(Level.WARNING, null, ioe);;
         }
         return FileVisitResult.CONTINUE;
@@ -240,6 +241,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> imple
         // We expect the occassional failure
         if (ioe != null) {
             summary.skippedFolders ++;
+            summary.skippedFolderList.add(t.toString());
             //Logger.getLogger(Searchmonkey.class.getName()).log(Level.WARNING, null, ioe);;
         }
         return FileVisitResult.CONTINUE;

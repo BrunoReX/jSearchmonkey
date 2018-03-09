@@ -80,7 +80,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     public void setContentMatch(SearchEntry entry) { //ContentMatch match) {
         this.entry = entry;
         this.match = new ContentMatch(entry);
-        this.jSUmmaryTextArea.setText("");
+        this.jSummaryTextArea.setText("");
     }
     public ContentMatch getContentMatch() {
         return this.match;
@@ -107,63 +107,103 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         "TBytes",
         "PBytes",
     };
+    
     public void UpdateSummary(SearchSummary ss, boolean interim)
     {
-        jSUmmaryTextArea.setText(""); // Clear before entering
+        jSummaryTextArea.setText(""); // Clear before entering
         if (interim)
         {
-            jSUmmaryTextArea.append(String.format("Search in progress...\n\n"));
+            jSummaryTextArea.append(String.format("Search in progress...\n\n"));
         } else {
-            jSUmmaryTextArea.append(String.format("Search completed in %d seconds.\n\n", (ss.endTime - ss.startTime)/1000000000));
+            jSummaryTextArea.append(String.format("Search completed in %d seconds.\n\n", (ss.endTime - ss.startTime)/1000000000));
         }
         
-        
-        jSUmmaryTextArea.append(String.format("Matched: %d file%s\n", ss.matchFileCount, ss.matchFileCount != 1 ? "s" : ""));
+        jSummaryTextArea.append(String.format("Matched: %d file%s\n", ss.matchFileCount, ss.matchFileCount != 1 ? "s" : ""));
         if (ss.totalMatchBytes > 0)
         {
             int order = getFileOrder(ss.totalMatchBytes);
             double divider = Math.pow(1024, order);
             
-            jSUmmaryTextArea.append(String.format("Size on disk: %.1f %s\n", ((double)ss.totalMatchBytes / divider), FSIZE[order]));
+            jSummaryTextArea.append(String.format("Size on disk: %.1f %s\n", ((double)ss.totalMatchBytes / divider), FSIZE[order]));
         }
         if (ss.totalContentMatch > 0)
         {
-            jSUmmaryTextArea.append(String.format("Content found: %d hit%s\n", ss.totalContentMatch, ss.totalContentMatch != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Content found: %d hit%s\n", ss.totalContentMatch, ss.totalContentMatch != 1 ? "s" : ""));
         }
         if (ss.totalFolders > 0)
         {
-            jSUmmaryTextArea.append(String.format("Processed: %d folder%s\n", ss.totalFolders, ss.totalFolders != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Processed: %d folder%s\n", ss.totalFolders, ss.totalFolders != 1 ? "s" : ""));
         }
         if (ss.skippedFolders > 0)
         {
-            jSUmmaryTextArea.append(String.format("Skipped: %d folder%s\n", ss.skippedFolders, ss.skippedFolders != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Skipped: %d folder%s\n", ss.skippedFolders, ss.skippedFolders != 1 ? "s" : ""));
         }
         if (ss.totalFiles > 0)
         {
-            jSUmmaryTextArea.append(String.format("Processed: %d file%s\n", ss.totalFiles, ss.totalFiles != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Processed: %d file%s\n", ss.totalFiles, ss.totalFiles != 1 ? "s" : ""));
         }
         if (ss.skippedFiles > 0)
         {
-            jSUmmaryTextArea.append(String.format("Skipped: %d file%s\n", ss.skippedFiles, ss.skippedFiles != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Skipped: %d file%s\n", ss.skippedFiles, ss.skippedFiles != 1 ? "s" : ""));
         }
+        jSummaryTextArea.append("\n");
         if (ss.maxMatchBytes > 0)
         {
             int order = getFileOrder(ss.maxMatchBytes);
             double divider = Math.pow(1024, order);
             
-            jSUmmaryTextArea.append(String.format("\nLargest file size: %.1f %s\n", ((double)ss.maxMatchBytes / divider), FSIZE[order]));
+            jSummaryTextArea.append(String.format("Largest file size: %.1f %s\n", ((double)ss.maxMatchBytes / divider), FSIZE[order]));
+        }
+        if (ss.minMatchBytes >= 0)
+        {
+            int order = getFileOrder(ss.minMatchBytes);
+            double divider = Math.pow(1024, order);
+            
+            jSummaryTextArea.append(String.format("Smallest file size: %.1f %s\n", ((double)ss.minMatchBytes / divider), FSIZE[order]));
         }
         if (ss.maxContentMatch > 0)
         {
-            jSUmmaryTextArea.append(String.format("Largest matches per file: %d hit%s\n", ss.maxContentMatch, ss.maxContentMatch != 1 ? "s" : ""));
+            jSummaryTextArea.append(String.format("Largest matches per file: %d hit%s\n", ss.maxContentMatch, ss.maxContentMatch != 1 ? "s" : ""));
         }
-        if (ss.firstCreated != null)
+        if (ss.firstModified != null)
         {
-            jSUmmaryTextArea.append(String.format("Oldest file: %s\n", ss.firstCreated));
+            jSummaryTextArea.append(String.format("Oldest modified file: %s\n", ss.firstModified));
         }
         if (ss.lastModified != null)
         {
-            jSUmmaryTextArea.append(String.format("Most recent file: %s\n", ss.lastModified));
+            jSummaryTextArea.append(String.format("Newest modified file: %s\n", ss.lastModified));
+        }
+        if (ss.firstCreated != null)
+        {
+            jSummaryTextArea.append(String.format("Oldest file was created: %s\n", ss.firstCreated));
+        }
+        if (ss.lastCreated != null)
+        {
+            jSummaryTextArea.append(String.format("Newest file was created: %s\n", ss.lastCreated));
+        }
+        if (ss.firstAccessed != null)
+        {
+            jSummaryTextArea.append(String.format("Oldest file was accessed: %s\n", ss.firstAccessed));
+        }
+        if (ss.lastAccessed != null)
+        {
+            jSummaryTextArea.append(String.format("Newest file was accessed: %s\n", ss.lastAccessed));
+        }
+        
+        // We need to make this list thread-safe
+        if (ss.skippedFolderList.size() > 0)
+        {
+            jSummaryTextArea.append("\nThe following folders were skipped:\n");
+            for (String item: ss.skippedFolderList) {
+                jSummaryTextArea.append(" > " + item + "\n");
+            }
+        }
+        if (ss.skippedFileList.size() > 0)
+        {
+            jSummaryTextArea.append("\nThe following files were skipped:\n");
+            for (String item: ss.skippedFileList) {
+                jSummaryTextArea.append(" > " + item + "\n");
+            }
         }
     }
             
@@ -361,7 +401,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         jMenuItem2 = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jSUmmaryTextArea = new javax.swing.JTextArea();
+        jSummaryTextArea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         jHitsTextPane = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -397,16 +437,18 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
 
         setLayout(new java.awt.BorderLayout());
 
-        jSUmmaryTextArea.setEditable(false);
-        jSUmmaryTextArea.setColumns(20);
-        jSUmmaryTextArea.setRows(5);
-        jSUmmaryTextArea.setComponentPopupMenu(jPopupMenu1);
-        jScrollPane1.setViewportView(jSUmmaryTextArea);
+        jSummaryTextArea.setEditable(false);
+        jSummaryTextArea.setColumns(20);
+        jSummaryTextArea.setRows(5);
+        jSummaryTextArea.setAutoscrolls(false);
+        jSummaryTextArea.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane1.setViewportView(jSummaryTextArea);
 
         jTabbedPane1.addTab("Summary", jScrollPane1);
 
         jHitsTextPane.setEditable(false);
         jHitsTextPane.setToolTipText("");
+        jHitsTextPane.setAutoscrolls(false);
         jHitsTextPane.setComponentPopupMenu(jPopupMenu1);
         jScrollPane3.setViewportView(jHitsTextPane);
 
@@ -414,6 +456,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
 
         jPreviewTextPane.setEditable(false);
         jPreviewTextPane.setToolTipText("");
+        jPreviewTextPane.setAutoscrolls(false);
         jPreviewTextPane.setComponentPopupMenu(jPopupMenu1);
         jScrollPane4.setViewportView(jPreviewTextPane);
 
@@ -463,10 +506,10 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JTextPane jPreviewTextPane;
-    private javax.swing.JTextArea jSUmmaryTextArea;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextArea jSummaryTextArea;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
