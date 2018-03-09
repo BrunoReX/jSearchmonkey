@@ -37,10 +37,20 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     public SearchMatchView() {
         initComponents();
 
+        DefaultCaret caret;
+        
         // Disable auto-scrolling on the text window
-        DefaultCaret caret = (DefaultCaret) jHitsTextPane.getCaret();
+        caret = (DefaultCaret) jHitsTextPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         
+        // Disable auto-scrolling on the text window
+        caret = (DefaultCaret) jSummaryTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+
+        // Disable auto-scrolling on the text window
+        caret = (DefaultCaret) jPreviewTextPane.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+                
         doc = new PreviewResultDoc();
         jHitsTextPane.setDocument(doc);
 
@@ -110,7 +120,6 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     
     public void UpdateSummary(SearchSummary ss, boolean interim)
     {
-        int pos = jSummaryTextArea.getCaretPosition();
         jSummaryTextArea.setText(""); // Clear before entering
         if (interim)
         {
@@ -206,9 +215,6 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                 jSummaryTextArea.append(" > " + item + "\n");
             }
         }
-
-        // Revert Caret position at the end
-        jSummaryTextArea.setCaretPosition(pos);
     }
             
     public class MatchResult2 {
@@ -381,8 +387,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         // if (busy.get() == 0)
         {
             // Clear the results
-            jHitsTextPane.setText("");
-            jPreviewTextPane.setText("");
+            jHitsTextPane.setText("\n\nClick on search results to show the matched text within the file.\n");
+            jPreviewTextPane.setText("\n\nClick on search results to show a preview of the file content.\n");
 
             // After a short delay, update the hits
             task = new ViewUpdate(paths);
