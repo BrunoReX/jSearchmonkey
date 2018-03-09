@@ -110,6 +110,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     
     public void UpdateSummary(SearchSummary ss, boolean interim)
     {
+        int pos = jSummaryTextArea.getCaretPosition();
         jSummaryTextArea.setText(""); // Clear before entering
         if (interim)
         {
@@ -205,6 +206,9 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                 jSummaryTextArea.append(" > " + item + "\n");
             }
         }
+
+        // Revert Caret position at the end
+        jSummaryTextArea.setCaretPosition(pos);
     }
             
     public class MatchResult2 {
