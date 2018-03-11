@@ -44,6 +44,9 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JList;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,7 +56,7 @@ import org.jsoup.select.Elements;
  *
  * @author cottr
  */
-public class TestExpression extends javax.swing.JPanel implements DocumentListener, ClipboardOwner {
+public class TestExpression extends javax.swing.JPanel implements DocumentListener, ChangeListener, ClipboardOwner {
 
     /**
      * Creates new form RegexHelper
@@ -67,10 +70,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         
         Restore(); // Load back previous example content
         
-        this.flags = flags;
-        this.jIgnoreContentCase.setSelected((this.flags & Pattern.CASE_INSENSITIVE) != 0);
-        //this.jLimitMaxHits.setSelected(Pattern.);
-
         // Create some styles
         PreviewResultDoc doc = new PreviewResultDoc();
         try {
@@ -79,11 +78,17 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
         jTextPane2.setStyledDocument(doc);
+
+        // Update flags
+        this.flags = flags;
+        jIgnoreContentCase.setSelected((this.flags & Pattern.CASE_INSENSITIVE) != 0);
+        jLimitMaxHits.setSelected(true);
+        this.jMaxHits.getModel().addChangeListener(this);
         
         // Add document listener to the regex edit tool
         // Or if the reference document is updated
         jTextPane1.getDocument().addDocumentListener(this);
-        // jTextPane2.getDocument().addDocumentListener(this); // Recursive!
+        jTextPane2.getDocument().addDocumentListener(this);
         
         UpdateHelpPage(null);
         // jReferenceList.setSelectedIndex(0); // Select the first item
@@ -151,6 +156,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
                         int e = m.end();
                         doc.setCharacterAttributes(s, e-s, doc.linkStyle, false);
                         count ++;
+                        if ((this.limit > 0) && (count == this.limit)) break;
                     } while (m.find());
                 }
             }
@@ -280,7 +286,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         jLabel3.setOpaque(true);
 
-        jLabel2.setBackground(new java.awt.Color(166, 215, 134));
+        jLabel2.setBackground(new java.awt.Color(204, 204, 204));
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Expression");
         jLabel2.setAlignmentX(0.5F);
@@ -291,7 +297,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jTextPane3.setEditable(false);
         jTextPane3.setToolTipText("");
-        jTextPane3.setComponentPopupMenu(jPopupMenu1);
         jTextPane3.setInheritsPopupMenu(true);
         jTextPane3.setMargin(new java.awt.Insets(5, 10, 5, 10));
         jScrollPane4.setViewportView(jTextPane3);
@@ -309,7 +314,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addComponent(jStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -325,7 +330,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
                 .addGap(0, 0, 0)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jStatus)
                 .addGap(0, 0, 0)
@@ -347,6 +352,11 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
         jIgnoreContentCase.setText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.text")); // NOI18N
         jIgnoreContentCase.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.toolTipText")); // NOI18N
+        jIgnoreContentCase.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jIgnoreContentCaseStateChanged(evt);
+            }
+        });
 
         jLimitMaxHits.setText(bundle.getString("SearchEntryPanel.jLimitMaxHits.text")); // NOI18N
         jLimitMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxHits.toolTipText")); // NOI18N
@@ -370,31 +380,22 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jMaxHits, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jMaxHits, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLimitMaxHits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jIgnoreContentCase))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(4, 4, 4)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jIgnoreContentCase)
-                            .addGap(0, 74, Short.MAX_VALUE))
-                        .addComponent(jLimitMaxHits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(138, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jIgnoreContentCase)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLimitMaxHits)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jMaxHits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(85, 85, 85)
-                    .addComponent(jIgnoreContentCase)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jLimitMaxHits)
-                    .addContainerGap(88, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jTopMenu.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -518,13 +519,30 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         UpdateReference(idx);
     }//GEN-LAST:event_jReferenceListValueChanged
 
+    int limit = 0;
     private void jLimitMaxHitsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxHitsItemStateChanged
         jMaxHits.setEnabled(jLimitMaxHits.isSelected());
+        limit = 0;
+        if (jLimitMaxHits.isSelected())
+        {
+            limit = (int)jMaxHits.getValue();
+        }
+        UpdateRegex();
     }//GEN-LAST:event_jLimitMaxHitsItemStateChanged
 
     private void jLimitMaxHitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimitMaxHitsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jLimitMaxHitsActionPerformed
+
+    private void jIgnoreContentCaseStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jIgnoreContentCaseStateChanged
+        if (jIgnoreContentCase.isSelected())
+        {
+            flags |= Pattern.CASE_INSENSITIVE;
+        } else {
+            flags &= ~Pattern.CASE_INSENSITIVE;
+        }
+        UpdateRegex();
+    }//GEN-LAST:event_jIgnoreContentCaseStateChanged
     
     private void UpdateReference(int idx)
     {                                            
@@ -604,22 +622,32 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
     @Override
     public void insertUpdate(DocumentEvent de) {
-        UpdateRegex();
+        SwingUtilities.invokeLater(() -> {
+            UpdateRegex();
+        });
     }
 
     @Override
     public void removeUpdate(DocumentEvent de) {
-        UpdateRegex();
+        SwingUtilities.invokeLater(() -> {
+            UpdateRegex();
+        });
     }
 
     @Override
     public void changedUpdate(DocumentEvent de) {
-        UpdateRegex();
+        // UpdateRegex();
     }
 
     @Override
     public void lostOwnership(Clipboard clpbrd, Transferable t) {
         // Don't really care!
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent ce) {
+        this.limit = (int)this.jMaxHits.getValue();
+        UpdateRegex();
     }
     
 }
