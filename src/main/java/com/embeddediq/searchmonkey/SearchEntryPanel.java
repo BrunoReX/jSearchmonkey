@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -121,6 +122,37 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         //this.jButton4.setVisible(false);
         //this.jButton5.setVisible(false);
         //this.jButton9.setVisible(false);
+    }
+    
+    public int getRegexFlags(boolean useContent)
+    {
+        int flags = 0;
+        if (useContent)
+        {
+            if (jIgnoreContentCase.isSelected())
+                flags |= Pattern.CASE_INSENSITIVE;
+        } else {
+            if (this.jIgnoreFilenameCase.isSelected())
+                flags |= Pattern.CASE_INSENSITIVE;
+        }
+        //flags |= Pattern.CASE_INSENSITIVE;
+        //flags |= Pattern.DOTALL;
+        //flags |= Pattern.UNICODE_CASE;
+        //flags |= Pattern.UNICODE_CASE;                    
+        return flags;
+    }
+    public void setRegexFlags(boolean useContent, int flags)
+    {
+        if (useContent)
+        {
+            jIgnoreContentCase.setSelected((flags & Pattern.CASE_INSENSITIVE) != 0);
+        } else {
+            jIgnoreFilenameCase.setSelected((flags & Pattern.CASE_INSENSITIVE) != 0);
+        }
+        //flags |= Pattern.CASE_INSENSITIVE;
+        //flags |= Pattern.DOTALL;
+        //flags |= Pattern.UNICODE_CASE;
+        //flags |= Pattern.UNICODE_CASE;                    
     }
     
     class SeparatorComboBoxModel extends DefaultComboBoxModel

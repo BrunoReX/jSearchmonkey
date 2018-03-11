@@ -543,7 +543,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         JOptionPane optPanel = new JOptionPane();
         // optPanel.setOptionType(JOptionPane.OK_CANCEL_OPTION);
         
-        int flags = 0;
+        int flags = this.searchEntryPanel1.getRegexFlags(true);
         TestExpression panel = new TestExpression(flags, "Contains");
         optPanel.setMessage(panel);
         JDialog frame = optPanel.createDialog(this, "Test Regular Expression");

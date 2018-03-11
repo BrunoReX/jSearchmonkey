@@ -68,6 +68,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         Restore(); // Load back previous example content
         
         this.flags = flags;
+        this.jIgnoreContentCase.setSelected((this.flags & Pattern.CASE_INSENSITIVE) != 0);
+        //this.jLimitMaxHits.setSelected(Pattern.);
 
         // Create some styles
         PreviewResultDoc doc = new PreviewResultDoc();
@@ -79,7 +81,9 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jTextPane2.setStyledDocument(doc);
         
         // Add document listener to the regex edit tool
+        // Or if the reference document is updated
         jTextPane1.getDocument().addDocumentListener(this);
+        // jTextPane2.getDocument().addDocumentListener(this); // Recursive!
         
         UpdateHelpPage(null);
         // jReferenceList.setSelectedIndex(0); // Select the first item
@@ -194,6 +198,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jTopMenu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jIgnoreContentCase = new javax.swing.JCheckBox();
+        jLimitMaxHits = new javax.swing.JCheckBox();
+        jMaxHits = new javax.swing.JSpinner();
         jReference = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jReferencePage = new javax.swing.JTextPane();
@@ -332,9 +340,64 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jTopMenu.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("<html><p>Enter a test expression and the syntax will automatically highlight the text within the search panel.</p></html>");
-        jLabel1.setPreferredSize(new java.awt.Dimension(250, 60));
-        jTopMenu.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jLabel1.setText("<html><p>Enter a test expression and the syntax will automatically highlight the text within the search panel.</p>\n<p>If you would like to understand more about Regular Exressions then check out the Reference Manual or the Cheat Sheet.</p>\n<p>The current regular expression settings are shown here:-</p>\n</html>");
+        jLabel1.setPreferredSize(new java.awt.Dimension(474, 140));
+        jTopMenu.add(jLabel1, java.awt.BorderLayout.NORTH);
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jIgnoreContentCase.setText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.text")); // NOI18N
+        jIgnoreContentCase.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.toolTipText")); // NOI18N
+
+        jLimitMaxHits.setText(bundle.getString("SearchEntryPanel.jLimitMaxHits.text")); // NOI18N
+        jLimitMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jLimitMaxHits.toolTipText")); // NOI18N
+        jLimitMaxHits.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jLimitMaxHitsItemStateChanged(evt);
+            }
+        });
+        jLimitMaxHits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLimitMaxHitsActionPerformed(evt);
+            }
+        });
+
+        jMaxHits.setModel(new javax.swing.SpinnerNumberModel(500, 1, null, 1));
+        jMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jMaxHits.toolTipText")); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jMaxHits, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(4, 4, 4)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jIgnoreContentCase)
+                            .addGap(0, 74, Short.MAX_VALUE))
+                        .addComponent(jLimitMaxHits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap()))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(138, Short.MAX_VALUE)
+                .addComponent(jMaxHits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(85, 85, 85)
+                    .addComponent(jIgnoreContentCase)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLimitMaxHits)
+                    .addContainerGap(88, Short.MAX_VALUE)))
+        );
+
+        jTopMenu.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jTabbedPane1.addTab("Help", jTopMenu);
 
@@ -454,6 +517,15 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         if (idx == -1) return;
         UpdateReference(idx);
     }//GEN-LAST:event_jReferenceListValueChanged
+
+    private void jLimitMaxHitsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxHitsItemStateChanged
+        jMaxHits.setEnabled(jLimitMaxHits.isSelected());
+    }//GEN-LAST:event_jLimitMaxHitsItemStateChanged
+
+    private void jLimitMaxHitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimitMaxHitsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLimitMaxHitsActionPerformed
+    
     private void UpdateReference(int idx)
     {                                            
         try {
@@ -500,10 +572,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private javax.swing.JMenuItem jCopy;
     private javax.swing.JMenuItem jCut;
     private javax.swing.JTextPane jHelpPage1;
+    private javax.swing.JCheckBox jIgnoreContentCase;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JCheckBox jLimitMaxHits;
+    private javax.swing.JSpinner jMaxHits;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JMenuItem jPaste;
     private javax.swing.JPopupMenu jPopupMenu1;
