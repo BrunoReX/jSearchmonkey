@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -153,6 +154,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         searchSummary2 = new com.embeddediq.searchmonkey.SearchSummaryPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -176,8 +178,15 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         copyMenuItem = new javax.swing.JMenuItem();
         pasteMenuItem = new javax.swing.JMenuItem();
         deleteMenuItem = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        toolMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        showStatusbar = new javax.swing.JCheckBoxMenuItem();
+        showToolbar = new javax.swing.JCheckBoxMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenu2 = new javax.swing.JMenu();
+        jLeftToRight = new javax.swing.JRadioButtonMenuItem();
+        jRightToLeft = new javax.swing.JRadioButtonMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -319,7 +328,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         menuBar.add(editMenu);
 
-        jMenu1.setText("Tools");
+        toolMenu.setText("Tools");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setMnemonic('T');
@@ -329,9 +338,44 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        toolMenu.add(jMenuItem1);
 
-        menuBar.add(jMenu1);
+        menuBar.add(toolMenu);
+
+        viewMenu.setText("View");
+
+        showStatusbar.setSelected(true);
+        showStatusbar.setText("Show status bar");
+        showStatusbar.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showStatusbarStateChanged(evt);
+            }
+        });
+        viewMenu.add(showStatusbar);
+
+        showToolbar.setSelected(true);
+        showToolbar.setText("Show toolbar");
+        showToolbar.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showToolbarStateChanged(evt);
+            }
+        });
+        viewMenu.add(showToolbar);
+        viewMenu.add(jSeparator2);
+
+        jMenu2.setText("Layout");
+
+        jLeftToRight.setSelected(true);
+        jLeftToRight.setText("Standard");
+        jMenu2.add(jLeftToRight);
+
+        jRightToLeft.setSelected(true);
+        jRightToLeft.setText("Right-to-left");
+        jMenu2.add(jRightToLeft);
+
+        viewMenu.add(jMenu2);
+
+        menuBar.add(viewMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
@@ -431,6 +475,16 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
             Save(FLAG_SAVE_DIV_MAIN);
         }
     }//GEN-LAST:event_jSplitPane2PropertyChange
+
+    private void showStatusbarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showStatusbarStateChanged
+        JCheckBoxMenuItem item = (JCheckBoxMenuItem)evt.getSource();
+        searchSummary2.setVisible(item.getState());
+    }//GEN-LAST:event_showStatusbarStateChanged
+
+    private void showToolbarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showToolbarStateChanged
+        JCheckBoxMenuItem item = (JCheckBoxMenuItem)evt.getSource();
+        jToolBar1.setVisible(item.getState());
+    }//GEN-LAST:event_showToolbarStateChanged
 
     private void Save(int flag) throws SecurityException
     {
@@ -610,6 +664,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenuItem contentMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
@@ -621,10 +676,13 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JRadioButtonMenuItem jLeftToRight;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButtonMenuItem jRightToLeft;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JToolBar jToolBar1;
@@ -637,6 +695,10 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private com.embeddediq.searchmonkey.SearchMatchView searchMatchView1;
     private com.embeddediq.searchmonkey.SearchResultsTable searchResultsTable1;
     private com.embeddediq.searchmonkey.SearchSummaryPanel searchSummary2;
+    private javax.swing.JCheckBoxMenuItem showStatusbar;
+    private javax.swing.JCheckBoxMenuItem showToolbar;
+    private javax.swing.JMenu toolMenu;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 
     /**
