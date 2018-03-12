@@ -118,11 +118,22 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         "PBytes",
     };
     
+    public void UpdateSummary()
+    {
+        // ss will be null
+        try {
+            int end = jSummaryTextArea.getLineEndOffset(0);
+            String msg = String.format("Search was cancelled\n\n");
+            jSummaryTextArea.replaceRange(msg, 0, end);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+            
     public void UpdateSummary(SearchSummary ss, boolean interim)
     {
         jSummaryTextArea.setText(""); // Clear before entering
-        if (interim)
-        {
+        if (interim) {
             jSummaryTextArea.append(String.format("Search in progress...\n\n"));
         } else {
             jSummaryTextArea.append(String.format("Search completed in %d seconds.\n\n", (ss.endTime - ss.startTime)/1000000000));

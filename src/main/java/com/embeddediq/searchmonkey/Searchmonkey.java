@@ -704,6 +704,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
                 searchSummary2.ShowProgress(false);
                 if (searchTask.isCancelled()) {
                     searchSummary2.SetStatus("Cancelled!");
+                    searchMatchView1.UpdateSummary();
                 } else {
                     try {
                         SearchSummary ss = searchTask.get();
