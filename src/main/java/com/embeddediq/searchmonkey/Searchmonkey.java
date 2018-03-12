@@ -320,6 +320,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         jMenu1.setText("Tools");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/074082-rounded-glossy-black-icon-alphanumeric-font-size.png"))); // NOI18N
+        jMenuItem1.setMnemonic('T');
         jMenuItem1.setText("Test Expression");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -337,6 +340,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         contentMenuItem.setText("Contents");
         helpMenu.add(contentMenuItem);
 
+        aboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help.png"))); // NOI18N
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
