@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -85,6 +84,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         this.saveAsMenuItem.setVisible(false);
         this.saveMenuItem.setVisible(false);
         this.jToolBar1.setVisible(false);
+        this.jColoumnsMenu.setVisible(false);
         this.pack();
         this.setVisible(true);
 
@@ -184,9 +184,10 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         showStatusbar = new javax.swing.JCheckBoxMenuItem();
         showToolbar = new javax.swing.JCheckBoxMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenu2 = new javax.swing.JMenu();
+        jLayoutMenu = new javax.swing.JMenu();
         jLeftToRight = new javax.swing.JRadioButtonMenuItem();
         jRightToLeft = new javax.swing.JRadioButtonMenuItem();
+        jColoumnsMenu = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -353,7 +354,6 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         });
         viewMenu.add(showStatusbar);
 
-        showToolbar.setSelected(true);
         showToolbar.setText("Show toolbar");
         showToolbar.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -363,17 +363,31 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         viewMenu.add(showToolbar);
         viewMenu.add(jSeparator2);
 
-        jMenu2.setText("Layout");
+        jLayoutMenu.setText("Layout");
 
+        buttonGroup1.add(jLeftToRight);
         jLeftToRight.setSelected(true);
         jLeftToRight.setText("Standard");
-        jMenu2.add(jLeftToRight);
+        jLeftToRight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jLeftToRightStateChanged(evt);
+            }
+        });
+        jLayoutMenu.add(jLeftToRight);
 
-        jRightToLeft.setSelected(true);
+        buttonGroup1.add(jRightToLeft);
         jRightToLeft.setText("Right-to-left");
-        jMenu2.add(jRightToLeft);
+        jRightToLeft.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRightToLeftStateChanged(evt);
+            }
+        });
+        jLayoutMenu.add(jRightToLeft);
 
-        viewMenu.add(jMenu2);
+        viewMenu.add(jLayoutMenu);
+
+        jColoumnsMenu.setText("Columns");
+        viewMenu.add(jColoumnsMenu);
 
         menuBar.add(viewMenu);
 
@@ -454,6 +468,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     static private final int FLAG_SAVE_DIV_RESULTS = 0x08; // Divider position between top and bottom results
     static private final int FLAG_SAVE_SEARCH = 0x10; // Save the search panel options (i.e. before closing)
     static private final int FLAG_SAVE_RESULTS = 0x20; // Save the search results
+    static private final int FLAG_SAVE_MENU = 0x40; // Save the menu options
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (evt.getID() == WindowEvent.WINDOW_CLOSING)
         {
@@ -465,7 +480,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     {
         // Todo - check for any 
         this.Stop(); // Stop/cancel search if in progress
-        Save(FLAG_SAVE_SEARCH | FLAG_SAVE_RESULTS);
+        Save(FLAG_SAVE_SEARCH | FLAG_SAVE_RESULTS | FLAG_SAVE_MENU);
         System.exit(0);
     }
     
@@ -486,6 +501,27 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jToolBar1.setVisible(item.getState());
     }//GEN-LAST:event_showToolbarStateChanged
 
+    private void jLeftToRightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jLeftToRightStateChanged
+        setLayout(jRightToLeft.isSelected());
+    }//GEN-LAST:event_jLeftToRightStateChanged
+
+    private void jRightToLeftStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRightToLeftStateChanged
+        setLayout(jRightToLeft.isSelected());
+    }//GEN-LAST:event_jRightToLeftStateChanged
+
+    private void setLayout(boolean rightToLeft)
+    {
+        // Todo - do more if we can to help the RTL layout
+        if (rightToLeft)
+        {
+            jSplitPane2.setLeftComponent(this.jSplitPane1);
+            jSplitPane2.setRightComponent(this.searchEntryPanel1);
+        } else {
+            jSplitPane2.setLeftComponent(this.searchEntryPanel1);
+            jSplitPane2.setRightComponent(this.jSplitPane1);
+        }
+    }
+    
     private void Save(int flag) throws SecurityException
     {
         if (restoreInProgress) return;
@@ -545,12 +581,27 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         {
             this.searchResultsTable1.Save();
         }
-}
+
+        // Get results main panel orientation and location
+        if ((flag & FLAG_SAVE_MENU) == FLAG_SAVE_MENU)
+        {
+            prefs.putBoolean("viewStatusBar", showStatusbar.isSelected());
+            prefs.putBoolean("viewToolBar", showToolbar.isSelected());
+            prefs.putBoolean("viewRightToLeft", jRightToLeft.isSelected());
+        }
+
+    }
     
     boolean restoreInProgress = false;
     private void Restore() throws SecurityException
     {
         restoreInProgress = true;
+        
+        showStatusbar.setSelected(prefs.getBoolean("viewStatusBar", true));
+        showToolbar.setSelected(prefs.getBoolean("viewToolBar", false));
+        jRightToLeft.setSelected(prefs.getBoolean("viewRightToLeft", false));
+
+        
         // Restore last position
         int h = prefs.getInt("Height", -1);
         int w = prefs.getInt("Width", -1);
@@ -676,8 +727,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JMenu jColoumnsMenu;
+    private javax.swing.JMenu jLayoutMenu;
     private javax.swing.JRadioButtonMenuItem jLeftToRight;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRightToLeft;
