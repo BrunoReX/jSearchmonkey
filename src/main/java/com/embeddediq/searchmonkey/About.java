@@ -64,7 +64,7 @@ public class About extends javax.swing.JPanel {
         jTextPane2.setEditable(false);
         jTextPane2.setContentType("text/html"); // NOI18N
         jTextPane2.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        jTextPane2.setText("<html><h3>JAVA Searchmonkey v3.2.0</h3> <p>JAVA Searchmonkey is copyright Adam Cottrell <a href=\"mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey\">searchmonkey@embededdiq.com</a>. Searchmonkey is open source and released under the GPL license</p><br/> <p>For help and support <a href=\"http://searchmonnkey.embeddediq.com/forum\">visit our forum</a>. <a href=\"http://searchmonnkey.embeddediq.com/downloads\">Download the latest Searchmonkey</a></p> </html>");
+        jTextPane2.setText("<html><h3>JAVA Searchmonkey v3.3.0</h3> <p>JAVA Searchmonkey is copyright Adam Cottrell <a href=\"mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey\">searchmonkey@embededdiq.com</a>. Searchmonkey is open source and released under the GPL license</p><br/> <p>For help and support <a href=\"http://searchmonnkey.embeddediq.com/forum\">visit our forum</a>. <a href=\"http://searchmonnkey.embeddediq.com/downloads\">Download the latest Searchmonkey</a></p> </html>");
         jScrollPane3.setViewportView(jTextPane2);
 
         add(jScrollPane3, java.awt.BorderLayout.SOUTH);
