@@ -1,4 +1,4 @@
-# Searchmonkey v3.2.0
+# Searchmonkey v3.3.0
 
 # 1 Introduction
 ## 1.1 What is Searchmonkey?
