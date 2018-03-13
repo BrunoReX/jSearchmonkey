@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Searchmonkey"
-#define MyAppVersion "3.1.0"
+#define MyAppVersion "3.2.0"
 #define MyAppPublisher "EmbeddedIQ"
-#define MyAppURL "http://www.EmbeddedIQ.com/"
+#define MyAppURL "http://searchmonkey.EmbeddedIQ.com/"
 #define MyAppExeName "Searchmonkey.jar"
 #define MyAppShortName "Searchmonkey"
 #define MyAppGroup "EmbeddedIQ"
