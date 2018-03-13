@@ -1,35 +1,12 @@
-# Searchmonkey v3.1.0
+# Searchmonkey v3.2.0
 
 # 1 Introduction
 ## 1.1 What is Searchmonkey?
 
 Perform powerful desktop searches without having to index your system using regular expressions. Searchmonkey is the graphical equivalent to grep + find, and is available in Gnome, KDE or JAVA editions.
 
-This is the release notes for the JAVA edition.
-
-## 1.2 Which version do I need?
-
-Download the file most suited to your environments:
-
-* [Searchmonkey_full_v3.1.0.exe](Searchmonkey_full_v3.1.0.exe) - Windows x64 and x86 full installer
-	* This windows installer contains everything you need to deploy Searchmonkey on Windows 7, Windows 8, Windows 10, and beyond. It includes a full copy of the Java Runtime Environment (JRE), and works on 64-bit and 32-bit OS. Use this version is unsure
-* [Searchmonkey_static_v3.1.0.exe](Searchmonkey_static_v3.1.0.exe) - Windows x64 and x86 static installer
-	* This windows installer contains everything you need to deploy Searchmonkey on Windows 7, Windows 8, Windows 10, and beyond. It includes a static install of  the Java Runtime Environment (JRE), and works on 64-bit and 32-bit OS. Use this package if you don't want to install any 3rd party dependencies in your uninstall list.
-* [Searchmonkey_v3.1.0.exe](Searchmonkey_v3.1.0.exe) - Windows x64 and x86 minimal installer
-	* This windows installer contains a full copy of Searchmonkey. Use this version if you have already installed Java Runtime Environment (JRE) 1.8 or newer.
-* [searchmonkey-3.1.0-jar-with-dependencies.jar](searchmonkey-3.1.0-jar-with-dependencies.jar) - x64 and x86 full JAR package
-	* This JAR archive contains a full copy of Searchmonkey and is cross-platform. Use this version if you are running Linux or OS.X. To use, install Java Runtime Environment (JRE) 1.8 or newer. To start run from the command line, enter the command e.g. ``` $ java -jar searchmonkey.jar```
-* [searchmonkey-3.1.0.jar](searchmonkey-3.1.0.jar) - x64 and x86 minimal JAR package
-	* This JAR archive contains a full copy of Searchmonkey but does not include any of the depenencies. Use this version if you are wanting to generate a clean package for your Linux distribution. To use, install Java Runtime Environment (JRE) 1.8 or newer and then use your package manager to install all of the dependencies (the full list can be found by compiling the source code). To start run from the command line, enter the command e.g. ``` $ java -jar searchmonkey.jar```
-
-# 2 What's new
-## 2.1 Highlights
-
-This version carries with it a major overhaul of the HMI so that it is more consistent with the Searchmonkey family of products.
-
 The key features in this release are:
-
-* Added content search for most text documents, including:-
+* Support for most text documents, including:-
 	* Adobe PDF
 	* Microsoft Office (XML & original file format)
 	* Open Office (ODT file format)
@@ -37,45 +14,57 @@ The key features in this release are:
 	* And much, much more besides
 * Improved HMI look-and-feel for true next generation feel
 
+This is the release notes for the JAVA edition.
+
+## 1.2 Which version do I need?
+
+Download the file most suited to your environments:
+
+* [Searchmonkey_full_v3.2.0.exe](https://sourceforge.net/projects/searchmonkey/files/jSearchmonkey%20JAVA/v3.2/Searchmonkey_full_v3.2.0.exe/download) - Windows x64 and x86 full installer
+	* This windows installer contains everything you need to deploy Searchmonkey on Windows 7, Windows 8, Windows 10, and beyond. It includes a full copy of the Java Runtime Environment (JRE), and works on 64-bit and 32-bit OS. Use this version is unsure
+* [Searchmonkey_static_v3.2.0.exe](https://sourceforge.net/projects/searchmonkey/files/jSearchmonkey%20JAVA/v3.2/Searchmonkey_static_v3.2.0.exe/download) - Windows x64 and x86 static installer
+	* This windows installer contains everything you need to deploy Searchmonkey on Windows 7, Windows 8, Windows 10, and beyond. It includes a static install of  the Java Runtime Environment (JRE), and works on 64-bit and 32-bit OS. Use this package if you don't want to install any 3rd party dependencies in your uninstall list.
+* [Searchmonkey_v3.2.0.exe](https://sourceforge.net/projects/searchmonkey/files/jSearchmonkey%20JAVA/v3.2/Searchmonkey_v3.2.0.exe/download) - Windows x64 and x86 minimal installer
+	* This windows installer contains a full copy of Searchmonkey. Use this version if you have already installed Java Runtime Environment (JRE) 1.8 or newer.
+* [searchmonkey-3.2.0-jar-with-dependencies.jar](https://sourceforge.net/projects/searchmonkey/files/jSearchmonkey%20JAVA/v3.2/searchmonkey-3.2.0-jar-with-dependencies.jar/download) - x64 and x86 full JAR package
+	* This JAR archive contains a full copy of Searchmonkey and is cross-platform. Use this version if you are running Linux or OS.X. To use, install Java Runtime Environment (JRE) 1.8 or newer. To start run from the command line, enter the command e.g. ``` $ java -jar searchmonkey.jar```
+* [searchmonkey-3.2.0.jar](https://sourceforge.net/projects/searchmonkey/files/jSearchmonkey%20JAVA/v3.2/searchmonkey-3.2.0.jar/download) - x64 and x86 minimal JAR package
+	* This JAR archive contains a full copy of Searchmonkey but does not include any of the depenencies. Use this version if you are wanting to generate a clean package for your Linux distribution. To use, install Java Runtime Environment (JRE) 1.8 or newer and then use your package manager to install all of the dependencies (the full list can be found by compiling the source code). To start run from the command line, enter the command e.g. ``` $ java -jar searchmonkey.jar```
+
+# 2 What's new
+## 2.1 Highlights
+
+This version provides a new and improved regular expression test utility:-
+ * Adds more control over the look-and-feel
+ * Improved regular expression tester
+ * Improved built-in help pages
+ * General bug fixes
+
 # 2.2 Improvements
 
-* Cleaner HMI:
-	* Search panel moved to the left-hand side **DONE**
-	* Advanced search options simplified by replacing with comboboxes **DONE**
-	* Intelligent comboboxes used to enter data with advanced features **DONE**
-	* Options tab used to keep search options easy to view and change **DONE**
-* Search panel:
-	* Accessed date: inverted range e.g. not between last week and last month **DONE**
-	* File Size Option: Inverted file range e.g. Greater than X OR less than Y **DONE**
-	* Filename search options: Removed limit max file size option **DONE**
-	* Filename search options: Can now ignore common binary files **DONE**
-	* Filename search options: case insensitive search **DONE**
-	* Results table: Added file type icons, for known types **DONE**
+* Menu bar:
+	* Added view menu to change the look and feel **DONE**
+	* Better RTL (right-to-left) support **DONE**
+* Test regular expression
+	* Improved dialog with built in help to test and evaluate regular expressions **DONE**
+	* User can see results in real time from with the test entry box, or the search box **DONE**
+	* Fixed the copy/paste buffer **DONE**
+* Search summary:
+	* Added more summary features including skipped files **DONE**
+	* When performing a filename search (no content) a message is shown to the user in the hits tab **DONE**
 
 ## 2.3 Fixed Issues
-* Search entry:
-	* Modified date now working normally **DONE**
-	* Created date now working normally **DONE**
-	* Dates, when printed in the comboboxes, are now in local date format **DONE**
-	* Filename are restored after start up **DONE**
-	* Containing are restored after start up **DONE**
-* Dialogs and wizards:
-	* Centred location of the wizards to the HMI **DONE**
-	* Mime types dialog has been made larger to make it easier to scroll **DONE**
-* Options:
-	* Shortcuts (LNK) files are now ignored (user options) **DONE**
+* Search summary:
+	* The most recent file is now the most recent **DONE**
+	* Fixed the caret-scrolling issue **DONE**
 * Search results:
-	* The icon column header is shown in the context menu (but not in the results table) **DONE**
-	* Changes to the column number will reset the table column width + positions **DONE**
-* General:
-	* Title of the window set to Searchmonkey's tagline **DONE**
+	* Fixing icon for ZIP files **DONE**
 
 # 3 BUGS
 
 ## 3.1 Known Issues
-* In summary, the most recent file is not the most recent.
 * File decode timeout (ms) should be moved to content search
-* Shortcut links on _About_ page do not work
+* Shortcut 'links' on _About_ page do not work as expected
 * Comboboxes can be filled with the same text multiple times
 * Restoring defaults does not reset the table columns + positions
 * Hidden columns will be restored on startup (not saved)
@@ -83,6 +72,7 @@ The key features in this release are:
 ## 3.2 Support
 
 Contact support to report any issues that you find with this software.
+You can find us on twitter using the handle *jSearchmonkey*
 
 # 4 Roadmap
 
@@ -90,6 +80,8 @@ Contact support to report any issues that you find with this software.
 * Filename matching
 	* Filename: regex wizard
 	* Filename: glob wizard
+* Test wizard:
+	* add (?i) and (?d) etc flags to the reference
 * Content matching:
 	* Content: regex wizard
 	* Content: keywords wizard
@@ -105,7 +97,6 @@ Contact support to report any issues that you find with this software.
 	* Results table: If number of hits exceeds the limit, then show this e.g. >999
 * Result summary:
 	* Report current search parameters to the search summary
-	* When performing a filename search (no content) show user message in the hits tab
 * General:
 	* General options: Use power search check button
 
@@ -113,7 +104,6 @@ Contact support to report any issues that you find with this software.
 * Export results as spreadsheet
 * Export hits or preview to file
 * Save/Restore a complete set of search results (e.g. for comparison)
-* Better RTL (right-to-left) support
 * Add translations (German, French, Russian)
 * Add command-line support e.g. searchmonkey <folder> [Options]
 
