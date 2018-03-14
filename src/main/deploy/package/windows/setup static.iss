@@ -53,8 +53,8 @@ Source: "..\..\..\..\..\README.md"; DestDir: "{app}"; DestName: "Release Notes.t
 Source: "..\..\..\resources\images\ico.ico"; DestDir: "{app}"
 
 [Icons]
-Name: "{commonprograms}\{#MyAppGroup}\{#MyAppName}"; Filename: "{app}\bin\java.exe"; Parameters: "-jar {#MyAppName}.jar"; IconFilename: "{app}\ico.ico"
-Name: "{commondesktop}\{#MyAppGroup} {#MyAppName}"; Filename: "{app}\bin\java.exe"; Parameters: "-jar {#MyAppName}.jar"; IconFilename: "{app}\ico.ico"; Tasks: desktopicon
+Name: "{commonprograms}\{#MyAppGroup}\{#MyAppName}"; Filename: "{app}\bin\java.exe"; WorkingDir: "{app}" ; Parameters: "-jar {#MyAppName}.jar"; IconFilename: "{app}\ico.ico"
+Name: "{commondesktop}\{#MyAppGroup} {#MyAppName}"; Filename: "{app}\bin\java.exe"; WorkingDir: "{app}"; Parameters: "-jar {#MyAppName}.jar"; IconFilename: "{app}\ico.ico"; Tasks: desktopicon
 
 ;; [Run]
 ;;Filename: "{tmp}\jre-8u161-windows.exe"; Tasks: jre; Parameters: "/s REMOVEOUTOFDATEJRES=1 AUTO_UPDATE=Disable"; StatusMsg: "Installing Java 8 Runtime..."
