@@ -1,2 +1,4 @@
 /target/
 /src/main/deploy/package/windows/Searchmonkey_static_v3.2.0.exe
+/src/main/deploy/package/windows/Searchmonkey_full_v3.2.0.exe
+/src/main/deploy/package/windows/Searchmonkey_lite_v3.2.0.exe
