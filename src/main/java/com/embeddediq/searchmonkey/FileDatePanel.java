@@ -90,7 +90,8 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
 
         jPopupMenu1.setInheritsPopupMenu(true);
 
-        jMenuItem1.setText("Set today");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jMenuItem1.setText(bundle.getString("FileDatePanel.jMenuItem1.text")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -98,7 +99,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem1);
 
-        jMenuItem2.setText("Set yesterday");
+        jMenuItem2.setText(bundle.getString("FileDatePanel.jMenuItem2.text")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -106,7 +107,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Set last week");
+        jMenuItem3.setText(bundle.getString("FileDatePanel.jMenuItem3.text")); // NOI18N
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -114,7 +115,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem3);
 
-        jMenuItem4.setText("Set last month");
+        jMenuItem4.setText(bundle.getString("FileDatePanel.jMenuItem4.text")); // NOI18N
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -122,7 +123,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem4);
 
-        jMenuItem5.setText("Set last quarter");
+        jMenuItem5.setText(bundle.getString("FileDatePanel.jMenuItem5.text")); // NOI18N
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -130,7 +131,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem5);
 
-        jMenuItem6.setText("Set last year");
+        jMenuItem6.setText(bundle.getString("FileDatePanel.jMenuItem6.text")); // NOI18N
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -138,7 +139,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         });
         jPopupMenu1.add(jMenuItem6);
 
-        jMenuItem7.setText("Set last decade");
+        jMenuItem7.setText(bundle.getString("FileDatePanel.jMenuItem7.text")); // NOI18N
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem7ActionPerformed(evt);
@@ -148,7 +149,7 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
 
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("<html><p>Setting these date constraints can help to increase the speed of searching because Searchmonkey can simply skip the very old or very new files.</p><br/><p>If one option is checked, then the other constraint will be set to: <em>don't care</em>. You can specify a range, for example <em>between 1st March and 31st March 2018</em>. However, if you want the opposite, then this too is possible, for example <em>before 1st March OR after 31st March 2018</em>. Or you can just use one constraint, for example <em>before 31st March</em></p></html>");
+        jLabel1.setText(bundle.getString("FileDatePanel.jLabel1.text")); // NOI18N
         add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setComponentPopupMenu(jPopupMenu1);
@@ -159,7 +160,6 @@ public class FileDatePanel extends javax.swing.JPanel implements ChangeListener 
         jToolBar5.setBorderPainted(false);
 
         jAfter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/calendar.png"))); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
         jAfter.setToolTipText(bundle.getString("SearchEntryPanel.jAfter.toolTipText")); // NOI18N
         jAfter.setComponentPopupMenu(jPopupMenu1);
         jAfter.setFocusable(false);

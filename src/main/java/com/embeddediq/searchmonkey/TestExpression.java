@@ -227,7 +227,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             }
         });
 
-        jCut.setText("Cut");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jCut.setText(bundle.getString("TestExpression.jCut.text")); // NOI18N
         jCut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCutActionPerformed(evt);
@@ -235,7 +236,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         });
         jPopupMenu1.add(jCut);
 
-        jCopy.setText("Copy");
+        jCopy.setText(bundle.getString("TestExpression.jCopy.text")); // NOI18N
         jCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCopyActionPerformed(evt);
@@ -243,7 +244,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         });
         jPopupMenu1.add(jCopy);
 
-        jPaste.setText("Paste");
+        jPaste.setText(bundle.getString("TestExpression.jPaste.text")); // NOI18N
         jPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasteActionPerformed(evt);
@@ -252,9 +253,9 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jPopupMenu1.add(jPaste);
         jPopupMenu1.add(jSeparator1);
 
-        jMenu1.setText("Reset");
+        jMenu1.setText(bundle.getString("TestExpression.jMenu1.text")); // NOI18N
 
-        jResetLatin.setText("Lorem ipsum..");
+        jResetLatin.setText(bundle.getString("TestExpression.jResetLatin.text")); // NOI18N
         jResetLatin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jResetLatinActionPerformed(evt);
@@ -273,8 +274,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jScrollPane3.setComponentPopupMenu(jPopupMenu1);
 
-        jTextPane2.setText("<Enter sample text here to test regular expression>");
-        jTextPane2.setToolTipText("Enter sample text or copy in from a file to test expression");
+        jTextPane2.setText(bundle.getString("TestExpression.jTextPane2.text")); // NOI18N
+        jTextPane2.setToolTipText(bundle.getString("TestExpression.jTextPane2.toolTipText")); // NOI18N
         jTextPane2.setComponentPopupMenu(jPopupMenu1);
         jTextPane2.setInheritsPopupMenu(true);
         jTextPane2.setMargin(new java.awt.Insets(5, 10, 5, 10));
@@ -282,13 +283,13 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Text");
+        jLabel3.setText(bundle.getString("TestExpression.jLabel3.text")); // NOI18N
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         jLabel3.setOpaque(true);
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 204));
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Expression");
+        jLabel2.setText(bundle.getString("TestExpression.jLabel2.text")); // NOI18N
         jLabel2.setAlignmentX(0.5F);
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 5));
         jLabel2.setOpaque(true);
@@ -296,14 +297,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jScrollPane4.setComponentPopupMenu(jPopupMenu1);
 
         jTextPane3.setEditable(false);
-        jTextPane3.setToolTipText("");
+        jTextPane3.setToolTipText(bundle.getString("TestExpression.jTextPane3.toolTipText")); // NOI18N
         jTextPane3.setInheritsPopupMenu(true);
         jTextPane3.setMargin(new java.awt.Insets(5, 10, 5, 10));
         jScrollPane4.setViewportView(jTextPane3);
 
         jStatus.setBackground(new java.awt.Color(204, 204, 204));
         jStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jStatus.setText("Status");
+        jStatus.setText(bundle.getString("TestExpression.jStatus.text")); // NOI18N
         jStatus.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         jStatus.setOpaque(true);
 
@@ -345,11 +346,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jTopMenu.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("<html><p>Enter a test expression and the syntax will automatically highlight the text within the search panel.</p>\n<p>If you would like to understand more about Regular Exressions then check out the Reference Manual or the Cheat Sheet.</p>\n<p>The current regular expression settings are shown here:-</p>\n</html>");
+        jLabel1.setText(bundle.getString("TestExpression.jLabel1.text")); // NOI18N
         jLabel1.setPreferredSize(new java.awt.Dimension(474, 140));
         jTopMenu.add(jLabel1, java.awt.BorderLayout.NORTH);
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
         jIgnoreContentCase.setText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.text")); // NOI18N
         jIgnoreContentCase.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreContentCase.toolTipText")); // NOI18N
         jIgnoreContentCase.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -400,14 +400,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jTopMenu.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Help", jTopMenu);
+        jTabbedPane1.addTab(bundle.getString("TestExpression.jTopMenu.TabConstraints.tabTitle"), jTopMenu); // NOI18N
 
         jReference.setLayout(new java.awt.BorderLayout());
 
         jReferencePage.setEditable(false);
         jReferencePage.setContentType("text/html"); // NOI18N
-        jReferencePage.setText("");
-        jReferencePage.setToolTipText("");
+        jReferencePage.setText(bundle.getString("TestExpression.jReferencePage.text")); // NOI18N
+        jReferencePage.setToolTipText(bundle.getString("TestExpression.jReferencePage.toolTipText")); // NOI18N
         jReferencePage.setAutoscrolls(false);
         jScrollPane2.setViewportView(jReferencePage);
 
@@ -419,7 +419,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             public String getElementAt(int i) { return strings[i]; }
         });
         jReferenceList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jReferenceList.setToolTipText("Click on item to select");
+        jReferenceList.setToolTipText(bundle.getString("TestExpression.jReferenceList.toolTipText")); // NOI18N
         jReferenceList.setSelectedIndex(0);
         jReferenceList.setVisibleRowCount(6);
         jReferenceList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -431,14 +431,14 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jReference.add(jScrollPane6, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.addTab("Reference", jReference);
+        jTabbedPane1.addTab(bundle.getString("TestExpression.jReference.TabConstraints.tabTitle"), jReference); // NOI18N
 
         jCheat.setLayout(new java.awt.BorderLayout());
 
         jHelpPage1.setEditable(false);
         jHelpPage1.setContentType("text/html"); // NOI18N
-        jHelpPage1.setText("<html>\n    <head>\n        <style type=\"text/css\">\n            table {\n                width: 100%\n            }\n            td, th {\n                background-color: #112233\n            }\n        </style>\n    </head>\n    <body>\n        HTML table test:\n        <div style=\"background-color: black\">\n            <table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n                <tr>\n                    <td>cell1</td>\n                    <td>cell2</td>\n                </tr>\n                <tr>\n                    <td>cell3</td>\n                    <td>cell4</td>\n                </tr>\n        </div>\n    </body>\n</html>");
-        jHelpPage1.setToolTipText("");
+        jHelpPage1.setText(bundle.getString("TestExpression.jHelpPage1.text")); // NOI18N
+        jHelpPage1.setToolTipText(bundle.getString("TestExpression.jHelpPage1.toolTipText")); // NOI18N
         jHelpPage1.setAutoscrolls(false);
         try {
             jHelpPage1.setPage(getClass().getResource("/help/regexCheat.htm"));
@@ -449,7 +449,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jCheat.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Cheat Sheet", jCheat);
+        jTabbedPane1.addTab(bundle.getString("TestExpression.jCheat.TabConstraints.tabTitle"), jCheat); // NOI18N
 
         add(jTabbedPane1, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents

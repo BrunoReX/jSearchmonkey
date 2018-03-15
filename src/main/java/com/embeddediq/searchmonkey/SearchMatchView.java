@@ -453,8 +453,9 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
             }
         });
 
-        jMenuItem1.setText("Copy");
-        jMenuItem1.setToolTipText("");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jMenuItem1.setText(bundle.getString("SearchMatchView.jMenuItem1.text")); // NOI18N
+        jMenuItem1.setToolTipText(bundle.getString("SearchMatchView.jMenuItem1.toolTipText")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -462,8 +463,8 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         });
         jPopupMenu1.add(jMenuItem1);
 
-        jMenuItem2.setText("Select all");
-        jMenuItem2.setToolTipText("");
+        jMenuItem2.setText(bundle.getString("SearchMatchView.jMenuItem2.text")); // NOI18N
+        jMenuItem2.setToolTipText(bundle.getString("SearchMatchView.jMenuItem2.toolTipText")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -480,23 +481,23 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         jSummaryTextArea.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(jSummaryTextArea);
 
-        jTabbedPane1.addTab("Summary", jScrollPane1);
+        jTabbedPane1.addTab(bundle.getString("SearchMatchView.jScrollPane1.TabConstraints.tabTitle"), jScrollPane1); // NOI18N
 
         jHitsTextPane.setEditable(false);
-        jHitsTextPane.setToolTipText("");
+        jHitsTextPane.setToolTipText(bundle.getString("SearchMatchView.jHitsTextPane.toolTipText")); // NOI18N
         jHitsTextPane.setAutoscrolls(false);
         jHitsTextPane.setComponentPopupMenu(jPopupMenu1);
         jScrollPane3.setViewportView(jHitsTextPane);
 
-        jTabbedPane1.addTab("Hits", jScrollPane3);
+        jTabbedPane1.addTab(bundle.getString("SearchMatchView.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
 
         jPreviewTextPane.setEditable(false);
-        jPreviewTextPane.setToolTipText("");
+        jPreviewTextPane.setToolTipText(bundle.getString("SearchMatchView.jPreviewTextPane.toolTipText")); // NOI18N
         jPreviewTextPane.setAutoscrolls(false);
         jPreviewTextPane.setComponentPopupMenu(jPopupMenu1);
         jScrollPane4.setViewportView(jPreviewTextPane);
 
-        jTabbedPane1.addTab("Preview", jScrollPane4);
+        jTabbedPane1.addTab(bundle.getString("SearchMatchView.jScrollPane4.TabConstraints.tabTitle"), jScrollPane4); // NOI18N
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents

@@ -86,7 +86,8 @@ public class FileTypePanel extends javax.swing.JPanel implements ListSelectionLi
         setMinimumSize(new java.awt.Dimension(335, 233));
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("<html><p>Setting the file type constraint can help to increase the speed of searching because Searchmonkey will choose files that match the selected MIME type.</p><br/><p>The mime will be pattern matched such that /text will match both /text/xml and /text/html mimes. Alternatively, if the pattern is /app/*/odt then the pattern will match entries such as /app/ms/odt and /app/adobe/odt</p></html>");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("FileTypePanel.jLabel1.text")); // NOI18N
         add(jLabel1, java.awt.BorderLayout.NORTH);
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -98,7 +99,7 @@ public class FileTypePanel extends javax.swing.JPanel implements ListSelectionLi
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText(bundle.getString("FileTypePanel.jTextField1.text")); // NOI18N
         add(jTextField1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 

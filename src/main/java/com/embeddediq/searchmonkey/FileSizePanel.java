@@ -50,11 +50,11 @@ public class FileSizePanel extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(335, 233));
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("<html><p>Setting these file size constraints size can help to increase the speed of searching because Searchmonkey can simply skip the very large or very small files.</p><br/><p>If one option is checked, then the other constraint will be set to: <em>don't care</em>. You can specify a range, for example <em>between 3 KBytes and 10 Mbytes</em>. However, if you want the opposite, then this too is possible, for example <em>greater than 10 MBytes OR less than 3 Kbytes</em>. Or you can just use one constraint, for example <em>Less than 5 MBytes</em></p></html>");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("FileSizePanel.jLabel1.text")); // NOI18N
         add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jLessThanSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
         jLessThanSpinner.setToolTipText(bundle.getString("SearchEntryPanel.jLessThanSpinner.toolTipText")); // NOI18N
         jLessThanSpinner.setEnabled(false);
 

@@ -315,7 +315,8 @@ public class CalendarPanel extends javax.swing.JPanel {
 
         jPopupMenu1.setInheritsPopupMenu(true);
 
-        jMenuItem1.setText("Set today");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jMenuItem1.setText(bundle.getString("CalendarPanel.jMenuItem1.text")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -323,7 +324,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem1);
 
-        jMenuItem2.setText("Set yesterday");
+        jMenuItem2.setText(bundle.getString("CalendarPanel.jMenuItem2.text")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -331,7 +332,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Set last week");
+        jMenuItem3.setText(bundle.getString("CalendarPanel.jMenuItem3.text")); // NOI18N
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -339,7 +340,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem3);
 
-        jMenuItem4.setText("Set last month");
+        jMenuItem4.setText(bundle.getString("CalendarPanel.jMenuItem4.text")); // NOI18N
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -347,7 +348,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem4);
 
-        jMenuItem5.setText("Set last quarter");
+        jMenuItem5.setText(bundle.getString("CalendarPanel.jMenuItem5.text")); // NOI18N
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -355,7 +356,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem5);
 
-        jMenuItem6.setText("Set last year");
+        jMenuItem6.setText(bundle.getString("CalendarPanel.jMenuItem6.text")); // NOI18N
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -363,7 +364,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jPopupMenu1.add(jMenuItem6);
 
-        jMenuItem7.setText("Set last decade");
+        jMenuItem7.setText(bundle.getString("CalendarPanel.jMenuItem7.text")); // NOI18N
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem7ActionPerformed(evt);
@@ -443,7 +444,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         jControlPanel.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("December 2017");
+        jLabel1.setText(bundle.getString("CalendarPanel.jLabel1.text")); // NOI18N
         jControlPanel.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jNextToolBar.setBorder(null);
@@ -451,7 +452,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         jNextToolBar.setRollover(true);
         jNextToolBar.setBorderPainted(false);
 
-        jNext.setText(">");
+        jNext.setText(bundle.getString("CalendarPanel.jNext.text")); // NOI18N
         jNext.setDefaultCapable(false);
         jNext.setFocusPainted(false);
         jNext.setFocusable(false);
@@ -463,7 +464,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jNextToolBar.add(jNext);
 
-        jNextYear.setText(">>");
+        jNextYear.setText(bundle.getString("CalendarPanel.jNextYear.text")); // NOI18N
         jNextYear.setDefaultCapable(false);
         jNextYear.setFocusable(false);
         jNextYear.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -481,7 +482,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
 
-        jPrevYear.setText("<<");
+        jPrevYear.setText(bundle.getString("CalendarPanel.jPrevYear.text")); // NOI18N
         jPrevYear.setBorder(null);
         jPrevYear.setBorderPainted(false);
         jPrevYear.setDefaultCapable(false);
@@ -495,7 +496,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         jToolBar1.add(jPrevYear);
 
-        jPrev.setText("<");
+        jPrev.setText(bundle.getString("CalendarPanel.jPrev.text")); // NOI18N
         jPrev.setBorder(null);
         jPrev.setBorderPainted(false);
         jPrev.setDefaultCapable(false);

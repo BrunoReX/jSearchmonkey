@@ -87,7 +87,8 @@ public class RegexCellComponent extends javax.swing.JPanel {
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't know", "This exact phrase", "One of these words", "A white space charactor", "One of these charactors", "Any numeric charactor", "Any text charactor", "Any charactor except", "Any charactor" }));
 
-        jLabel2.setText("that occurs");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/RegexWizard/Bundle"); // NOI18N
+        jLabel2.setText(bundle.getString("RegexCellComponent.jLabel2.text")); // NOI18N
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Only once", "Perhaps once", "Any number of times", "Any number of times (greedy)", "Once or more times", "Once or more times (greedy)" }));
 
@@ -119,7 +120,7 @@ public class RegexCellComponent extends javax.swing.JPanel {
 
         add(jPanel1, "cardEdit");
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText(bundle.getString("RegexCellComponent.jLabel1.text")); // NOI18N
         add(jLabel1, "cardView");
     }// </editor-fold>//GEN-END:initComponents
 

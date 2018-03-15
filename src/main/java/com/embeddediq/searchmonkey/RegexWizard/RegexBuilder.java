@@ -348,9 +348,10 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Line ending"));
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/RegexWizard/Bundle"); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("RegexBuilder.jPanel1.border.title"))); // NOI18N
 
-        jLabel1.setText("that occurs");
+        jLabel1.setText(bundle.getString("RegexBuilder.jLabel1.text")); // NOI18N
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't know", "This exact phrase", "A white space charactor", "One of these charactors", "Any numeric charactor", "Any text charactor", "Any charactor except", "Any charactor", " ", " ", " " }));
 
@@ -385,9 +386,9 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         jPanel4.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Line begins"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("RegexBuilder.jPanel2.border.title"))); // NOI18N
 
-        jLabel2.setText("that occurs");
+        jLabel2.setText(bundle.getString("RegexBuilder.jLabel2.text")); // NOI18N
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Only once", "Perhaps once", "Any number of times", "Any number of times (greedy)", "Once or more times", "Once or more times (greedy)" }));
 
@@ -422,12 +423,12 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         jPanel4.add(jPanel2, java.awt.BorderLayout.NORTH);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Line contains"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("RegexBuilder.jPanel3.border.title"))); // NOI18N
         jPanel3.setLayout(new java.awt.BorderLayout(11, 11));
 
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't know", "This exact phrase", "One of these words", "A white space charactor", "One of these charactors", "Any numeric charactor", "Any text charactor", "Any charactor except", "Any charactor", " ", " ", " " }));
 
-        jLabel4.setText("that occurs");
+        jLabel4.setText(bundle.getString("RegexBuilder.jLabel4.text")); // NOI18N
 
         jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Only once", "Perhaps once", "Any number of times", "Any number of times (greedy)", "Once or more times", "Once or more times (greedy)" }));
 
@@ -476,13 +477,13 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jButton4.setText("Move up");
+        jButton4.setText(bundle.getString("RegexBuilder.jButton4.text")); // NOI18N
 
-        jButton7.setText("Delete");
+        jButton7.setText(bundle.getString("RegexBuilder.jButton7.text")); // NOI18N
 
-        jButton5.setText("Move down");
+        jButton5.setText(bundle.getString("RegexBuilder.jButton5.text")); // NOI18N
 
-        jButton6.setText("Insert");
+        jButton6.setText(bundle.getString("RegexBuilder.jButton6.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -520,10 +521,10 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         add(jPanel4, java.awt.BorderLayout.CENTER);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Resulting Expression"));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("RegexBuilder.jPanel5.border.title"))); // NOI18N
 
         jTextField2.setEditable(false);
-        jTextField2.setText("<Expression here>");
+        jTextField2.setText(bundle.getString("RegexBuilder.jTextField2.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -544,9 +545,9 @@ public class RegexBuilder extends javax.swing.JPanel {
 
         add(jPanel5, java.awt.BorderLayout.SOUTH);
 
-        jButton2.setText("Cancel");
+        jButton2.setText(bundle.getString("RegexBuilder.jButton2.text")); // NOI18N
 
-        jButton1.setText("OK");
+        jButton1.setText(bundle.getString("RegexBuilder.jButton1.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);

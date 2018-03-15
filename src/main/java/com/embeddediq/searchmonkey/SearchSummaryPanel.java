@@ -96,10 +96,11 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
         add(filler5);
 
         jStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jStatus.setText("Ready");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jStatus.setText(bundle.getString("SearchSummaryPanel.jStatus.text")); // NOI18N
         add(jStatus);
 
-        jProgressBar1.setToolTipText("");
+        jProgressBar1.setToolTipText(bundle.getString("SearchSummaryPanel.jProgressBar1.toolTipText")); // NOI18N
         jProgressBar1.setIndeterminate(true);
         jProgressBar1.setPreferredSize(new java.awt.Dimension(100, 14));
         jProgressBar1.setStringPainted(true);
@@ -108,7 +109,7 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
         add(filler1);
 
         jSearchSummary.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jSearchSummary.setText("Found: 16 items (300 MB)");
+        jSearchSummary.setText(bundle.getString("SearchSummaryPanel.jSearchSummary.text")); // NOI18N
         add(jSearchSummary);
         add(filler2);
 
@@ -119,7 +120,7 @@ public class SearchSummaryPanel extends javax.swing.JPanel {
         add(jSeparator1);
 
         jSearchSelect.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jSearchSelect.setText("Selected: One item (2 MB)");
+        jSearchSelect.setText(bundle.getString("SearchSummaryPanel.jSearchSelect.text")); // NOI18N
         add(jSearchSelect);
         add(filler3);
     }// </editor-fold>//GEN-END:initComponents

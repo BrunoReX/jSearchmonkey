@@ -13,7 +13,9 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="jCut">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cut"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jCut.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCutActionPerformed"/>
@@ -21,7 +23,9 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jCopy">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Copy"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jCopy.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCopyActionPerformed"/>
@@ -29,7 +33,9 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jPaste">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Paste"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jPaste.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jPasteActionPerformed"/>
@@ -39,12 +45,16 @@
         </Component>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Reset"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jMenu1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jResetLatin">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Lorem ipsum.."/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jResetLatin.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jResetLatinActionPerformed"/>
@@ -65,11 +75,11 @@
     </Property>
   </Properties>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
@@ -140,8 +150,12 @@
           <SubComponents>
             <Component class="javax.swing.JTextPane" name="jTextPane2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;Enter sample text here to test regular expression&gt;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Enter sample text or copy in from a file to test expression"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jTextPane2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jTextPane2.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="jPopupMenu1"/>
                 </Property>
@@ -161,7 +175,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Text"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jLabel3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="5" left="10" right="10" top="5"/>
@@ -178,7 +194,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Expression"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="alignmentX" type="float" value="0.5"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -203,7 +221,9 @@
             <Component class="javax.swing.JTextPane" name="jTextPane3">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jTextPane3.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="inheritsPopupMenu" type="boolean" value="true"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[5, 10, 5, 10]"/>
@@ -220,7 +240,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Status"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jStatus.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="5" left="10" right="10" top="5"/>
@@ -268,7 +290,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Help">
-                <Property name="tabTitle" type="java.lang.String" value="Help"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jTopMenu.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -277,7 +301,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Enter a test expression and the syntax will automatically highlight the text within the search panel.&lt;/p&gt;&#xa;&lt;p&gt;If you would like to understand more about Regular Exressions then check out the Reference Manual or the Cheat Sheet.&lt;/p&gt;&#xa;&lt;p&gt;The current regular expression settings are shown here:-&lt;/p&gt;&#xa;&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[474, 140]"/>
                 </Property>
@@ -369,7 +395,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Reference">
-                <Property name="tabTitle" type="java.lang.String" value="Reference"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jReference.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -392,8 +420,12 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-                    <Property name="text" type="java.lang.String" value=""/>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jReferencePage.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jReferencePage.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                     <Property name="autoscrolls" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -466,7 +498,9 @@
                       </StringArray>
                     </Property>
                     <Property name="selectionMode" type="int" value="0"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Click on item to select"/>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jReferenceList.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                     <Property name="selectedIndex" type="int" value="0"/>
                     <Property name="visibleRowCount" type="int" value="6"/>
                   </Properties>
@@ -485,7 +519,9 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Cheat Sheet">
-                <Property name="tabTitle" type="java.lang.String" value="Cheat Sheet"/>
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jCheat.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -508,8 +544,12 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;    &lt;head&gt;&#xa;        &lt;style type=&quot;text/css&quot;&gt;&#xa;            table {&#xa;                width: 100%&#xa;            }&#xa;            td, th {&#xa;                background-color: #112233&#xa;            }&#xa;        &lt;/style&gt;&#xa;    &lt;/head&gt;&#xa;    &lt;body&gt;&#xa;        HTML table test:&#xa;        &lt;div style=&quot;background-color: black&quot;&gt;&#xa;            &lt;table border=&quot;0&quot; cellpadding=&quot;2&quot; cellspacing=&quot;1&quot;&gt;&#xa;                &lt;tr&gt;&#xa;                    &lt;td&gt;cell1&lt;/td&gt;&#xa;                    &lt;td&gt;cell2&lt;/td&gt;&#xa;                &lt;/tr&gt;&#xa;                &lt;tr&gt;&#xa;                    &lt;td&gt;cell3&lt;/td&gt;&#xa;                    &lt;td&gt;cell4&lt;/td&gt;&#xa;                &lt;/tr&gt;&#xa;        &lt;/div&gt;&#xa;    &lt;/body&gt;&#xa;&lt;/html&gt;"/>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jHelpPage1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jHelpPage1.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
                     <Property name="autoscrolls" type="boolean" value="false"/>
                     <Property name="page" type="java.net.URL" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="getClass().getResource(&quot;/help/regexCheat.htm&quot;)" type="code"/>

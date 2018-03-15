@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
@@ -21,7 +21,9 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/about.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="http://searchmonkey.embeddediq.com"/>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="About.jLabel1.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseClicked"/>
@@ -51,14 +53,18 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="2"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;h3&gt;JAVA Searchmonkey v3.3.0&lt;/h3&gt; &lt;p&gt;JAVA Searchmonkey is copyright Adam Cottrell &lt;a href=&quot;mailto:searchmonkey@embededdiq.com?Subject=JAVA Searchmonkey&quot;&gt;searchmonkey@embededdiq.com&lt;/a&gt;. Searchmonkey is open source and released under the GPL license&lt;/p&gt;&lt;br/&gt; &lt;p&gt;For help and support &lt;a href=&quot;http://searchmonnkey.embeddediq.com/forum&quot;&gt;visit our forum&lt;/a&gt;. &lt;a href=&quot;http://searchmonnkey.embeddediq.com/downloads&quot;&gt;Download the latest Searchmonkey&lt;/a&gt;&lt;/p&gt; &lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="About.jTextPane2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;h1&gt;Welcome!&lt;/h1&gt;&lt;p&gt;&lt;b&gt;JAVA Searchmonkey&lt;/b&gt; is a powerful desktop tool for finding files and their content using regular expressions. Searchmonkey combines the power of find/grep and can look inside most text files including PDF, DOCX, XLSX, ODT, and much more besides.&lt;/p&gt;&lt;br/&gt; &lt;p&gt;To learn more about what Searchmonkey can do for you, then visit our web page: &lt;a href=&quot;http://searchmonnkey.embeddediq.com&quot;&gt;http://searchmonnkey.embeddediq.com&lt;/a&gt;&lt;/p&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="About.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

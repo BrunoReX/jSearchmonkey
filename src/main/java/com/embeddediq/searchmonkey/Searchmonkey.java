@@ -204,7 +204,8 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Searchmonkey - power searching without the pain");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        setTitle(bundle.getString("Searchmonkey.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(500, 500));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentMoved(java.awt.event.ComponentEvent evt) {
@@ -232,7 +233,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.5);
-        jSplitPane1.setToolTipText("");
+        jSplitPane1.setToolTipText(bundle.getString("Searchmonkey.jSplitPane1.toolTipText")); // NOI18N
         jSplitPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jSplitPane1PropertyChange(evt);
@@ -250,8 +251,8 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton3.setText("Test Expression");
-        jButton3.setToolTipText("Test Regex Expression");
+        jButton3.setText(bundle.getString("Searchmonkey.jButton3.text")); // NOI18N
+        jButton3.setToolTipText(bundle.getString("Searchmonkey.jButton3.toolTipText")); // NOI18N
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -264,7 +265,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jToolBar1.add(jSeparator1);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/system-search.png"))); // NOI18N
-        jButton1.setToolTipText("Start search");
+        jButton1.setToolTipText(bundle.getString("Searchmonkey.jButton1.toolTipText")); // NOI18N
         jButton1.setFocusable(false);
         jButton1.setHideActionText(true);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -277,7 +278,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jToolBar1.add(jButton1);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/process-stop.png"))); // NOI18N
-        jButton2.setToolTipText("Cancel search");
+        jButton2.setToolTipText(bundle.getString("Searchmonkey.jButton2.toolTipText")); // NOI18N
         jButton2.setEnabled(false);
         jButton2.setFocusable(false);
         jButton2.setHideActionText(true);
@@ -293,23 +294,23 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         fileMenu.setMnemonic('f');
-        fileMenu.setText("File");
+        fileMenu.setText(bundle.getString("Searchmonkey.fileMenu.text")); // NOI18N
 
         openMenuItem.setMnemonic('o');
-        openMenuItem.setText("Open");
+        openMenuItem.setText(bundle.getString("Searchmonkey.openMenuItem.text")); // NOI18N
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setMnemonic('s');
-        saveMenuItem.setText("Save");
+        saveMenuItem.setText(bundle.getString("Searchmonkey.saveMenuItem.text")); // NOI18N
         fileMenu.add(saveMenuItem);
 
         saveAsMenuItem.setMnemonic('a');
-        saveAsMenuItem.setText("Save As ...");
+        saveAsMenuItem.setText(bundle.getString("Searchmonkey.saveAsMenuItem.text")); // NOI18N
         fileMenu.add(saveAsMenuItem);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
+        exitMenuItem.setText(bundle.getString("Searchmonkey.exitMenuItem.text")); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
@@ -320,31 +321,31 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         menuBar.add(fileMenu);
 
         editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
+        editMenu.setText(bundle.getString("Searchmonkey.editMenu.text")); // NOI18N
 
         cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Cut");
+        cutMenuItem.setText(bundle.getString("Searchmonkey.cutMenuItem.text")); // NOI18N
         editMenu.add(cutMenuItem);
 
         copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Copy");
+        copyMenuItem.setText(bundle.getString("Searchmonkey.copyMenuItem.text")); // NOI18N
         editMenu.add(copyMenuItem);
 
         pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Paste");
+        pasteMenuItem.setText(bundle.getString("Searchmonkey.pasteMenuItem.text")); // NOI18N
         editMenu.add(pasteMenuItem);
 
         deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
+        deleteMenuItem.setText(bundle.getString("Searchmonkey.deleteMenuItem.text")); // NOI18N
         editMenu.add(deleteMenuItem);
 
         menuBar.add(editMenu);
 
-        toolMenu.setText("Tools");
+        toolMenu.setText(bundle.getString("Searchmonkey.toolMenu.text")); // NOI18N
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setMnemonic('T');
-        jMenuItem1.setText("Test Expression");
+        jMenuItem1.setText(bundle.getString("Searchmonkey.jMenuItem1.text")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -354,10 +355,10 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         menuBar.add(toolMenu);
 
-        viewMenu.setText("View");
+        viewMenu.setText(bundle.getString("Searchmonkey.viewMenu.text")); // NOI18N
 
         showStatusbar.setSelected(true);
-        showStatusbar.setText("Show status bar");
+        showStatusbar.setText(bundle.getString("Searchmonkey.showStatusbar.text")); // NOI18N
         showStatusbar.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 showStatusbarStateChanged(evt);
@@ -365,7 +366,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         });
         viewMenu.add(showStatusbar);
 
-        showToolbar.setText("Show toolbar");
+        showToolbar.setText(bundle.getString("Searchmonkey.showToolbar.text")); // NOI18N
         showToolbar.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 showToolbarStateChanged(evt);
@@ -374,11 +375,11 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         viewMenu.add(showToolbar);
         viewMenu.add(jSeparator2);
 
-        jLayoutMenu.setText("Layout");
+        jLayoutMenu.setText(bundle.getString("Searchmonkey.jLayoutMenu.text")); // NOI18N
 
         buttonGroup1.add(jLeftToRight);
         jLeftToRight.setSelected(true);
-        jLeftToRight.setText("Standard");
+        jLeftToRight.setText(bundle.getString("Searchmonkey.jLeftToRight.text")); // NOI18N
         jLeftToRight.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jLeftToRightStateChanged(evt);
@@ -387,7 +388,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jLayoutMenu.add(jLeftToRight);
 
         buttonGroup1.add(jRightToLeft);
-        jRightToLeft.setText("Right-to-left");
+        jRightToLeft.setText(bundle.getString("Searchmonkey.jRightToLeft.text")); // NOI18N
         jRightToLeft.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRightToLeftStateChanged(evt);
@@ -397,21 +398,21 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         viewMenu.add(jLayoutMenu);
 
-        jColoumnsMenu.setText("Columns");
+        jColoumnsMenu.setText(bundle.getString("Searchmonkey.jColoumnsMenu.text")); // NOI18N
         viewMenu.add(jColoumnsMenu);
 
         menuBar.add(viewMenu);
 
         helpMenu.setMnemonic('h');
-        helpMenu.setText("Help");
+        helpMenu.setText(bundle.getString("Searchmonkey.helpMenu.text")); // NOI18N
 
         contentMenuItem.setMnemonic('c');
-        contentMenuItem.setText("Contents");
+        contentMenuItem.setText(bundle.getString("Searchmonkey.contentMenuItem.text")); // NOI18N
         helpMenu.add(contentMenuItem);
 
         aboutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("About");
+        aboutMenuItem.setText(bundle.getString("Searchmonkey.aboutMenuItem.text")); // NOI18N
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuItemActionPerformed(evt);

@@ -583,7 +583,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        jPopupMenu1.setLabel("Hello");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
+        jPopupMenu1.setLabel(bundle.getString("SearchResultsTable.jPopupMenu1.label")); // NOI18N
         jPopupMenu1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -596,8 +597,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
 
         jOpen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jOpen.setMnemonic('O');
-        jOpen.setText("Open file");
-        jOpen.setToolTipText("Open selected file or files using the applicaiton associated with this file type");
+        jOpen.setText(bundle.getString("SearchResultsTable.jOpen.text")); // NOI18N
+        jOpen.setToolTipText(bundle.getString("SearchResultsTable.jOpen.toolTipText")); // NOI18N
         jOpen.setEnabled(false);
         jOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -608,8 +609,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jPopupMenu1.add(jSeparator1);
 
         jEdit.setMnemonic('E');
-        jEdit.setText("Edit file");
-        jEdit.setToolTipText("Edit select file or files using the default editor");
+        jEdit.setText(bundle.getString("SearchResultsTable.jEdit.text")); // NOI18N
+        jEdit.setToolTipText(bundle.getString("SearchResultsTable.jEdit.toolTipText")); // NOI18N
         jEdit.setEnabled(false);
         jEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -619,8 +620,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jPopupMenu1.add(jEdit);
 
         jBrowse.setMnemonic('B');
-        jBrowse.setText("Browse folder");
-        jBrowse.setToolTipText("Open file navigator to browse the folder containing this file");
+        jBrowse.setText(bundle.getString("SearchResultsTable.jBrowse.text")); // NOI18N
+        jBrowse.setToolTipText(bundle.getString("SearchResultsTable.jBrowse.toolTipText")); // NOI18N
         jBrowse.setEnabled(false);
         jBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -631,8 +632,8 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         jPopupMenu1.add(jSeparator2);
 
         jColumnMenu.setMnemonic('C');
-        jColumnMenu.setText("Show/Hide Columns");
-        jColumnMenu.setToolTipText("Show or hide columns in this table");
+        jColumnMenu.setText(bundle.getString("SearchResultsTable.jColumnMenu.text")); // NOI18N
+        jColumnMenu.setToolTipText(bundle.getString("SearchResultsTable.jColumnMenu.toolTipText")); // NOI18N
         jPopupMenu1.add(jColumnMenu);
 
         setLayout(new java.awt.BorderLayout());
