@@ -77,7 +77,7 @@ public class About extends javax.swing.JPanel {
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         if (Desktop.isDesktopSupported()) {
             try {
-                Desktop.getDesktop().browse(new URI("http://searchmonkey.embeddediq.com"));
+                Desktop.getDesktop().browse(new URI("http://searchmonkey.embeddediq.com")); // Do not translate
             } catch (URISyntaxException | IOException ex) {
                 Logger.getLogger(About.class.getName()).log(Level.SEVERE, null, ex);
             }

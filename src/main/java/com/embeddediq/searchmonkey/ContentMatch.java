@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import static java.lang.System.nanoTime;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -94,14 +93,14 @@ public class ContentMatch {
     public String GetContentText(Path path)
     {
         // TODO - make this timeout configurable
-        long startTime = nanoTime();
+        long startTime = System.nanoTime();
         String lines = "";
         String encoding = TestFile(path);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
-                if ((entry.FileTimeout > 0) && ((nanoTime() - startTime) > entry.FileTimeout)) {
+                if ((entry.FileTimeout > 0) && ((System.nanoTime() - startTime) > entry.FileTimeout)) {
                     lines += " -- SIC -- \n";
                     break;
                 } // Early exit after 5 seconds

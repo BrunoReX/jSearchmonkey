@@ -66,8 +66,8 @@ public class SearchEntry {
     
     
     // List of PREFIX based on glob type
-    public final static String PREFIX_GLOB = "glob:";
-    public final static String PREFIX_REGEX = "regex:";
+    public final static String PREFIX_GLOB = "glob:"; // Do not translate
+    public final static String PREFIX_REGEX = "regex:"; // Do not translate
 }
 
 

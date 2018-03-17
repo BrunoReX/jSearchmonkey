@@ -23,6 +23,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -37,6 +39,10 @@ public final class FileDateEntry implements Serializable {
     LocalDateTime after; // later than
     @SerializedName("useAfter")
     boolean useAfter;
+
+    public FileDateEntry() {
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
+    }
 
     public void setAfter(Date date)
     {
@@ -88,30 +94,41 @@ public final class FileDateEntry implements Serializable {
         {
             s_before = this.before.format(fmt);
         }
+        String xx;
         if (s_before != null && s_after != null)
         {
             int dval = this.before.compareTo(this.after);
             if (dval > 0)
             {
-                return String.format("Between %s and %s", s_after, s_before);
+                xx = rb.getString(RunDialogMessages.BETWEENDATES.getKey());
+                return String.format(xx, s_after, s_before); // Translate
             } 
             else if (dval < 0)
             {
-                return String.format("Not between %s and %s (inverse)", s_after, s_before);
+                xx = rb.getString(RunDialogMessages.NOTBETWEENDATES.getKey());
+                return String.format(xx, s_after, s_before); // Translate
             }
             else
             {
-                return String.format("Equals %s", s_before);
+                xx = rb.getString(RunDialogMessages.EQUALSDATE.getKey());
+                return String.format(xx, s_before); // Translate
             }
         }
         else if (s_before != null)
         {
-            return String.format("Before %s", s_before);
+            xx = rb.getString(RunDialogMessages.BEFOREDATE.getKey());
+            return String.format(xx, s_before); // Translate
             
         } else if (s_after != null)
         {
-            return String.format("After %s", s_after);
+            xx = rb.getString(RunDialogMessages.AFTERDATE.getKey());
+            return String.format(xx, s_after); // Translate
         }
-        return "Don't care";
+
+        // messages.getString(s_after)
+        return rb.getString(RunDialogMessages.DONTCARE.getKey()); // Translate
     }
+    
+    
+    ResourceBundle rb;
 }
