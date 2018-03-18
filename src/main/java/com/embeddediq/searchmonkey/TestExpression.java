@@ -473,6 +473,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jHelpPage1.setText(bundle.getString("TestExpression.jHelpPage1.text")); // NOI18N
         jHelpPage1.setToolTipText(bundle.getString("TestExpression.jHelpPage1.toolTipText")); // NOI18N
         jHelpPage1.setAutoscrolls(false);
+        jHelpPage1.setCaretPosition(1);
         jScrollPane5.setViewportView(jHelpPage1);
 
         jCheat.add(jScrollPane5, java.awt.BorderLayout.LINE_END);
