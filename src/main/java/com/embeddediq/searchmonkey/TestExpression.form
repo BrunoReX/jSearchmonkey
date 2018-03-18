@@ -529,12 +529,17 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
           <SubComponents>
             <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jScrollPane5.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="Center"/>
+                  <BorderConstraints direction="After"/>
                 </Constraint>
               </Constraints>
 
@@ -551,9 +556,6 @@
                       <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jHelpPage1.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="autoscrolls" type="boolean" value="false"/>
-                    <Property name="page" type="java.net.URL" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="getClass().getResource(&quot;/help/regexCheat.htm&quot;)" type="code"/>
-                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>

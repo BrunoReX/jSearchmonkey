@@ -71,7 +71,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
      */
     public TestExpression(int flags, String name) {
         initComponents();
-        
+
+        // Load reference documents
+        regexRef = ResourceBundle.getBundle("com.embeddediq.searchmonkey.regexRef.Bundle", Locale.getDefault());
+
         // Load langauge bundle
         rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         mf = new MessageFormat(rb.getString("TestExpression.Status.String"));
@@ -120,6 +123,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     }
     
     private final ResourceBundle rb;
+    private final ResourceBundle regexRef;
     private final MessageFormat mf;
     
     private final String def1;
@@ -462,19 +466,16 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
 
         jCheat.setLayout(new java.awt.BorderLayout());
 
+        jScrollPane5.setToolTipText(bundle.getString("TestExpression.jScrollPane5.toolTipText")); // NOI18N
+
         jHelpPage1.setEditable(false);
         jHelpPage1.setContentType("text/html"); // NOI18N
         jHelpPage1.setText(bundle.getString("TestExpression.jHelpPage1.text")); // NOI18N
         jHelpPage1.setToolTipText(bundle.getString("TestExpression.jHelpPage1.toolTipText")); // NOI18N
         jHelpPage1.setAutoscrolls(false);
-        try {
-            jHelpPage1.setPage(getClass().getResource("/help/regexCheat.htm"));
-        } catch (java.io.IOException e1) {
-            e1.printStackTrace();
-        }
         jScrollPane5.setViewportView(jHelpPage1);
 
-        jCheat.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+        jCheat.add(jScrollPane5, java.awt.BorderLayout.LINE_END);
 
         jTabbedPane1.addTab(bundle.getString("TestExpression.jCheat.TabConstraints.tabTitle"), jCheat); // NOI18N
 
@@ -574,22 +575,25 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void UpdateReference(int idx)
     {                                            
         try {
-            Document doc;
-            doc = Jsoup.parse(getClass().getResourceAsStream("/help/regexRef.htm"), 
-                    "UTF-8", "");
-            String head = doc.select("head").first().toString();
-            Elements items = doc.select("div.content");
-            if (items.size() > idx)
-            {
-                Element content = items.get(idx);
-                this.jReferencePage.setText("<html>" + head + content.toString() + "</html>");
-                return;
-            }
-        } catch (IOException | IndexOutOfBoundsException ex) {
+//            Document doc;
+            String head = regexRef.getString("TestExpression.RegexRef.HEAD");
+            String content = "<body>" + regexRef.getString(String.format("TestExpression.RegexRef.%d", idx + 1)) + "</body>";
+            this.jReferencePage.setText("<html>" + head + content + "</html>");
+//            doc = Jsoup.parse(getClass().getResourceAsStream("/help/regexRef.htm"), 
+//                    "UTF-8", "");
+//            //String head = doc.select("head").first().toString();
+//            Elements items = doc.select("div.content");
+//            if (items.size() > idx)
+//            {
+                //Element content = items.get(idx);
+//                this.jReferencePage.setText("<html>" + head + content.toString() + "</html>");
+//                return;
+//            }
+        } catch (IndexOutOfBoundsException ex) {
             // Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
-        this.jReferencePage.setText(rb.getString("TestExpression.BlankReference.String"));
+        //this.jReferencePage.setText(rb.getString("TestExpression.BlankReference.String"));
     }
 
     private void UpdateHelpPage(String resource)
