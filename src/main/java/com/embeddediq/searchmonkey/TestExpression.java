@@ -32,7 +32,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ChoiceFormat;
+import java.text.Format;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JTextPane;
@@ -172,6 +177,19 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             this.jTextPane3.setText(ex.getLocalizedMessage());
         }
         // Update the status message
+        ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.com.shared.Bundle");
+        MessageFormat mf = new MessageFormat(rb.getString("TestExpression.Status.String"));
+        double[] fileLimits = {0,1,2};
+        String [] fileStrings = {
+            rb.getString("TestExpression.Status.NoMatches.String"),
+            rb.getString("TestExpression.Status.OneMatch.String"),
+            rb.getString("TestExpression.Status.multipleMatches.String")
+        };
+        ChoiceFormat choiceForm = new ChoiceFormat(fileLimits, fileStrings);
+        Format[] formats = {choiceForm, NumberFormat.getInstance()};
+        mf.setFormat(formats);
+        Object[]args = new Object[]{count, count};
+        mf.format(args);
         this.jStatus.setText(String.format("Status: Found %d match%s", count, count == 1 ? "" : "es"));
     }
 
