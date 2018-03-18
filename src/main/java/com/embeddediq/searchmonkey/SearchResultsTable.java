@@ -39,6 +39,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,11 +78,15 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         rowData = new ArrayList<>();
         myModel = new MyTableModel();
         jTable1.setModel(myModel);
-        jTable1.setDefaultRenderer(Object.class, new SearchMonkeyTableRenderer());
+        SearchMonkeyTableRenderer cellRenderer = new SearchMonkeyTableRenderer();
+        jTable1.setDefaultRenderer(Object.class, cellRenderer);
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setFillsViewportHeight(true);
         jTable1.setRowHeight(28);
         jTable1.getColumn(SearchResult.COLUMN_NAMES[SearchResult.FLAGS]).setCellRenderer(new IconTableRenderer(jTable1.getRowHeight()-6));
+        jTable1.getTableHeader().setDefaultRenderer(cellRenderer);
+        // header = table.getTableHeader();
+
         
         // Check to see if the Desktop().edit function is supported
         this.jOpen.setVisible(Desktop.getDesktop().isSupported(Desktop.Action.OPEN));
@@ -388,18 +394,27 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
         }
     }
     
-    public class SearchMonkeyTableRenderer extends JLabel
-                           implements TableCellRenderer {
-
+    public class SearchMonkeyTableRenderer extends DefaultTableCellRenderer { 
+        
+        private final ResourceBundle rb;
+        
         public SearchMonkeyTableRenderer() {
             setOpaque(true); //MUST do this for background to show up.
+            this.rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
             hidden = new ImageIcon(getClass().getResource("/images/File-Hide-icon.png"));
             linked = new ImageIcon(getClass().getResource("/images/link-icon-614x460.png"));
         }
-        Icon hidden;
-        Icon linked;
+
+        private final Icon hidden;
+        private final Icon linked;
         
-        private final String[] MAG_NAMES = new String[] {"Bytes", "KBytes", "MBytes", "GBytes", "TBytes"};
+        private final String[] MAG_NAMES = new String[] {
+            "SearchResult.Bytes.String",
+            "SearchResult.KBytes.String",
+            "SearchResult.MBytes.String",
+            "SearchResult.GBytes.String",
+            "SearchResult.TBytes.String",
+        };
     
         private int getFileOrder(long fsize)
         {
@@ -430,6 +445,16 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
                                 int row, int column) {
 
             setIcon(null);
+            
+            // Special case for the header
+            if (row == -1)
+            {
+                DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                // Convert heading text into the international string
+
+                renderer.setText(rb.getString((String)value));
+                return renderer;
+            }
 
             String txtVal = "";
             String txtToolTip = new String();
@@ -438,9 +463,9 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
                 case SearchResult.SIZE: // Handle Size
                     int order = getFileOrder((long)value);
                     if (order > 0) {
-                        txtVal = String.format("%.1f %s", ((double)((long)value) / Math.pow(1024, order)), MAG_NAMES[order]);
+                        txtVal = String.format("%.1f %s", ((double)((long)value) / Math.pow(1024, order)), rb.getString(MAG_NAMES[order]));
                     } else {
-                        txtVal = String.format("%d %s", (long)value, MAG_NAMES[order]);
+                        txtVal = String.format("%d %s", (long)value, rb.getString(MAG_NAMES[order]));
                     }
                     break;
                 case SearchResult.CREATED: // Handle Date

@@ -109,17 +109,17 @@ public class SearchResult {
      *
      */
     public final static String[] COLUMN_NAMES = new String[] {
-        "Icon", // 0 = Icon
-        "File", // 1
-        "Folder", // 2
-        "File size", // 3
-        "Count", // 4
-        "Last modified", // 5
-        "Created", // 6
-        "Last accessed", // 7
-        "Flags", // 8
-        "Extension", // 9
-        "Content Type", // 10
+        "SearchResult.Icon.String", // 0 = Icon
+        "SearchResult.File.String", // 1
+        "SearchResult.Folder.String", // 2
+        "SearchResult.FileSize.String", // 3
+        "SearchResult.Count.String", // 4
+        "SearchResult.LastModified.String", // 5
+        "SearchResult.Created.String", // 6
+        "SearchResult.LastAccessed.String", // 7
+        "SearchResult.Flags.String", // 8
+        "SearchResult.Extension.String", // 9
+        "SearchResult.ContentType.String", // 10
     };
 
     public final static Class[] COLUMN_CLASSES = new Class[]  {
