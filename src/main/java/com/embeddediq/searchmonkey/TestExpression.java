@@ -37,6 +37,7 @@ import java.text.Format;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -177,20 +178,19 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             this.jTextPane3.setText(ex.getLocalizedMessage());
         }
         // Update the status message
-        ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.com.shared.Bundle");
+        final ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         MessageFormat mf = new MessageFormat(rb.getString("TestExpression.Status.String"));
         double[] fileLimits = {0,1,2};
         String [] fileStrings = {
-            rb.getString("TestExpression.Status.NoMatches.String"),
-            rb.getString("TestExpression.Status.OneMatch.String"),
-            rb.getString("TestExpression.Status.multipleMatches.String")
+            rb.getString("TestExpression.StatusNoMatches.String"),
+            rb.getString("TestExpression.StatusOneMatch.String"),
+            rb.getString("TestExpression.StatusMultipleMatches.String")
         };
         ChoiceFormat choiceForm = new ChoiceFormat(fileLimits, fileStrings);
         Format[] formats = {choiceForm, NumberFormat.getInstance()};
-        mf.setFormat(formats);
+        mf.setFormats(formats);
         Object[]args = new Object[]{count, count};
-        mf.format(args);
-        this.jStatus.setText(String.format("Status: Found %d match%s", count, count == 1 ? "" : "es"));
+        this.jStatus.setText(mf.format(args));
     }
 
     /**
