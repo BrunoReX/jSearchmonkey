@@ -71,6 +71,24 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
      */
     public TestExpression(int flags, String name) {
         initComponents();
+        
+        // Load langauge bundle
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
+        mf = new MessageFormat(rb.getString("TestExpression.Status.String"));
+        double[] fileLimits = {0,1,2};
+        String [] fileStrings = {
+            rb.getString("TestExpression.StatusNoMatches.String"),
+            rb.getString("TestExpression.StatusOneMatch.String"),
+            rb.getString("TestExpression.StatusMultipleMatches.String")
+        };
+        ChoiceFormat choiceForm = new ChoiceFormat(fileLimits, fileStrings);
+        Format[] formats = {choiceForm, NumberFormat.getInstance()};
+        mf.setFormats(formats);
+        
+        // Load default string
+        def1 = rb.getString("TestExpression.LoremIpsum.String");
+
+        
         prefs = Preferences.userNodeForPackage(SearchEntry.class);
         wizardName = name;
         
@@ -101,8 +119,10 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         this.UpdateReference(0);
     }
     
+    private final ResourceBundle rb;
+    private final MessageFormat mf;
     
-    private final String def1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec orci laoreet mauris venenatis malesuada. Sed vel pretium ex. Aliquam quis metus tristique, cursus augue eu, molestie erat. Praesent eu purus erat. Vestibulum placerat arcu at mi feugiat vulputate. Aenean faucibus libero a lectus iaculis semper. Integer eget ante non eros feugiat volutpat at a tellus. Nulla in sollicitudin tellus, nec tempus odio. Donec sagittis velit sed posuere varius. Duis magna leo, vulputate nec sapien non, efficitur euismod odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse congue justo quis sapien dignissim, vel pellentesque est gravida.";
+    private final String def1;
     private String wizardName;
     
     private void Restore() // Load back previous example content
@@ -178,17 +198,6 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
             this.jTextPane3.setText(ex.getLocalizedMessage());
         }
         // Update the status message
-        final ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
-        MessageFormat mf = new MessageFormat(rb.getString("TestExpression.Status.String"));
-        double[] fileLimits = {0,1,2};
-        String [] fileStrings = {
-            rb.getString("TestExpression.StatusNoMatches.String"),
-            rb.getString("TestExpression.StatusOneMatch.String"),
-            rb.getString("TestExpression.StatusMultipleMatches.String")
-        };
-        ChoiceFormat choiceForm = new ChoiceFormat(fileLimits, fileStrings);
-        Format[] formats = {choiceForm, NumberFormat.getInstance()};
-        mf.setFormats(formats);
         Object[]args = new Object[]{count, count};
         this.jStatus.setText(mf.format(args));
     }
@@ -579,8 +588,8 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         } catch (IOException | IndexOutOfBoundsException ex) {
             // Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        this.jReferencePage.setText("<html>Nothing found</html>");
+                
+        this.jReferencePage.setText(rb.getString("TestExpression.BlankReference.String"));
     }
 
     private void UpdateHelpPage(String resource)
