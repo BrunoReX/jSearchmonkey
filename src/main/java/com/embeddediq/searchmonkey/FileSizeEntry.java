@@ -18,6 +18,8 @@ package com.embeddediq.searchmonkey;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -33,6 +35,8 @@ public class FileSizeEntry implements Serializable {
     @SerializedName("useMaxSize")
     boolean useMaxSize;
 
+    private final ResourceBundle rb;
+
     static public int getIndex(long val)
     {
         int idx = 0;
@@ -44,15 +48,19 @@ public class FileSizeEntry implements Serializable {
         return idx;
     }
 
+    public FileSizeEntry() {
+        this.rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
+    }
+
     @Override
     public String toString()
     {
         String[] SCALAR = new String[]{
-            "Bytes",
-            "KBytes",
-            "MBytes",
-            "GBytes",
-            "TBytes",
+            rb.getString(RunDialogMessages.BYTES.getKey()),
+            rb.getString(RunDialogMessages.KBYTES.getKey()),
+            rb.getString(RunDialogMessages.MBYTES.getKey()),
+            rb.getString(RunDialogMessages.GBYTES.getKey()),
+            rb.getString(RunDialogMessages.TBYTES.getKey()),
         };
         String lessThan = null;
         if (useMaxSize)
@@ -63,6 +71,7 @@ public class FileSizeEntry implements Serializable {
                     SCALAR[idx]);
         }
         String greaterThan = null;
+        String xx;
         if (useMinSize)
         {
             int idx = getIndex(minSize);
@@ -73,21 +82,26 @@ public class FileSizeEntry implements Serializable {
         if (lessThan != null && greaterThan != null)
         {
             if (maxSize > minSize ) {
-                return String.format("Between %s and %s", greaterThan, lessThan);
+                xx = rb.getString(RunDialogMessages.BETWEENSIZES.getKey());
+                return String.format(xx, greaterThan, lessThan);
             } else if (maxSize < minSize ) {
-                return String.format("Greater than %s OR less than %s", greaterThan, lessThan);
+                xx = rb.getString(RunDialogMessages.NOTBETWEENSIZES.getKey());
+                return String.format(xx, greaterThan, lessThan);
             } else {
-                return String.format("Exactly %s", greaterThan);
+                xx = rb.getString(RunDialogMessages.EQUALSSIZE.getKey());
+                return String.format(xx, greaterThan);
             }
         }
         else if (lessThan != null)
         {
-            return String.format("Less than %s", lessThan);
+            xx = rb.getString(RunDialogMessages.LESSTHAN.getKey());
+            return String.format(xx, lessThan);
             
         } else if (greaterThan != null)
         {
-            return String.format("Greater than %s", greaterThan);
+            xx = rb.getString(RunDialogMessages.GREATERTHAN.getKey());
+            return String.format(xx, greaterThan);
         }
-        return "Don't care";
+        return rb.getString(RunDialogMessages.DONTCARE.getKey());
     }
 }

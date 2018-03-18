@@ -24,6 +24,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.MatchResult;
@@ -42,9 +44,11 @@ import org.mozilla.universalchardet.UniversalDetector;
 public class ContentMatch {
     final private Pattern regexMatch;
 
+    private final ResourceBundle rb;
     private final SearchEntry entry;
     public ContentMatch(SearchEntry entry)
     {
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         this.entry = entry;
         
         if (entry.containingText != null)
@@ -101,7 +105,7 @@ public class ContentMatch {
             while ((line = bufferedReader.readLine()) != null) {
                 lines += line + "\n";
                 if ((entry.FileTimeout > 0) && ((System.nanoTime() - startTime) > entry.FileTimeout)) {
-                    lines += " -- SIC -- \n";
+                    lines += rb.getString(RunDialogMessages.SIC.getKey()); // Cut early
                     break;
                 } // Early exit after 5 seconds
             }

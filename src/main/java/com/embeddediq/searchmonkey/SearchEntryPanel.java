@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -69,6 +71,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
     String lastItem = null;
     JSpinner popup_link;
+    private final ResourceBundle rb;
+
     /**
      * Creates new form SearchEntryPanel
      */
@@ -77,6 +81,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         
         initComponents();
         
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         jPanel3.setVisible(false); // hide the regex view
         jPanel6.setVisible(false); // hide the context word search
 
@@ -86,38 +91,51 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             jIgnoreHiddenFolders.setVisible(false);
             jIgnoreHiddenFolders.setSelected(false);
         }
+        String xx;
         
         // Add a browse button to the jCombobox
-        jLookIn.setModel(new SeparatorComboBoxModel(System.getProperty("user.home"), "Browse"));
+        xx = rb.getString(RunDialogMessages.BROWSE.getKey());
+        jLookIn.setModel(new SeparatorComboBoxModel(System.getProperty("user.home"), xx));
         jLookIn.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd_folder = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jLookIn, "Enter file size");
+        xx = rb.getString(RunDialogMessages.FOLDER.getKey());
+        AdvancedDialog sd_folder = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jLookIn, xx);
         jLookIn.addActionListener(new SeparatorComboBoxListener(jLookIn, sd_folder));
 
         // Creating a custom class for the JComboBox
-        jFileTypeCombo.setModel(new SeparatorComboBoxModel(new FileTypeEntry(), "Other"));
+        xx = rb.getString(RunDialogMessages.OTHER.getKey());
+        jFileTypeCombo.setModel(new SeparatorComboBoxModel(new FileTypeEntry(), xx));
         jFileTypeCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd_not_time = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFileTypeCombo, "Enter file type", new FileTypePanel());
+        xx = rb.getString(RunDialogMessages.FILETYPE.getKey());
+        AdvancedDialog sd_not_time = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFileTypeCombo, xx, new FileTypePanel());
         jFileTypeCombo.addActionListener(new SeparatorComboBoxListener(jFileTypeCombo, sd_not_time));
         
-        jFilesizeCombo.setModel(new SeparatorComboBoxModel(new FileSizeEntry(), "Other"));
+        xx = rb.getString(RunDialogMessages.OTHER.getKey());
+        jFilesizeCombo.setModel(new SeparatorComboBoxModel(new FileSizeEntry(), xx));
         jFilesizeCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd_not_time1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, "Enter file size", new FileSizePanel());
+        xx = rb.getString(RunDialogMessages.FILESIZE.getKey());
+        AdvancedDialog sd_not_time1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jFilesizeCombo, xx, new FileSizePanel());
         jFilesizeCombo.addActionListener(new SeparatorComboBoxListener(jFilesizeCombo, sd_not_time1));
 
         // Creating a custom class for the JComboBox
-        jCreatedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
+        xx = rb.getString(RunDialogMessages.OTHER.getKey());
+        jCreatedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), xx));
         jCreatedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd3 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, "Enter created date", new FileDatePanel());
+        xx = rb.getString(RunDialogMessages.CREATED.getKey());
+        AdvancedDialog sd3 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jCreatedCombo, xx, new FileDatePanel());
         jCreatedCombo.addActionListener(new SeparatorComboBoxListener(jCreatedCombo, sd3));
         // Creating a custom class for the JComboBox
-        jModifiedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
+        xx = rb.getString(RunDialogMessages.OTHER.getKey());
+        jModifiedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), xx));
         jModifiedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, "Enter modified date", new FileDatePanel());
+        xx = rb.getString(RunDialogMessages.MODIFIED.getKey());
+        AdvancedDialog sd1 = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jModifiedCombo, xx, new FileDatePanel());
         jModifiedCombo.addActionListener(new SeparatorComboBoxListener(jModifiedCombo, sd1));
         // Creating a custom class for the JComboBox
-        jAccessedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), "Other"));
+        xx = rb.getString(RunDialogMessages.OTHER.getKey());
+        jAccessedCombo.setModel(new SeparatorComboBoxModel(new FileDateEntry(), xx));
         jAccessedCombo.setRenderer(new SeparatorComboBoxRenderer());
-        AdvancedDialog sd = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, "Enter accessed date", new FileDatePanel());
+        xx = rb.getString(RunDialogMessages.ACCESSED.getKey());
+        AdvancedDialog sd = new AdvancedDialog((Frame)SwingUtilities.getWindowAncestor(this), jAccessedCombo, xx, new FileDatePanel());
         jAccessedCombo.addActionListener(new SeparatorComboBoxListener(jAccessedCombo, sd));
                 
         // Restore the settings
@@ -1523,7 +1541,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     jCombo.getModel().setSelectedItem(entry);
                 }
             } else {
-                jFileChooser1.setApproveButtonText("OK");
+                String xx = rb.getString(RunDialogMessages.OK.getKey());
+
+                jFileChooser1.setApproveButtonText(xx);
                 jFileChooser1.setSelectedFile(new File((String)data));
                 int ret = jFileChooser1.showOpenDialog(parent);
                 if (ret == JFileChooser.APPROVE_OPTION)
@@ -1556,7 +1576,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jCheckBox3ItemStateChanged
 
     private void jRestoreAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRestoreAllActionPerformed
-        int res = JOptionPane.showConfirmDialog(this, "Press OK to clear all configuration settings", "Restore all defaults?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        String x1 = rb.getString(RunDialogMessages.CONFIRM_TITLE.getKey());
+        String x2 = rb.getString(RunDialogMessages.CONFIRM_DIALOG.getKey());
+        int res = JOptionPane.showConfirmDialog(this, x2, x1, JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (res != JOptionPane.OK_OPTION) return; //Cancel
         try {
             prefs.clear();

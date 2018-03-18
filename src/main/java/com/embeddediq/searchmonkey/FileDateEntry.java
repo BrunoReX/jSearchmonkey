@@ -40,6 +40,7 @@ public final class FileDateEntry implements Serializable {
     @SerializedName("useAfter")
     boolean useAfter;
 
+    private final ResourceBundle rb;
     public FileDateEntry() {
         rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
     }
@@ -125,10 +126,7 @@ public final class FileDateEntry implements Serializable {
             return String.format(xx, s_after); // Translate
         }
 
-        // messages.getString(s_after)
         return rb.getString(RunDialogMessages.DONTCARE.getKey()); // Translate
     }
     
-    
-    ResourceBundle rb;
 }

@@ -22,12 +22,36 @@ package com.embeddediq.searchmonkey;
  */
 public enum RunDialogMessages implements MessageKeyProvider {
 
+    SIC("ContentMatch.Sic.String"),
     DONTCARE("FileDateEntry.DontCare.String"),
     BETWEENDATES("FileDateEntry.BetweenDates.String"),
     NOTBETWEENDATES("FileDateEntry.NotBetweenDates.String"),
     EQUALSDATE("FileDateEntry.EqualsDate.String"),
     BEFOREDATE("FileDateEntry.BeforeDate.String"),
-    AFTERDATE("FileDateEntry.AfterDate.String");
+    AFTERDATE("FileDateEntry.AfterDate.String"),
+    BETWEENSIZES("FileDateEntry.BetweenSizes.String"),
+    NOTBETWEENSIZES("FileDateEntry.NotBetweenSizes.String"),
+    EQUALSSIZE("FileDateEntry.EqualsSize.String"),
+    LESSTHAN("FileDateEntry.LessThan.String"),
+    GREATERTHAN("FileDateEntry.GreaterThan.String"),
+    DONTCARE2("FileSizeEntry.DontCare.String"),
+    BYTES("FileSizeEntry.Bytes.String"),
+    KBYTES("FileSizeEntry.KBytes.String"),
+    MBYTES("FileSizeEntry.MBytes.String"),
+    GBYTES("FileSizeEntry.GBytes.String"),
+    TBYTES("FileSizeEntry.TBytes.String"),
+    BROWSE("SearchEntryPanel.Browse.String"),
+    FOLDER("SearchEntryPanel.Folder.String"),
+    OTHER("SearchEntryPanel.Other.String"),
+    FILETYPE("SearchEntryPanel.FileType.String"),
+    FILESIZE("SearchEntryPanel.FileSize.String"),
+    CREATED("SearchEntryPanel.CreatedDate.String"),
+    MODIFIED("SearchEntryPanel.ModifiedDate.String"),
+    ACCESSED("SearchEntryPanel.AccessedDate.String"),
+    OK("SearchEntryPanel.Ok.String"),
+    CONFIRM_TITLE("SearchEntryPanel.ConfirmTitle.String"),
+    CONFIRM_DIALOG("SearchEntryPanel.ConfirmDialog.String"),
+    DONTCARE3("FileTypeEntry.DontCare.String");
     
 
     private RunDialogMessages(String key) {

@@ -16,7 +16,6 @@
  */
 package com.embeddediq.searchmonkey.RegexWizard;
 
-import com.embeddediq.searchmonkey.RegexExpression;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;

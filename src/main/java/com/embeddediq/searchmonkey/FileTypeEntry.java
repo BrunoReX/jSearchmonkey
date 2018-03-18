@@ -18,6 +18,8 @@ package com.embeddediq.searchmonkey;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -29,8 +31,10 @@ public class FileTypeEntry implements Serializable {
     @SerializedName("mimeName")
     String mimeName; // Less than
 
+    private final ResourceBundle rb;
     public FileTypeEntry(String name)
     {
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         if (name != null && name.length() > 0)
         {
             mimeName = name;
@@ -39,6 +43,7 @@ public class FileTypeEntry implements Serializable {
     }
     public FileTypeEntry(Object clone)
     {
+        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         if (clone != null && clone instanceof FileTypeEntry)
         {
             isActive = ((FileTypeEntry)clone).isActive;
@@ -54,7 +59,7 @@ public class FileTypeEntry implements Serializable {
     @Override
     public String toString()
     {
-        if (!isActive) return "Don't care";
+        if (!isActive) return rb.getString(RunDialogMessages.DONTCARE3.getKey());
         if (mimeName.length() > 30) return mimeName.substring(0, 30) + "...";
         return mimeName;
     }

@@ -16,7 +16,6 @@
  */
 package com.embeddediq.searchmonkey.RegexWizard;
 
-import com.embeddediq.searchmonkey.RegexExpression;
 import java.awt.CardLayout;
 import javax.swing.JTable;
 

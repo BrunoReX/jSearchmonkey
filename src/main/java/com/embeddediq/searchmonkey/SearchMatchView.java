@@ -21,7 +21,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.lang.System.nanoTime;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -296,7 +295,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         {
             // ContentMatch cm = new ContentMatch();
             long hitCount = 0L;
-            long startTime = nanoTime();
+            long startTime = System.nanoTime();
             
             String lines = match.GetContent(path); // ContentMatch.GetContent(path);
             if (lines == null || lines.equals("")) return;
