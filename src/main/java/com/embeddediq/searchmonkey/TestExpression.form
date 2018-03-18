@@ -427,6 +427,7 @@
                       <ResourceString bundle="com/embeddediq/searchmonkey/Bundle.properties" key="TestExpression.jReferencePage.toolTipText" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="autoscrolls" type="boolean" value="false"/>
+                    <Property name="caretPosition" type="int" value="1"/>
                   </Properties>
                 </Component>
               </SubComponents>

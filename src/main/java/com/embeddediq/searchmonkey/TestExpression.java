@@ -53,10 +53,6 @@ import javax.swing.JList;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  *
@@ -440,6 +436,7 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
         jReferencePage.setText(bundle.getString("TestExpression.jReferencePage.text")); // NOI18N
         jReferencePage.setToolTipText(bundle.getString("TestExpression.jReferencePage.toolTipText")); // NOI18N
         jReferencePage.setAutoscrolls(false);
+        jReferencePage.setCaretPosition(1);
         jScrollPane2.setViewportView(jReferencePage);
 
         jReference.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -576,25 +573,13 @@ public class TestExpression extends javax.swing.JPanel implements DocumentListen
     private void UpdateReference(int idx)
     {                                            
         try {
-//            Document doc;
             String head = regexRef.getString("TestExpression.RegexRef.HEAD");
             String content = "<body>" + regexRef.getString(String.format("TestExpression.RegexRef.%d", idx + 1)) + "</body>";
             this.jReferencePage.setText("<html>" + head + content + "</html>");
-//            doc = Jsoup.parse(getClass().getResourceAsStream("/help/regexRef.htm"), 
-//                    "UTF-8", "");
-//            //String head = doc.select("head").first().toString();
-//            Elements items = doc.select("div.content");
-//            if (items.size() > idx)
-//            {
-                //Element content = items.get(idx);
-//                this.jReferencePage.setText("<html>" + head + content.toString() + "</html>");
-//                return;
-//            }
+            this.jReferencePage.setCaretPosition(1);
         } catch (IndexOutOfBoundsException ex) {
             // Logger.getLogger(TestExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
-        //this.jReferencePage.setText(rb.getString("TestExpression.BlankReference.String"));
     }
 
     private void UpdateHelpPage(String resource)
