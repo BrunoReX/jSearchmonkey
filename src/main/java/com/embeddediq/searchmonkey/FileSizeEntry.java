@@ -35,8 +35,6 @@ public class FileSizeEntry implements Serializable {
     @SerializedName("useMaxSize")
     boolean useMaxSize;
 
-    private final ResourceBundle rb;
-
     static public int getIndex(long val)
     {
         int idx = 0;
@@ -49,12 +47,12 @@ public class FileSizeEntry implements Serializable {
     }
 
     public FileSizeEntry() {
-        this.rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
     }
 
     @Override
     public String toString()
     {
+        final ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         String[] SCALAR = new String[]{
             rb.getString(RunDialogMessages.BYTES.getKey()),
             rb.getString(RunDialogMessages.KBYTES.getKey()),

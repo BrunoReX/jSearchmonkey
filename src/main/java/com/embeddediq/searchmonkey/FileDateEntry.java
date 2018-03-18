@@ -40,9 +40,7 @@ public final class FileDateEntry implements Serializable {
     @SerializedName("useAfter")
     boolean useAfter;
 
-    private final ResourceBundle rb;
     public FileDateEntry() {
-        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
     }
 
     public void setAfter(Date date)
@@ -83,6 +81,7 @@ public final class FileDateEntry implements Serializable {
     @Override
     public String toString()
     {
+        final ResourceBundle rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
         DateTimeFormatter fmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
                 
         String s_after = null;
