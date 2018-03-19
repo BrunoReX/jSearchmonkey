@@ -31,7 +31,9 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +58,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
@@ -1717,8 +1720,18 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         if (reply != null && reply.length() > 0)
         {
             model.setElementAt(reply, idx);
+            sort(model);
         }
     }//GEN-LAST:event_jEditActionPerformed
+
+    void sort(DefaultListModel dlm) { 
+        Object[] dlma = dlm.toArray();    // make an array of the elements in the model
+        Arrays.sort(dlma);   // sort the array (this step uses the compareTo method)
+        dlm.clear();     // empty the model
+        for (Object x : dlma) {
+            dlm.addElement(x);
+        }
+    }
 
     private void jAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddActionPerformed
         DefaultListModel model = (DefaultListModel)(jList1.getModel());
@@ -1726,6 +1739,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         if (reply != null && reply.length() > 0)
         {
             model.addElement(reply);
+            sort(model);
         }
     }//GEN-LAST:event_jAddActionPerformed
 
