@@ -43,6 +43,7 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -91,6 +92,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             jIgnoreHiddenFolders.setVisible(false);
             jIgnoreHiddenFolders.setSelected(false);
         }
+
+        DefaultListModel model = new DefaultListModel();
+        model.addElement(".git");
+        model.addElement(".hg");
+        model.addElement(".svn");
+        jList1.setModel(model);
+        
+
         String xx;
         
         // Add a browse button to the jCombobox
@@ -814,8 +823,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jIgnoreFolderCase = new javax.swing.JCheckBox();
         jLimitMaxRecurse = new javax.swing.JCheckBox();
         jMaxRecurse = new javax.swing.JSpinner();
-        jManageSkipFolders = new javax.swing.JButton();
         jIgnoreHiddenFolders = new javax.swing.JCheckBox();
+        jPanel8 = new javax.swing.JPanel();
+        jAdd = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jRemove = new javax.swing.JButton();
+        jEdit = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
         jRestoreAll = new javax.swing.JButton();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
@@ -953,7 +968,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jCheckBox3)
                 .addGap(18, 18, 18)
-                .addComponent(jContainingText1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jContainingText1, 0, 553, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1043,7 +1058,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 246, Short.MAX_VALUE)
+                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 573, Short.MAX_VALUE)
                     .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1330,16 +1345,87 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jMaxRecurse.toolTipText")); // NOI18N
         jMaxRecurse.setEnabled(false);
 
-        jManageSkipFolders.setText(bundle.getString("SearchEntryPanel.jManageSkipFolders.text")); // NOI18N
-        jManageSkipFolders.setToolTipText(bundle.getString("SearchEntryPanel.jManageSkipFolders.toolTipText")); // NOI18N
-        jManageSkipFolders.addActionListener(new java.awt.event.ActionListener() {
+        jIgnoreHiddenFolders.setText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.text")); // NOI18N
+        jIgnoreHiddenFolders.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.toolTipText")); // NOI18N
+
+        jAdd.setText(bundle.getString("SearchEntryPanel.jAdd.text")); // NOI18N
+        jAdd.setToolTipText(bundle.getString("SearchEntryPanel.jAdd.toolTipText")); // NOI18N
+        jAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jManageSkipFoldersActionPerformed(evt);
+                jAddActionPerformed(evt);
             }
         });
 
-        jIgnoreHiddenFolders.setText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.text")); // NOI18N
-        jIgnoreHiddenFolders.setToolTipText(bundle.getString("SearchEntryPanel.jIgnoreHiddenFolders.toolTipText")); // NOI18N
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { ".git", ".hg", ".svn" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jList1.setToolTipText(bundle.getString("SearchEntryPanel.jList1.toolTipText")); // NOI18N
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jList1);
+
+        jRemove.setText(bundle.getString("SearchEntryPanel.jRemove.text")); // NOI18N
+        jRemove.setToolTipText(bundle.getString("SearchEntryPanel.jRemove.toolTipText")); // NOI18N
+        jRemove.setEnabled(false);
+        jRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRemoveActionPerformed(evt);
+            }
+        });
+
+        jEdit.setText(bundle.getString("SearchEntryPanel.jEdit.text")); // NOI18N
+        jEdit.setToolTipText(bundle.getString("SearchEntryPanel.jEdit.toolTipText")); // NOI18N
+        jEdit.setEnabled(false);
+        jEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jEditActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText(bundle.getString("SearchEntryPanel.jLabel10.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jAdd, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jEdit, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jRemove, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(jLabel10))
+                .addContainerGap())
+        );
+
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jAdd, jEdit, jRemove});
+
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jEdit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRemove)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -1353,15 +1439,14 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jLimitMaxRecurse)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jMaxRecurse, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jManageSkipFolders))
-                .addContainerGap())
+                        .addComponent(jMaxRecurse, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jManageSkipFolders)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jIgnoreFolderCase)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1588,10 +1673,6 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jRestoreAllActionPerformed
 
-    private void jManageSkipFoldersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jManageSkipFoldersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jManageSkipFoldersActionPerformed
-
     private void jLimitMaxRecurseItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jLimitMaxRecurseItemStateChanged
         jMaxRecurse.setEnabled(jLimitMaxRecurse.isSelected());
     }//GEN-LAST:event_jLimitMaxRecurseItemStateChanged
@@ -1604,11 +1685,56 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jFileTimeout.setEnabled(jEnableFileTimeout.isSelected());
     }//GEN-LAST:event_jEnableFileTimeoutItemStateChanged
 
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        if (evt.getValueIsAdjusting()) return;
+        
+        int idx = jList1.getSelectedIndex();
+        this.jRemove.setEnabled(idx != -1);
+        this.jEdit.setEnabled(idx != -1);
+    }//GEN-LAST:event_jList1ValueChanged
+
+    private void jRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRemoveActionPerformed
+        int idx = jList1.getSelectedIndex();
+        if (idx == -1) return;
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove?", "Click OK to permanently delete entry.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (reply == JOptionPane.OK_OPTION)
+        {
+            DefaultListModel model = (DefaultListModel)(jList1.getModel());
+            model.removeElementAt(idx);
+            if (idx >= model.getSize()) idx --;
+            if (idx != -1) {
+                this.jList1.setSelectedIndex(idx);
+            }
+        }
+    }//GEN-LAST:event_jRemoveActionPerformed
+
+    private void jEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditActionPerformed
+        int idx = jList1.getSelectedIndex();
+        if (idx == -1) return;
+        DefaultListModel model = (DefaultListModel)(jList1.getModel());
+        Object item = model.getElementAt(idx);
+        String reply = JOptionPane.showInputDialog(this, "Enter item to edit", item);
+        if (reply != null && reply.length() > 0)
+        {
+            model.setElementAt(reply, idx);
+        }
+    }//GEN-LAST:event_jEditActionPerformed
+
+    private void jAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddActionPerformed
+        DefaultListModel model = (DefaultListModel)(jList1.getModel());
+        String reply = JOptionPane.showInputDialog(this, "Enter item to add");
+        if (reply != null && reply.length() > 0)
+        {
+            model.addElement(reply);
+        }
+    }//GEN-LAST:event_jAddActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup ContentSearchType;
     private javax.swing.ButtonGroup FilenameSearchType;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JComboBox<String> jAccessedCombo;
+    private javax.swing.JButton jAdd;
     private javax.swing.JPanel jBasicSearch;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -1617,6 +1743,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jCreatedCombo;
     private javax.swing.JCheckBox jDisable3rdParty;
     private javax.swing.JCheckBox jDisableUnicodeDetection;
+    private javax.swing.JButton jEdit;
     private javax.swing.JCheckBox jEnableFileTimeout;
     private javax.swing.JCheckBox jExpertMode;
     private javax.swing.JFileChooser jFileChooser1;
@@ -1632,6 +1759,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox jIgnoreHiddenFolders;
     private javax.swing.JCheckBox jIgnoreSymbolicLinks;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1642,8 +1770,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JCheckBox jLimitMaxHits;
     private javax.swing.JCheckBox jLimitMaxRecurse;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JComboBox<String> jLookIn;
-    private javax.swing.JButton jManageSkipFolders;
     private javax.swing.JSpinner jMaxHits;
     private javax.swing.JSpinner jMaxRecurse;
     private javax.swing.JComboBox<String> jModifiedCombo;
@@ -1658,9 +1786,12 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JButton jRemove;
     private javax.swing.JButton jRestoreAll;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel jSearch;
     private javax.swing.JCheckBox jSkipBinaryFiles;
     private javax.swing.JSpinner jSpinner1;
