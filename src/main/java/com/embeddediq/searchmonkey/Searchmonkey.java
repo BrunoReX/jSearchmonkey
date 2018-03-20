@@ -232,7 +232,6 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         jSplitPane2.setLeftComponent(searchEntryPanel1);
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane1.setResizeWeight(0.5);
         jSplitPane1.setToolTipText(bundle.getString("Searchmonkey.jSplitPane1.toolTipText")); // NOI18N
         jSplitPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {

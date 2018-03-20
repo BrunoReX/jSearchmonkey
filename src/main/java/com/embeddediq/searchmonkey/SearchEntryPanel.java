@@ -850,6 +850,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jSearch.setLayout(new javax.swing.BoxLayout(jSearch, javax.swing.BoxLayout.Y_AXIS));
 
         jBasicSearch.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jBasicSearch.border.title"))); // NOI18N
+        jBasicSearch.setPreferredSize(new java.awt.Dimension(240, 195));
 
         jLabel2.setLabelFor(jFileName);
         jLabel2.setText(bundle.getString("SearchEntryPanel.jLabel2.text")); // NOI18N
@@ -971,7 +972,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jCheckBox3)
                 .addGap(18, 18, 18)
-                .addComponent(jContainingText1, 0, 225, Short.MAX_VALUE))
+                .addComponent(jContainingText1, 0, 204, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1025,6 +1026,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jBasicSearch.getAccessibleContext().setAccessibleName(bundle.getString("SearchEntryPanel.jBasicSearch.AccessibleContext.accessibleName")); // NOI18N
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("SearchEntryPanel.jPanel7.border.title"))); // NOI18N
+        jPanel7.setPreferredSize(new java.awt.Dimension(240, 189));
 
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
@@ -1035,6 +1037,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jModifiedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
 
         jCreatedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
+        jCreatedCombo.setPreferredSize(new java.awt.Dimension(23, 20));
 
         jLabel6.setText(bundle.getString("SearchEntryPanel.jLabel6.text")); // NOI18N
 
@@ -1061,8 +1064,8 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 245, Short.MAX_VALUE)
-                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 224, Short.MAX_VALUE)
                     .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -1240,7 +1243,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                         .addGap(6, 6, 6)
                         .addComponent(jFileTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jStrictFilenameSearch))
-                .addGap(20, 20, 20))
+                .addGap(0, 0, 0))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1312,7 +1315,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                         .addComponent(jLimitMaxHits)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jMaxHits, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1406,7 +1409,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                             .addComponent(jAdd, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jEdit, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jRemove, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1442,8 +1445,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jLimitMaxRecurse)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jMaxRecurse, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jMaxRecurse, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
@@ -1477,23 +1479,16 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGroup(jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jOptionsLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRestoreAll)))
+                        .addComponent(jRestoreAll)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jOptionsLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jOptionsLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jOptionsLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        jOptionsLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel1, jPanel14, jPanel15, jPanel16});
-
         jOptionsLayout.setVerticalGroup(
             jOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jOptionsLayout.createSequentialGroup()

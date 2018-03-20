@@ -34,7 +34,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,71,0,0,1,99"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,71,0,0,1,78"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -78,6 +78,9 @@
                           <ResourceString PropertyName="titleX" bundle="com/embeddediq/searchmonkey/Bundle.properties" key="SearchEntryPanel.jBasicSearch.border.title" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                         </TitledBorder>
                       </Border>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[240, 195]"/>
                     </Property>
                   </Properties>
                   <AccessibilityProperties>
@@ -359,7 +362,7 @@
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jContainingText1" pref="225" max="32767" attributes="0"/>
+                                  <Component id="jContainingText1" pref="204" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -423,6 +426,9 @@
                         </TitledBorder>
                       </Border>
                     </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[240, 189]"/>
+                    </Property>
                   </Properties>
 
                   <Layout>
@@ -440,8 +446,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jAccessedCombo" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jCreatedCombo" alignment="1" pref="245" max="32767" attributes="0"/>
-                                  <Component id="jModifiedCombo" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jCreatedCombo" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jModifiedCombo" alignment="1" pref="224" max="32767" attributes="0"/>
                                   <Component id="jFileTypeCombo" alignment="1" max="32767" attributes="0"/>
                                   <Component id="jFilesizeCombo" alignment="1" max="32767" attributes="0"/>
                               </Group>
@@ -535,6 +541,9 @@
                             <StringItem index="3" value="Last year"/>
                             <StringItem index="4" value="[Other time frame..]"/>
                           </StringArray>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[23, 20]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -670,24 +679,17 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="2" attributes="0">
-                                      <Component id="jPanel16" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jRestoreAll" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="jRestoreAll" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jPanel15" linkSize="1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="jPanel1" max="32767" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jPanel14" linkSize="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jPanel1" linkSize="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jPanel15" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jPanel14" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jPanel16" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -838,7 +840,7 @@
                                   </Group>
                                   <Component id="jStrictFilenameSearch" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1007,7 +1009,7 @@
                                       <Component id="jMaxHits" min="-2" pref="108" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1123,7 +1125,6 @@
                                       <Component id="jMaxRecurse" min="-2" pref="108" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -1209,7 +1210,7 @@
                                               <Component id="jRemove" linkSize="2" alignment="1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="jLabel10" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jLabel10" alignment="0" pref="285" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
