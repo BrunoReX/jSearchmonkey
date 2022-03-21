@@ -748,7 +748,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jIgnoreFolderCase.setSelected(prefs.getBoolean("IgnoreFolderCase", true));
         jIgnoreHiddenFolders.setSelected(prefs.getBoolean("IgnoreHiddenFolders", false));
         jLimitMaxRecurse.setSelected(prefs.getBoolean("LimitMaxRecurse", false));
-        jMaxRecurse.setValue(prefs.getLong("MaxRecurse", 5)); // limit to 5 sub directories
+        jMaxRecurse.setValue(prefs.getLong("MaxRecurse", 5L)); // limit to 5 sub directories
         
     }
     
@@ -1298,7 +1298,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         });
 
-        jMaxHits.setModel(new javax.swing.SpinnerNumberModel(500, 1, null, 1));
+        jMaxHits.setModel(new javax.swing.SpinnerNumberModel((Long)500L, (Long)1L, (Long)Long.MAX_VALUE, (Long)1L));
         jMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jMaxHits.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -1347,7 +1347,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         });
 
-        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel(5, 1, 100, 1));
+        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel((Long)5L, (Long)1L, (Long)100L, (Long)1L));
         jMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jMaxRecurse.toolTipText")); // NOI18N
         jMaxRecurse.setEnabled(false);
 
