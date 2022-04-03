@@ -16,176 +16,169 @@
  */
 package com.embeddediq.searchmonkey;
 
+import org.apache.tika.Tika;
+
 import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.tika.Tika;
-import org.apache.tika.exception.TikaException;
-import org.mozilla.universalchardet.UniversalDetector;
 
 // Replace lots of separate handlers with one handler
 
 /**
- *
  * @author cottr
  */
 public class ContentMatch {
+
+    private static final Logger LOGGER = Logger.getLogger( MethodHandles.lookup().lookupClass().getName() );
+
     final private Pattern regexMatch;
 
     private final ResourceBundle rb;
     private final SearchEntry entry;
-    public ContentMatch(SearchEntry entry)
-    {
-        rb = ResourceBundle.getBundle("com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault());
+    private final Tika tika;
+
+    public ContentMatch( SearchEntry entry ) {
+        rb = ResourceBundle.getBundle( "com.embeddediq.searchmonkey.shared.Bundle", Locale.getDefault() );
         this.entry = entry;
-        
-        if (entry.containingText != null)
-        {
+
+        if ( entry.containingText != null ) {
             int flags = 0;
-            if (!entry.flags.useContentRegex) flags |= Pattern.LITERAL;
-            if (entry.flags.ignoreContentCase) flags |= Pattern.CASE_INSENSITIVE;
-            regexMatch = Pattern.compile(entry.containingText, flags);
+            if ( !entry.flags.useContentRegex )
+                flags |= Pattern.LITERAL;
+            if ( entry.flags.ignoreContentCase )
+                flags |= Pattern.CASE_INSENSITIVE;
+            regexMatch = Pattern.compile( entry.containingText, flags );
         } else {
             regexMatch = null;
         }
-        
+
         // The dawn of a new age..
         tika = new Tika();
     }
 
-    Tika tika;
-    
-    /**
-     * Simple file reader with basic matching
-     * @param path
-     * @return 
-    */
-    public String GetContent(Path path)
-    {
+    public long checkContent( Path path, Supplier<Boolean> cancelToken ) throws IOException {
+
         // Let's not process empty files...
-        if (path.toFile().length() == 0) {
-            return "";
-        }
-        
-        // Check to see if we're using plugins
-        if (!entry.flags.disablePlugins)
-        {
-            try {
-                return tika.parseToString(path.toFile());
-            } catch (IOException | TikaException | IllegalArgumentException ex) {
-                //Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if ( !Files.exists( path ) || path.toFile().length() == 0 ) {
+            return 0;
         }
 
-        // Fallback
-        return GetContentText(path);
+        AtomicLong count = new AtomicLong();
 
+        forEachLineInFile( path, cancelToken, line -> count.addAndGet( getLineMatchCount( line ) ) );
+
+        return count.get();
     }
 
-    public String GetContentText(Path path)
-    {
-        // TODO - make this timeout configurable
+    /**
+     * Enumerates all the lines in the file in as a stream but only up to 5 seconds of reading. Throw a InterruptedException to exit the loop early.
+     */
+    public void forEachLineInFileWithTimeout( Path path, Supplier<Boolean> cancelToken, Consumer<String> expression )
+        throws IOException, TimeoutException {
         long startTime = System.nanoTime();
-        String lines = "";
-        String encoding = TestFile(path);
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), encoding))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                lines += line + "\n";
-                if ((entry.FileTimeout > 0) && ((System.nanoTime() - startTime) > entry.FileTimeout)) {
-                    lines += rb.getString(RunDialogMessages.SIC.getKey()); // Cut early
-                    break;
-                } // Early exit after 5 seconds
+        AtomicBoolean timeoutToken = new AtomicBoolean( false );
+        AtomicReference<TimeoutException> timeoutException = new AtomicReference<>( null );
+
+        forEachLineInFile( path, () -> timeoutToken.get() || cancelToken.get(), line -> {
+            expression.accept( line );
+
+            if ( entry.FileTimeout > 0 && System.nanoTime() - startTime > entry.FileTimeout ) {
+                timeoutException.set( new TimeoutException( rb.getString( RunDialogMessages.SIC.getKey() ) ) );
+                timeoutToken.set( true );
+            } // Early exit after 5 seconds
+        } );
+
+        TimeoutException exception = timeoutException.get();
+
+        if ( exception != null ) {
+            throw exception;
+        }
+    }
+
+    /**
+     * Enumerates all the lines in the file in as a stream. Throw a InterruptedException to exit the loop early.
+     */
+    public void forEachLineInFile( Path path, Supplier<Boolean> cancelToken,
+        Consumer<String> expression ) throws IOException {
+
+        if ( entry.flags.disablePlugins ) {
+            forEachFileInFileWithFileReader( path, cancelToken, expression );
+            return;
+        }
+
+        // if the user has opted to use 3rd party scanning we'll fallback on default scanning if there's a problem
+        try ( BufferedReader bufferedReader = new BufferedReader( tika.parse( path.toFile() ) ) ) {
+            forEachLineInFile( bufferedReader, cancelToken, expression );
+        } catch ( IOException ex ) {
+            /*LOGGER.log(
+                Level.WARNING,
+                String.format( "Encountered error while reading [%s] with Tika, falling back to default reader.", path ),
+                ex
+            );*/
+            forEachFileInFileWithFileReader( path, cancelToken, expression );
+        }
+    }
+
+    private void forEachFileInFileWithFileReader( Path path, Supplier<Boolean> cancelToken, Consumer<String> expression )
+        throws IOException {
+        try ( BufferedReader bufferedReader = new BufferedReader( new FileReader( path.toString() ) ) ) {
+            forEachLineInFile( bufferedReader, cancelToken, expression );
+        }
+    }
+
+    private void forEachLineInFile( BufferedReader bufferedReader, Supplier<Boolean> cancelToken, Consumer<String> expression )
+        throws IOException {
+        while ( true ) {
+
+            if ( cancelToken.get() ) {
+                break;
             }
-        } catch (IOException er) {
-            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, er);
-        }
 
-        return lines;
-    }
-    
-    public long CheckContent(Path path)
-    {
-        long count = 0;
-        String lines = GetContent(path);
-        for (String line: lines.split("\n")) {
-                count += getMatchCount(line);
-                if (entry.maxHits > 0 && count > entry.maxHits) {
-                    count = entry.maxHits;
-                    break;
-                }
+            String line = bufferedReader.readLine();
+
+            if ( line == null ) {
+                break;
+            }
+
+            expression.accept( line );
         }
-        return count;
     }
 
-
-    private int getMatchCount(String line)
-    {
-        Matcher match = regexMatch.matcher(line);
+    private int getLineMatchCount( String line ) {
+        Matcher match = regexMatch.matcher( line );
         int result = 0;
-        while (match.find())
-        {
+        while ( match.find() ) {
             result++;
         }
         return result;
     }
 
-    public List<MatchResult> getMatches(String line)
-    {
-        Matcher match = regexMatch.matcher(line);
+    public List<MatchResult> getMatches( String line ) {
+        Matcher match = regexMatch.matcher( line );
         List<MatchResult> results = new ArrayList<>();
-        while (match.find())
-        {
-            results.add(match.toMatchResult());
+        while ( match.find() ) {
+            results.add( match.toMatchResult() );
         }
         return results;
     }
 
-    private String TestFile(Path path)
-    {
-        if (entry.flags.disableUnicodeDetection) return Charset.defaultCharset().name(); // UTF8
-
-        String encoding = null;
-        
-        byte[] buf = new byte[4096];
-        try (java.io.InputStream fis = java.nio.file.Files.newInputStream(path)) // java.nio.file.Paths.get("test.txt"));
-        {
-            // (1)
-            UniversalDetector detector = new UniversalDetector(null);
-
-            // (2)
-            int nread;
-            while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
-              detector.handleData(buf, 0, nread);
-            }
-            // (3)
-            detector.dataEnd();
-
-            // (4)
-            encoding = detector.getDetectedCharset();
-
-            // (5)
-            detector.reset();
-        } catch (IOException ex) {
-            Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (encoding == null) {
-            // Logger.getLogger(ContentMatch.class.getName()).log(Level.SEVERE, null, "Unknown encoding type..");
-            encoding = Charset.defaultCharset().name(); // UTF8
-        }
-        return encoding;
-    }
 }
 

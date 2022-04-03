@@ -21,10 +21,15 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.MatchResult;
@@ -41,6 +46,8 @@ import javax.swing.text.JTextComponent;
  */
 public class SearchMatchView extends javax.swing.JPanel implements ActionListener {
 
+    private static final Logger LOGGER = Logger.getLogger( MethodHandles.lookup().lookupClass().getName() );
+    
     /**
      * Creates new form SearchMatchView
      */
@@ -133,10 +140,10 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         // ss will be null
         try {
             int end = jSummaryTextArea.getLineEndOffset(0);
-            String msg = String.format("Search was cancelled\n\n");
+            String msg = "Search was cancelled\n\n";
             jSummaryTextArea.replaceRange(msg, 0, end);
         } catch (BadLocationException ex) {
-            Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
             
@@ -144,7 +151,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
     {
         jSummaryTextArea.setText(""); // Clear before entering
         if (interim) {
-            jSummaryTextArea.append(String.format("Search in progress...\n\n"));
+            jSummaryTextArea.append( "Search in progress...\n\n");
         } else {
             jSummaryTextArea.append(String.format("Search completed in %d seconds.\n\n", (ss.endTime - ss.startTime)/1000000000));
         }
@@ -225,20 +232,16 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         if (ss.skippedFolderList.size() > 0)
         {
             jSummaryTextArea.append("\nThe following folders were skipped:\n");
-            for (String item: ss.skippedFolderList) {
-                jSummaryTextArea.append(" > " + item + "\n");
-            }
+            ss.skippedFolderList.stream().sorted().forEach( (item) -> jSummaryTextArea.append( " > " + item + "\n") );
         }
         if (ss.skippedFileList.size() > 0)
         {
             jSummaryTextArea.append("\nThe following files were skipped:\n");
-            for (String item: ss.skippedFileList) {
-                jSummaryTextArea.append(" > " + item + "\n");
-            }
+            ss.skippedFileList.stream().sorted().forEach( (item) -> jSummaryTextArea.append( " > " + item + "\n") );
         }
     }
             
-    public class MatchResult2 {
+    public static class MatchResult2 {
         public MatchResult2(String title)
         {
             this.title = title;
@@ -254,7 +257,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         }
         
         public String title;
-        public boolean isTitle = false;
+        public boolean isTitle;
         public int line_nr;
         public List<MatchResult> results;
         public int start; // List of start/end results
@@ -288,56 +291,56 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                 PreviewResultDoc doc2 = get();
                 jPreviewTextPane.setDocument(doc2);
             } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
         private void consumePath(Path path, PreviewResultDoc previewDoc)
         {
-            // ContentMatch cm = new ContentMatch();
-            long hitCount = 0L;
-            long startTime = System.nanoTime();
-            
-            String lines = match.GetContent(path); // ContentMatch.GetContent(path);
-            if (lines == null || lines.equals("")) return;
-            
-            try /*(LineIterator lineIterator = FileUtils.lineIterator(path.toFile())) */ {
-                publish(new MatchResult2(path.toString() + "\n"));
-                previewDoc.insertString(previewDoc.getLength(), path.toString() + "\n", previewDoc.pathStyle);
-                int i = 0;
-                //while (lineIterator.hasNext())
-                for (String line: lines.split("\n"))
-                {
-                    if (isCancelled()) break; // Check for cancel
-                    // String line = lineIterator.nextLine();
-                    previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
-                    i ++;
-                    if (entry.containingText != null)
-                    {
-                        List<MatchResult> results = match.getMatches(line);
-                        if (results.size() > 0)
-                        {
-                            publish(new MatchResult2(i, line, results));
-                            for (MatchResult res: results)
-                            {
-                                int s = previewDoc.getLength() + res.start() - line.length() - 1;
-                                int e = res.end() - res.start();
-                                previewDoc.setCharacterAttributes(s, e, doc.linkStyle, true);
-                            }
+            try {
+                publish( new MatchResult2( path.toString() + "\n" ) );
+                previewDoc.insertString( previewDoc.getLength(), path + "\n", previewDoc.pathStyle);
+                AtomicInteger i = new AtomicInteger();
+
+                try {
+                    match.forEachLineInFileWithTimeout( path, this::isCancelled, (line) -> {
+
+                        try {
+                            previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
+                        } catch ( BadLocationException e ) {
+                            LOGGER.log(Level.SEVERE, null, e);
                         }
-                    }
+
+                        i.getAndIncrement();
+
+                        if ( entry.containingText == null ) {
+                            return;
+                        }
+
+                        List<MatchResult> results = match.getMatches(line);
+
+                        if ( results.size() <= 0 ) {
+                            return;
+                        }
+
+                        publish( new MatchResult2( i.get(), line, results ) );
+
+                        for (MatchResult res: results)
+                        {
+                            int s = previewDoc.getLength() + res.start() - line.length() - 1;
+                            int e = res.end() - res.start();
+                            previewDoc.setCharacterAttributes(s, e, doc.linkStyle, true);
+                        }
+                    });
                 }
-                // return resultList;
+                catch ( TimeoutException ex ){
+                    previewDoc.insertString(previewDoc.getLength(), ex.getMessage() + "\n", previewDoc.nameStyle);
+                }
             }
-            catch (BadLocationException ex) {
-                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+            catch (BadLocationException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
 
-                
-        /**
-         *
-         * @param results
-         */
         @Override
         public void process(List<MatchResult2> results)
         {
@@ -371,14 +374,14 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                     }
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }
     
     private ViewUpdate task;
 
-    private Timer timer;
+    private final Timer timer;
 
     public void UpdateView(Path[] paths)
     {
@@ -391,7 +394,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
             try {
                 task.cancel(true);
             } catch (CancellationException ex) {
-                Logger.getLogger(SearchMatchView.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
             task = null;
             // busy.set(2); // Cancelled, awaiting closure
@@ -427,7 +430,6 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -455,20 +457,12 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
         jMenuItem1.setText(bundle.getString("SearchMatchView.jMenuItem1.text")); // NOI18N
         jMenuItem1.setToolTipText(bundle.getString("SearchMatchView.jMenuItem1.toolTipText")); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
+        jMenuItem1.addActionListener( this::jMenuItem1ActionPerformed );
         jPopupMenu1.add(jMenuItem1);
 
         jMenuItem2.setText(bundle.getString("SearchMatchView.jMenuItem2.text")); // NOI18N
         jMenuItem2.setToolTipText(bundle.getString("SearchMatchView.jMenuItem2.toolTipText")); // NOI18N
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
+        jMenuItem2.addActionListener( this::jMenuItem2ActionPerformed );
         jPopupMenu1.add(jMenuItem2);
 
         setLayout(new java.awt.BorderLayout());
