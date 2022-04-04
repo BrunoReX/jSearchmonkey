@@ -17,6 +17,10 @@
 package com.embeddediq.searchmonkey;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.commons.lang.StringEscapeUtils;
+
+import java.io.FileWriter;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JTable;
@@ -57,6 +61,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -227,7 +232,6 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
     {
         jTable1.getSelectionModel().addListSelectionListener(listener);
     }
-   
 
     public SearchResult[] getSelectedRows()
     {
@@ -238,6 +242,54 @@ public class SearchResultsTable extends javax.swing.JPanel implements ItemListen
             results[i] = rowData.get(jTable1.convertRowIndexToModel(rows[i]));
         }        
         return results;
+    }
+
+    public boolean exportToCSV( String pathToExportTo) {
+
+        try( FileWriter csv = new FileWriter( pathToExportTo )) {
+
+            TableModel model = jTable1.getModel();
+
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                csv.write(model.getColumnName(i) + ",");
+            }
+
+            csv.write("\n");
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    Object value = model.getValueAt(i, j);
+                    value = value == null ? "" : value;
+
+                    csv.write( StringEscapeUtils.escapeCsv(value.toString()) + ",");
+                }
+                csv.write("\n");
+            }
+
+            return true;
+        }
+        catch ( IOException ignored ) {
+
+        }
+        return false;
+    }
+
+    public boolean exportToJSON( String pathToExportTo) {
+
+        try( FileWriter file = new FileWriter( pathToExportTo )) {
+
+            String json = new GsonBuilder()
+                .create()
+                .toJson( rowData );
+
+            file.write( json );
+
+            return true;
+        }
+        catch ( IOException ignored ) {
+
+        }
+        return false;
     }
 
     public void resizeAllColumnWidth() {

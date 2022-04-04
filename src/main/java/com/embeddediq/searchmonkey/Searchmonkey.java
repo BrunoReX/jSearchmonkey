@@ -26,6 +26,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,20 +37,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JSplitPane;
-import javax.swing.Painter;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
-import javax.swing.UIManager;
+
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -166,6 +163,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        fileChooser = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         searchSummary2 = new com.embeddediq.searchmonkey.SearchSummaryPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -183,6 +181,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         openMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
+        exportMenu = new javax.swing.JMenu();
+        exportAsCsvMenuItem = new javax.swing.JMenuItem();
+        exportAsJsonMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         cutMenuItem = new javax.swing.JMenuItem();
@@ -202,6 +203,9 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
+
+        fileChooser.setCurrentDirectory(null);
+        fileChooser.setName(""); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/embeddediq/searchmonkey/Bundle"); // NOI18N
@@ -247,7 +251,6 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         jButton3.setText(bundle.getString("Searchmonkey.jButton3.text")); // NOI18N
@@ -307,7 +310,29 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
         saveAsMenuItem.setText(bundle.getString("Searchmonkey.saveAsMenuItem.text")); // NOI18N
         fileMenu.add(saveAsMenuItem);
 
-        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        exportMenu.setText(bundle.getString("Searchmonkey.exportMenu.text")); // NOI18N
+        exportMenu.setToolTipText(bundle.getString("Searchmonkey.exportMenu.toolTipText")); // NOI18N
+
+        exportAsCsvMenuItem.setText(bundle.getString("Searchmonkey.exportAsCsvMenuItem.text")); // NOI18N
+        exportAsCsvMenuItem.setActionCommand(bundle.getString("Searchmonkey.exportAsCsvMenuItem.actionCommand")); // NOI18N
+        exportAsCsvMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportAsCsvMenuItem_ActionPerformed(evt);
+            }
+        });
+        exportMenu.add(exportAsCsvMenuItem);
+
+        exportAsJsonMenuItem.setText(bundle.getString("Searchmonkey.exportAsJsonMenuItem.text")); // NOI18N
+        exportAsJsonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportAsJsonMenuItem_ActionPerformed(evt);
+            }
+        });
+        exportMenu.add(exportAsJsonMenuItem);
+
+        fileMenu.add(exportMenu);
+
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText(bundle.getString("Searchmonkey.exitMenuItem.text")); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -342,7 +367,7 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
 
         toolMenu.setText(bundle.getString("Searchmonkey.toolMenu.text")); // NOI18N
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setMnemonic('T');
         jMenuItem1.setText(bundle.getString("Searchmonkey.jMenuItem1.text")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -519,6 +544,26 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private void jRightToLeftStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRightToLeftStateChanged
         setLayout(jRightToLeft.isSelected());
     }//GEN-LAST:event_jRightToLeftStateChanged
+
+    private void exportAsCsvMenuItem_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAsCsvMenuItem_ActionPerformed
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setSelectedFile( new File( "export.csv" ) );
+        int result = fileChooser.showOpenDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION){
+            searchResultsTable1.exportToCSV( fileChooser.getSelectedFile().getAbsolutePath() );
+            JOptionPane.showMessageDialog( this, "Results Exported!" );
+        }
+    }//GEN-LAST:event_exportAsCsvMenuItem_ActionPerformed
+
+    private void exportAsJsonMenuItem_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAsJsonMenuItem_ActionPerformed
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setSelectedFile( new File( "export.json" ) );
+        int result = fileChooser.showOpenDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION){
+            searchResultsTable1.exportToJSON(fileChooser.getSelectedFile().getAbsolutePath() );
+            JOptionPane.showMessageDialog( this, "Results Exported!" );
+        }
+    }//GEN-LAST:event_exportAsJsonMenuItem_ActionPerformed
 
     private void setLayout(boolean rightToLeft)
     {
@@ -733,6 +778,10 @@ public class Searchmonkey extends javax.swing.JFrame implements ActionListener, 
     private javax.swing.JMenuItem deleteMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenuItem exportAsCsvMenuItem;
+    private javax.swing.JMenuItem exportAsJsonMenuItem;
+    private javax.swing.JMenu exportMenu;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton jButton1;
