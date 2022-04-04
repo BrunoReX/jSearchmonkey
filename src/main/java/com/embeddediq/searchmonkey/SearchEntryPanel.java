@@ -972,7 +972,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jCheckBox3)
                 .addGap(18, 18, 18)
-                .addComponent(jContainingText1, 0, 204, Short.MAX_VALUE))
+                .addComponent(jContainingText1, 0, 248, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1031,23 +1031,37 @@ public class SearchEntryPanel extends javax.swing.JPanel {
         jLabel4.setText(bundle.getString("SearchEntryPanel.jLabel4.text")); // NOI18N
 
         jFileTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
+        jFileTypeCombo.setMinimumSize(new java.awt.Dimension(101, 25));
+        jFileTypeCombo.setName(""); // NOI18N
+        jFileTypeCombo.setPreferredSize(new java.awt.Dimension(101, 25));
 
         jLabel5.setText(bundle.getString("SearchEntryPanel.jLabel5.text")); // NOI18N
 
         jModifiedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
+        jModifiedCombo.setMinimumSize(new java.awt.Dimension(101, 25));
+        jModifiedCombo.setName(""); // NOI18N
+        jModifiedCombo.setPreferredSize(new java.awt.Dimension(101, 25));
 
         jCreatedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care", "Last week", "Last month", "Last year", "[Other time frame..]" }));
-        jCreatedCombo.setPreferredSize(new java.awt.Dimension(23, 20));
+        jCreatedCombo.setMinimumSize(new java.awt.Dimension(101, 25));
+        jCreatedCombo.setName(""); // NOI18N
+        jCreatedCombo.setPreferredSize(new java.awt.Dimension(101, 25));
 
         jLabel6.setText(bundle.getString("SearchEntryPanel.jLabel6.text")); // NOI18N
 
         jLabel7.setText(bundle.getString("SearchEntryPanel.jLabel7.text")); // NOI18N
 
         jAccessedCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
+        jAccessedCombo.setMinimumSize(new java.awt.Dimension(101, 25));
+        jAccessedCombo.setName(""); // NOI18N
+        jAccessedCombo.setPreferredSize(new java.awt.Dimension(101, 25));
 
         jLabel9.setText(bundle.getString("SearchEntryPanel.jLabel9.text")); // NOI18N
 
         jFilesizeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't care" }));
+        jFilesizeCombo.setMinimumSize(new java.awt.Dimension(101, 25));
+        jFilesizeCombo.setName(""); // NOI18N
+        jFilesizeCombo.setPreferredSize(new java.awt.Dimension(101, 25));
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1065,7 +1079,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCreatedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 224, Short.MAX_VALUE)
+                    .addComponent(jModifiedCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFileTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -1074,23 +1088,23 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel4)
                     .addComponent(jFileTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel9)
                     .addComponent(jFilesizeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel5)
                     .addComponent(jModifiedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel6)
                     .addComponent(jCreatedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel7)
                     .addComponent(jAccessedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -1298,7 +1312,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         });
 
-        jMaxHits.setModel(new javax.swing.SpinnerNumberModel((Long)500L, (Long)1L, (Long)Long.MAX_VALUE, (Long)1L));
+        jMaxHits.setModel(new javax.swing.SpinnerNumberModel(500, 1, null, 1));
         jMaxHits.setToolTipText(bundle.getString("SearchEntryPanel.jMaxHits.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -1347,7 +1361,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
             }
         });
 
-        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel((Long)5L, (Long)1L, (Long)100L, (Long)1L));
+        jMaxRecurse.setModel(new javax.swing.SpinnerNumberModel(5, 1, 100, 1));
         jMaxRecurse.setToolTipText(bundle.getString("SearchEntryPanel.jMaxRecurse.toolTipText")); // NOI18N
         jMaxRecurse.setEnabled(false);
 
@@ -1409,7 +1423,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
                             .addComponent(jAdd, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jEdit, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jRemove, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+                    .addComponent(jLabel10))
                 .addContainerGap())
         );
 
