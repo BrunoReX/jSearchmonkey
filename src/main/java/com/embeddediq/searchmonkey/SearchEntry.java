@@ -40,7 +40,7 @@ public class SearchEntry {
     public long lessThan; // <=0 is off, otherwise smaller than file size in bytes
     public long greaterThan; // <=0 is off, otherwise smaller than file size in bytes
     public Flags flags = new Flags();
-    public Set<Path> ignoreFolderSet = new HashSet<>(); // Set of paths to ignore
+    public Set<String> ignoreFolderSet = new HashSet<>(); // Set of paths to ignore
     public FileTypeEntry mime; // Use mime to search
 
     public class Flags {

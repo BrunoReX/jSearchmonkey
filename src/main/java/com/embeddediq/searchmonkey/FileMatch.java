@@ -19,6 +19,9 @@ package com.embeddediq.searchmonkey;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -26,31 +29,49 @@ import java.nio.file.PathMatcher;
  */
 public class FileMatch implements PathMatcher {
 
-    private final PathMatcher matcher;
+    private final PathMatcher matchPattern;
     private final SearchEntry entry;
+    private final List<PathMatcher> excludePatterns;
     
     public FileMatch(SearchEntry entry)
     {
         this.entry = entry;
-        String prefix = (entry.flags.useFilenameRegex ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB);
-        String search = entry.fileNameText;
-        if (!entry.flags.strictFilenameChecks)
-        {
-            if (entry.flags.useFilenameRegex)
-            {
-                search = "(.*?)" + search + "(.*?)";
-            } else { // Glob search
-                if (!search.startsWith("*"))
-                {
-                    search = "*" + search;
-                }
-                if (!search.endsWith("*"))
-                {
-                    search += "*";
-                }
-            }
+
+        matchPattern = buildPattern( entry.flags.useFilenameRegex, entry.flags.strictFilenameChecks, entry.fileNameText );
+
+        excludePatterns = entry
+            .ignoreFolderSet
+            .stream()
+            .map( ( excludePattern ) -> buildPattern( entry.flags.useFilenameRegex, entry.flags.strictFilenameChecks, excludePattern ) )
+            .collect( Collectors.toList() );
+    }
+
+    private PathMatcher buildPattern( boolean useFilenameRegex, boolean strictFilenameChecks, String pattern ) {
+        String prefix = ( useFilenameRegex ? SearchEntry.PREFIX_REGEX : SearchEntry.PREFIX_GLOB );
+        pattern = preparePattern( useFilenameRegex, strictFilenameChecks, pattern );
+        return FileSystems.getDefault().getPathMatcher( prefix + pattern );
+    }
+
+    private String preparePattern( boolean useFilenameRegex, boolean strictFilenameChecks, String search ) {
+
+        if ( strictFilenameChecks ) {
+            return search;
         }
-        matcher = FileSystems.getDefault().getPathMatcher(prefix + search);
+
+        if ( useFilenameRegex ) {
+            return "(.*?)" + search + "(.*?)";
+        }
+
+        // Glob search
+        if ( !search.startsWith( "*" ) ) {
+            search = "*" + search;
+        }
+
+        if ( !search.endsWith( "*" ) ) {
+            search += "*";
+        }
+
+        return search;
     }
 
     // TODO - make this list part of the config parms
@@ -82,6 +103,12 @@ public class FileMatch implements PathMatcher {
             if (fname.endsWith(".lnk")) return false;
         }
 
-        return matcher.matches(name);
+        return matchPattern.matches( name );
+    }
+
+    public boolean isExcludedPath( Path path ) {
+        return excludePatterns
+            .stream()
+            .anyMatch( ( pattern ) -> pattern.matches( path ) );
     }
 }

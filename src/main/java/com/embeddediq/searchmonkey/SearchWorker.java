@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,8 +45,8 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
     private final ContentMatch contentMatch;
     private final FileMatch matcher;
     private final SearchResultsTable table;
-    private AtomicSearchSummary summary;
     private final ConcurrentLinkedQueue<SearchResult> searchResults = new ConcurrentLinkedQueue<>();
+    private AtomicSearchSummary summary;
 
     public SearchWorker( SearchEntry entry, SearchResultsTable table ) {
         super();
@@ -62,7 +62,8 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
         summary.startTime = System.nanoTime();
 
-        ParallelExecutor uiPool = new ParallelExecutor(2, 2, 1.0);
+        ParallelExecutor uiPool = new ParallelExecutor( 2, 2, 1.0 );
+        AtomicBoolean searchToken = new AtomicBoolean( false );
 
         uiPool.execute( () -> {
             while ( true ) {
@@ -78,22 +79,29 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
                 ArrayList<SearchResult> results = new ArrayList<>();
 
-                while(true){
+                while ( true ) {
                     SearchResult result = searchResults.poll();
-                    if(result == null){
+                    if ( result == null ) {
                         break;
                     }
                     results.add( result );
-                    if(results.size() == 1000){
+                    if ( results.size() == 1000 ) {
                         break;
                     }
                 }
 
-                if(results.size() == 0){
-                    continue;
+                if(results.size() > 0){
+                    table.insertRows( results );
                 }
 
-                table.insertRows( results );
+                if ( searchResults.isEmpty() ) {
+                    if ( searchToken.get() ) {
+                        uiPool.cancel();
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
 
                 //noinspection BusyWait
                 Thread.sleep( 500 );
@@ -125,7 +133,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             return null;
         } );
 
-        ParallelExecutor searchPool = new ParallelExecutor(4, 64, 2.0);
+        ParallelExecutor searchPool = new ParallelExecutor( 4, 64, 2.0 );
 
         for ( Path startingDir : entry.lookIn ) {
 
@@ -142,7 +150,9 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
         searchPool.waitAll( 365L, TimeUnit.DAYS );
 
-        uiPool.cancel();
+        searchToken.set( true );
+
+        uiPool.waitAll( 1, TimeUnit.MINUTES );
 
         summary.endTime = System.nanoTime(); // We are done!
 
@@ -151,51 +161,63 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
     private void visitDirectory( File current, ParallelExecutor pool ) {
 
+        Path currentPath = current.toPath();
+
+        //LOGGER.info( "Visiting [" + currentPath + "]" );
+
         if ( this.isCancelled() ) {
             pool.cancel();
+            //LOGGER.info( "Skipped [" + currentPath + "] because worker cancelled" );
             return;
         }
 
         if ( pool.isCancelled() ) {
-            return;
-        }
-
-        Path currentPath = current.toPath();
-
-        if ( summary.hasSeenPath( currentPath.toString() ) ) {
-            return;
-        }
-        summary.seenPath( currentPath.toString() );
-
-        summary.totalFolders.incrementAndGet();
-
-        // Use exception list to skip entire folders
-        if ( entry.ignoreFolderSet.contains( currentPath ) ) {
-            skipDirectory( current );
-            return;
-        }
-
-        if ( entry.flags.ignoreHiddenFolders && current.isHidden() ) {
-            skipDirectory( current );
+            //LOGGER.info( "Skipped [" + currentPath + "] because pool cancelled" );
             return;
         }
 
         try {
 
+            if ( summary.hasSeenPath( current.getCanonicalPath() ) ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] because seen" );
+                return;
+            }
+            summary.seenPath( current.getCanonicalPath() );
+
+            summary.totalFolders.incrementAndGet();
+
+            // Use exception list to skip entire folders
+            if ( matcher.isExcludedPath( currentPath ) ) {
+                skipDirectory( current );
+                //LOGGER.info( "Skipped [" + currentPath + "] ignored directory" );
+                return;
+            }
+
+            if ( entry.flags.ignoreHiddenFolders && current.isHidden() ) {
+                skipDirectory( current );
+                //LOGGER.info( "Skipped [" + currentPath + "] symbolic link" );
+                return;
+            }
+
             BasicFileAttributes attrs = Files.readAttributes( currentPath, BasicFileAttributes.class );
 
             if ( entry.flags.ignoreSymbolicLinks && attrs.isSymbolicLink() ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] symbolic link" );
                 return;
             }
 
             try ( DirectoryStream<Path> children = Files.newDirectoryStream( currentPath ) ) {
                 for ( Path childPath : children ) {
 
+                    //LOGGER.info( "Visiting [" + childPath + "]" );
+
                     if ( this.isCancelled() ) {
                         pool.cancel();
+                        //LOGGER.info( "Skipped [" + childPath + "] because worker cancelled" );
                         return;
                     }
                     if ( pool.isCancelled() ) {
+                        //LOGGER.info( "Skipped [" + childPath + "] because pool cancelled" );
                         return;
                     }
 
@@ -203,12 +225,14 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
                     if ( !child.isDirectory() && !child.isFile() ) {
                         skipFile( child );
-                        return;
+                        //LOGGER.info( "Skipped [" + child.getPath() + "] because not a file or directory" );
+                        continue;
                     }
 
                     if ( !child.canRead() ) {
                         skipFile( child );
-                        return;
+                        //LOGGER.info( "Skipped [" + child.getPath() + "] because cannot read" );
+                        continue;
                     }
 
                     pool.execute( () -> {
@@ -230,7 +254,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
         } catch ( Exception ex ) {
             skipDirectory( current );
-            //LOGGER.log( Level.INFO, "Error encountered when processing file: " + current.getPath(), ex );
+            //LOGGER.log( Level.INFO, "Error encountered when processing file [" + current.getPath() + "]", ex );
         }
     }
 
@@ -239,7 +263,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             matchFile( current );
         } catch ( IOException ex ) {
             skipFile( current );
-            //LOGGER.log( Level.INFO, "Error encountered when processing file: " + current.getPath(), ex );
+            //LOGGER.log( Level.INFO, "Error encountered when processing file [" + current.getPath() + "]", ex );
         }
     }
 
@@ -247,10 +271,11 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
     // method on each file.
     private void matchFile( File current ) throws IOException {
 
-        if ( summary.hasSeenPath( current.getPath() ) ) {
+        if ( summary.hasSeenPath( current.getCanonicalPath() ) ) {
+            //LOGGER.info( "Skipped [" + current.getPath() + "] because seen" );
             return;
         }
-        summary.seenPath( current.getPath() );
+        summary.seenPath( current.getCanonicalPath() );
 
         summary.totalFiles.incrementAndGet();
 
@@ -260,15 +285,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
 
         if ( entry.flags.ignoreSymbolicLinks && attrs.isSymbolicLink() ) {
             skipFile( current );
+            //LOGGER.info( "Skipped [" + currentPath + "] because symbolic link" );
             return;
         }
 
         if ( entry.flags.ignoreHiddenFiles && current.isHidden() ) {
             skipFile( current );
+            //LOGGER.info( "Skipped [" + currentPath + "] because hidden" );
             return;
         }
 
         if ( !matcher.matches( currentPath ) ) {
+            //LOGGER.info( "Skipped [" + currentPath + "] does not match pattern" );
             return;
         }
 
@@ -276,14 +304,17 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             if ( entry.greaterThan > entry.lessThan ) // Inverted search
             {
                 if ( ( attrs.size() > entry.lessThan ) && ( attrs.size() < entry.greaterThan ) ) {
+                    //LOGGER.info( "Skipped [" + currentPath + "] because not correct size" );
                     return;
                 }
             } else if ( ( attrs.size() > entry.lessThan ) || ( attrs.size() < entry.greaterThan ) ) // Standard search
             {
+                //LOGGER.info( "Skipped [" + currentPath + "] because not correct size" );
                 return;
             }
         } else if ( ( ( entry.lessThan > 0 ) && ( attrs.size() > entry.lessThan ) ) || ( ( entry.greaterThan > 0 ) && ( attrs.size()
-            < entry.greaterThan ) ) ) {
+                < entry.greaterThan ) ) ) {
+            //LOGGER.info( "Skipped [" + currentPath + "] because not correct size" );
             return;
         }
 
@@ -291,15 +322,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             if ( entry.modifiedAfter.compareTo( entry.modifiedBefore ) > 0 ) // Inverted search
             {
                 if ( ( attrs.lastModifiedTime().compareTo( entry.modifiedBefore ) > 0 ) && (
-                    attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) {
+                        attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) {
+                    //LOGGER.info( "Skipped [" + currentPath + "] because not modified in correct time" );
                     return;
                 }
             } else if ( ( attrs.lastModifiedTime().compareTo( entry.modifiedBefore ) > 0 ) || // Standard search
-                ( attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) {
+                    ( attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] because not modified in correct time" );
                 return;
             }
         } else if ( ( ( entry.modifiedBefore != null ) && ( attrs.lastModifiedTime().compareTo( entry.modifiedBefore ) > 0 ) ) || (
-            ( entry.modifiedAfter != null ) && ( attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) ) {
+                ( entry.modifiedAfter != null ) && ( attrs.lastModifiedTime().compareTo( entry.modifiedAfter ) < 0 ) ) ) {
+            //LOGGER.info( "Skipped [" + currentPath + "] because not modified in correct time" );
             return;
         }
 
@@ -307,15 +341,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             if ( entry.accessedAfter.compareTo( entry.accessedBefore ) > 0 ) // Inverted search
             {
                 if ( ( attrs.lastAccessTime().compareTo( entry.accessedBefore ) > 0 ) && (
-                    attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) {
+                        attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) {
+                    //LOGGER.info( "Skipped [" + currentPath + "] because not accessed in correct time" );
                     return;
                 }
             } else if ( ( attrs.lastAccessTime().compareTo( entry.accessedBefore ) > 0 ) || // Standard search
-                ( attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) {
+                    ( attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] because not accessed in correct time" );
                 return;
             }
         } else if ( ( ( entry.accessedBefore != null ) && ( attrs.lastAccessTime().compareTo( entry.accessedBefore ) > 0 ) ) || (
-            ( entry.accessedAfter != null ) && ( attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) ) {
+                ( entry.accessedAfter != null ) && ( attrs.lastAccessTime().compareTo( entry.accessedAfter ) < 0 ) ) ) {
+            //LOGGER.info( "Skipped [" + currentPath + "] because not accessed in correct time" );
             return;
         }
 
@@ -323,15 +360,18 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
             if ( entry.createdAfter.compareTo( entry.createdBefore ) > 0 ) // Inverted search
             {
                 if ( ( attrs.creationTime().compareTo( entry.createdBefore ) > 0 ) && (
-                    attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) {
+                        attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) {
+                    //LOGGER.info( "Skipped [" + currentPath + "] because not created in correct time" );
                     return;
                 }
             } else if ( ( attrs.creationTime().compareTo( entry.createdBefore ) > 0 ) || // Standard search
-                ( attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) {
+                    ( attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] because not created in correct time" );
                 return;
             }
         } else if ( ( ( entry.createdBefore != null ) && ( attrs.creationTime().compareTo( entry.createdBefore ) > 0 ) ) || (
-            ( entry.createdAfter != null ) && ( attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) ) {
+                ( entry.createdAfter != null ) && ( attrs.creationTime().compareTo( entry.createdAfter ) < 0 ) ) ) {
+            //LOGGER.info( "Skipped [" + currentPath + "] because not created in correct time" );
             return;
         }
 
@@ -340,6 +380,7 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
         if ( entry.mime.isActive ) {
             mimeType = Files.probeContentType( currentPath );
             if ( mimeType == null || !mimeType.equals( entry.mime.mimeName ) ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] because not expected mime type" );
                 return;
             }
         }
@@ -347,8 +388,9 @@ public class SearchWorker extends SwingWorker<SearchSummary, SearchResult> {
         long count = -1;
         if ( entry.containingText != null ) {
 
-            count = contentMatch.checkContent( currentPath, this::isCancelled );
+            count = contentMatch.checkContent( currentPath, entry.maxHits, this::isCancelled );
             if ( count <= 0 ) {
+                //LOGGER.info( "Skipped [" + currentPath + "] no content matches" );
                 return;
             }
 

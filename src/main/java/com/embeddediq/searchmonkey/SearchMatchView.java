@@ -30,6 +30,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.MatchResult;
@@ -299,10 +301,12 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
             try {
                 publish( new MatchResult2( path.toString() + "\n" ) );
                 previewDoc.insertString( previewDoc.getLength(), path + "\n", previewDoc.pathStyle);
-                AtomicInteger i = new AtomicInteger();
+                AtomicInteger lineNumber = new AtomicInteger();
+                AtomicLong totalHits = new AtomicLong();
+                Supplier<Boolean> cancelToken = () -> totalHits.get() > entry.maxHits || this.isCancelled();
 
                 try {
-                    match.forEachLineInFileWithTimeout( path, this::isCancelled, (line) -> {
+                    match.forEachLineInFileWithTimeout( path, cancelToken, (line) -> {
 
                         try {
                             previewDoc.insertString(previewDoc.getLength(), line + "\n", previewDoc.nameStyle);
@@ -310,7 +314,7 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                             LOGGER.log(Level.SEVERE, null, e);
                         }
 
-                        i.getAndIncrement();
+                        lineNumber.getAndIncrement();
 
                         if ( entry.containingText == null ) {
                             return;
@@ -322,7 +326,13 @@ public class SearchMatchView extends javax.swing.JPanel implements ActionListene
                             return;
                         }
 
-                        publish( new MatchResult2( i.get(), line, results ) );
+                        long currentHits = totalHits.addAndGet( results.size() );
+
+                        if(currentHits > entry.maxHits){
+                            return;
+                        }
+
+                        publish( new MatchResult2( lineNumber.get(), line, results ) );
 
                         for (MatchResult res: results)
                         {

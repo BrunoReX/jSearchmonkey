@@ -9,7 +9,7 @@ public class AggregateException extends RuntimeException {
     public AggregateException( Collection<Exception> exceptions) {
         super("Child exceptions:\n" + exceptions
             .stream()
-            .map( e -> " * " + e.getMessage() )
+            .map( e -> " * " + e.getClass().getSimpleName() + ": " + e.getMessage() )
             .collect( Collectors.joining("\n"))
         );
         myExceptions = exceptions;

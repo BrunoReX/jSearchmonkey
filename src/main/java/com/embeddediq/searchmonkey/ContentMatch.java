@@ -17,14 +17,29 @@
 package com.embeddediq.searchmonkey;
 
 import org.apache.tika.Tika;
+import org.apache.tika.parser.txt.CharsetDetector;
+import org.apache.tika.parser.txt.CharsetMatch;
+import org.mozilla.universalchardet.Constants;
+import org.mozilla.universalchardet.UniversalDetector;
+import ucar.ma2.Array;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -74,16 +89,22 @@ public class ContentMatch {
         tika = new Tika();
     }
 
-    public long checkContent( Path path, Supplier<Boolean> cancelToken ) throws IOException {
+    public long checkContent( Path path, long maxHits, Supplier<Boolean> cancelToken ) throws IOException {
 
-        // Let's not process empty files...
-        if ( !Files.exists( path ) || path.toFile().length() == 0 ) {
+        if ( !Files.exists( path ) ) {
             return 0;
         }
 
         AtomicLong count = new AtomicLong();
+        AtomicBoolean maxHitsToken = new AtomicBoolean(false);
+        Supplier<Boolean> aggregateCancelToken = () -> maxHitsToken.get() || cancelToken.get();
 
-        forEachLineInFile( path, cancelToken, line -> count.addAndGet( getLineMatchCount( line ) ) );
+        forEachLineInFile( path, aggregateCancelToken, line -> {
+            long totalHits = count.getAndUpdate( (existing) -> Math.min( maxHits, existing + getLineMatchCount( line ) ) );
+            if(totalHits == maxHits){
+                maxHitsToken.set( true );
+            }
+        } );
 
         return count.get();
     }
@@ -92,7 +113,7 @@ public class ContentMatch {
      * Enumerates all the lines in the file in as a stream but only up to 5 seconds of reading. Throw a InterruptedException to exit the loop early.
      */
     public void forEachLineInFileWithTimeout( Path path, Supplier<Boolean> cancelToken, Consumer<String> expression )
-        throws IOException, TimeoutException {
+            throws IOException, TimeoutException {
         long startTime = System.nanoTime();
         AtomicBoolean timeoutToken = new AtomicBoolean( false );
         AtomicReference<TimeoutException> timeoutException = new AtomicReference<>( null );
@@ -117,7 +138,7 @@ public class ContentMatch {
      * Enumerates all the lines in the file in as a stream. Throw a InterruptedException to exit the loop early.
      */
     public void forEachLineInFile( Path path, Supplier<Boolean> cancelToken,
-        Consumer<String> expression ) throws IOException {
+            Consumer<String> expression ) throws IOException {
 
         if ( entry.flags.disablePlugins ) {
             forEachFileInFileWithFileReader( path, cancelToken, expression );
@@ -137,15 +158,8 @@ public class ContentMatch {
         }
     }
 
-    private void forEachFileInFileWithFileReader( Path path, Supplier<Boolean> cancelToken, Consumer<String> expression )
-        throws IOException {
-        try ( BufferedReader bufferedReader = new BufferedReader( new FileReader( path.toString() ) ) ) {
-            forEachLineInFile( bufferedReader, cancelToken, expression );
-        }
-    }
-
     private void forEachLineInFile( BufferedReader bufferedReader, Supplier<Boolean> cancelToken, Consumer<String> expression )
-        throws IOException {
+            throws IOException {
         while ( true ) {
 
             if ( cancelToken.get() ) {
@@ -178,6 +192,76 @@ public class ContentMatch {
             results.add( match.toMatchResult() );
         }
         return results;
+    }
+
+    private void forEachFileInFileWithFileReader( Path path, Supplier<Boolean> cancelToken,
+            Consumer<String> expression ) {
+
+        try ( FileChannel fis = FileChannel.open( path, StandardOpenOption.READ ) ) {
+
+            Charset charset = null;
+
+            if ( entry.flags.disableUnicodeDetection )
+                charset = Charset.defaultCharset();
+
+            StringBuilder sb = new StringBuilder(512);
+            ByteBuffer bb = ByteBuffer.allocate( 8192 );
+
+            while ( fis.read( bb ) >= 0 ) {
+
+                bb.flip();
+
+                if ( charset == null ) {
+                    charset = getCharset( bb );
+                }
+
+                CharBuffer cb = charset.decode( bb );
+
+                while ( cb.remaining() > 0 ) {
+
+                    char current = cb.get();
+
+                    if ( current != '\n' ) {
+                        sb.append( current );
+                        continue;
+                    }
+
+                    if ( cancelToken.get() ) {
+                        break;
+                    }
+
+                    expression.accept( sb.toString() );
+                    sb.setLength( 0 );
+                }
+
+                bb.clear();
+            }
+
+            if(sb.length() > 0){
+                expression.accept(sb.toString());
+            }
+        } catch ( Exception ex ) {
+            LOGGER.log( Level.INFO, "Unable to read file [" + path + "]", ex );
+        }
+    }
+
+    private Charset getCharset( ByteBuffer buffer ) {
+        try {
+            byte[] sample = Arrays.copyOf(buffer.array(), 256);
+
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText( sample );
+
+            CharsetMatch charset = detector.detect();
+
+            if(charset == null){
+                return Charset.defaultCharset();
+            }
+
+            return Charset.forName( charset.getName() );
+        } catch ( Exception e ) {
+            return Charset.defaultCharset();
+        }
     }
 
 }
