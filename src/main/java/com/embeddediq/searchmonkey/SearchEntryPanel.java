@@ -17,6 +17,7 @@
 package com.embeddediq.searchmonkey;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
@@ -29,11 +30,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -61,7 +62,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import static org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 
 // Note to self - here is the NIMBUS Default Look and Feel
 // https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html#primary
@@ -567,7 +568,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     }
     private void Save2(String name, JComboBox jCombo) throws SecurityException
     {
-        Gson g = new Gson();
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
         SeparatorComboBoxModel model = (SeparatorComboBoxModel)jCombo.getModel();
         
         Object item = model.getSelectedItem();
@@ -614,7 +617,7 @@ public class SearchEntryPanel extends javax.swing.JPanel {
 
         Gson g = new Gson();
         String json = prefs.get( name, GSON.toJson( def ) );
-        ArrayList<T> items = g.fromJson( json, new TypeToken<ArrayList<T>>() {}.getType() );
+        ArrayList<T> items = g.fromJson( json, ArrayList.class);
         DefaultListModel<T> model = new DefaultListModel<>();
 
         for ( int i = 0; i < items.size(); i++ ) {
@@ -658,7 +661,9 @@ public class SearchEntryPanel extends javax.swing.JPanel {
     {
         // int count = ;
         jCombo.setSelectedIndex(-1); // Select none
-        Gson g = new Gson();
+        Gson g = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
         String json = prefs.get(name, g.toJson(def));
         {
             List<Object> items;

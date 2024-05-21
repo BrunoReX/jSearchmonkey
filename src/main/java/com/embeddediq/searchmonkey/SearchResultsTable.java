@@ -18,7 +18,7 @@ package com.embeddediq.searchmonkey;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.FileWriter;
 import java.util.List;
